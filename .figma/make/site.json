@@ -1,0 +1,10 @@
+{
+  "description": "Create a professional portfolio for data science and AI, showcasing your projects, education, and certifications to enhance career opportunities.",
+  "robots": {
+    "index": false
+  },
+  "accessibility": {
+    "addBypassLinks": false,
+    "ignoreReducedMotion": false
+  }
+}
