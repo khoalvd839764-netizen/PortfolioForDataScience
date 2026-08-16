@@ -53,30 +53,17 @@ export default async function handler(req: Request) {
       })
     }
 
-    // Check if GEMINI_API_KEY exists in Environment Variables
-    const apiKey = process.env.GEMINI_API_KEY
-
-    // Fallback intelligent response if API key is not configured yet in local development
+    // If GEMINI_API_KEY is not configured yet
     if (!apiKey) {
-      const lower = message.toLowerCase()
-      let fallbackReply = 'Xin chào! Tôi là Trợ lý AI của Lê Võ Đăng Khoa. '
-
-      if (lower.includes('học') || lower.includes('trường') || lower.includes('uth') || lower.includes('ngành')) {
-        fallbackReply += 'Khoa hiện là sinh viên năm 2 chuyên ngành Data Science & AI tại Trường Đại học Giao thông Vận tải TP.HCM (UTH).'
-      } else if (lower.includes('kỹ năng') || lower.includes('skill') || lower.includes('c++') || lower.includes('python') || lower.includes('sql') || lower.includes('mysql')) {
-        fallbackReply += '3 kỹ năng cốt lõi của Khoa bao gồm: C++ (OOP, Cấu trúc dữ liệu & Giải thuật), Python (Data Science, Machine Learning) và MySQL (Quản trị & Tối ưu Database).'
-      } else if (lower.includes('liên hệ') || lower.includes('contact') || lower.includes('mail') || lower.includes('email') || lower.includes('github')) {
-        fallbackReply += 'Bạn có thể liên hệ trực tiếp với Khoa qua Email: khoalevodang301007@gmail.com hoặc ghé thăm GitHub: https://github.com/khoalvd839764-netizen.'
-      } else if (lower.includes('dự án') || lower.includes('project')) {
-        fallbackReply += 'Khoa đang tích cực xây dựng và hoàn thiện các dự án thực tế về C++, Python ML và MySQL để chuẩn bị ra mắt mã nguồn mở trên GitHub.'
-      } else {
-        fallbackReply += 'Bạn có thể hỏi tôi về học vấn tại UTH, 3 kỹ năng cốt lõi (C++, Python, MySQL) hoặc thông tin liên hệ của Khoa nhé!'
-      }
-
-      return new Response(JSON.stringify({ reply: fallbackReply }), {
-        status: 200,
-        headers: { 'Content-Type': 'application/json' },
-      })
+      return new Response(
+        JSON.stringify({
+          reply: '⚠️ AI hiện tại chưa hoạt động (chưa được cấu hình GEMINI_API_KEY trên hệ thống). Vui lòng liên hệ trực tiếp với Lê Võ Đăng Khoa qua email: khoalevodang301007@gmail.com!',
+        }),
+        {
+          status: 200,
+          headers: { 'Content-Type': 'application/json' },
+        }
+      )
     }
 
     // Call Google Gemini 1.5 Flash API

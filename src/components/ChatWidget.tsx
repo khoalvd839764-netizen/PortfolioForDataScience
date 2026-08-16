@@ -87,7 +87,7 @@ export default function ChatWidget() {
       const errMessage: Message = {
         id: (Date.now() + 1).toString(),
         role: 'assistant',
-        content: 'Khoa hiện là sinh viên năm 2 chuyên ngành Data Science & AI tại UTH. 3 kỹ năng cốt lõi: C++, Python, MySQL. Bạn có thể liên hệ trực tiếp qua email khoalevodang301007@gmail.com!',
+        content: '⚠️ AI hiện tại không hoạt động (chưa kết nối API trên server). Vui lòng liên hệ trực tiếp với Khoa qua email: khoalevodang301007@gmail.com!',
         time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
       }
       setMessages((prev) => [...prev, errMessage])
