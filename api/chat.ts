@@ -67,8 +67,9 @@ export default async function handler(req: Request) {
       )
     }
 
-    // Call Google Gemini 1.5 Flash API
-    const geminiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`
+    // Call Google Gemini API (gemini-flash-lite-latest with fallback to gemini-flash-latest)
+    const primaryUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-lite-latest:generateContent?key=${apiKey}`
+    const fallbackUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:generateContent?key=${apiKey}`
 
     // Build context history for Gemini
     const contents: any[] = [
@@ -96,17 +97,28 @@ export default async function handler(req: Request) {
       parts: [{ text: message }],
     })
 
-    const geminiRes = await fetch(geminiUrl, {
+    const payload = {
+      contents,
+      generationConfig: {
+        maxOutputTokens: 1000,
+        temperature: 0.7,
+      },
+    }
+
+    let geminiRes = await fetch(primaryUrl, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        contents,
-        generationConfig: {
-          maxOutputTokens: 300,
-          temperature: 0.7,
-        },
-      }),
+      body: JSON.stringify(payload),
     })
+
+    if (!geminiRes.ok) {
+      console.warn('Primary model failed, trying fallback model...')
+      geminiRes = await fetch(fallbackUrl, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      })
+    }
 
     if (!geminiRes.ok) {
       const errData = await geminiRes.text()
