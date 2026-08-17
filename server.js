@@ -1,12 +1,20 @@
-// Vercel Serverless Function: /api/chat
-export const config = {
-  runtime: 'edge', // Fast edge runtime on Vercel
-}
+import express from 'express'
+import cors from 'cors'
+import path from 'path'
+import { fileURLToPath } from 'url'
+import dotenv from 'dotenv'
 
-interface ChatMessage {
-  role: 'user' | 'assistant'
-  content: string
-}
+dotenv.config()
+
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = path.dirname(__filename)
+
+const app = express()
+const PORT = process.env.PORT || 3000
+
+// Middleware
+app.use(cors())
+app.use(express.json())
 
 const SYSTEM_INSTRUCTION = `
 Bạn là "Khoa's AI Assistant" — Trợ lý Trí tuệ Nhân tạo đại diện cho Lê Võ Đăng Khoa.
@@ -32,46 +40,26 @@ Phong cách trả lời:
 - Có thể trả lời bằng cả tiếng Việt và tiếng Anh tùy theo ngôn ngữ người dùng hỏi.
 `
 
-export default async function handler(req: Request) {
-  if (req.method !== 'POST') {
-    return new Response(JSON.stringify({ error: 'Method not allowed' }), {
-      status: 405,
-      headers: { 'Content-Type': 'application/json' },
-    })
-  }
-
+// API Chat Endpoint
+app.post('/api/chat', async (req, res) => {
   try {
-    const { message, history } = (await req.json()) as {
-      message: string
-      history?: ChatMessage[]
-    }
+    const { message, history } = req.body
 
     if (!message || typeof message !== 'string' || message.trim().length === 0) {
-      return new Response(JSON.stringify({ error: 'Message cannot be empty' }), {
-        status: 400,
-        headers: { 'Content-Type': 'application/json' },
+      return res.status(400).json({ error: 'Message cannot be empty' })
+    }
+
+    const apiKey = process.env.GEMINI_API_KEY
+    if (!apiKey) {
+      return res.status(200).json({
+        reply: '⚠️ AI hiện tại chưa hoạt động (chưa được cấu hình GEMINI_API_KEY trên hệ thống Render). Vui lòng thêm biến môi trường GEMINI_API_KEY hoặc liên hệ với Khoa qua email: khoalevodang301007@gmail.com!',
       })
     }
 
-    // If GEMINI_API_KEY is not configured yet
-    const apiKey = process.env.GEMINI_API_KEY
-    if (!apiKey) {
-      return new Response(
-        JSON.stringify({
-          reply: '⚠️ AI hiện tại chưa hoạt động (chưa được cấu hình GEMINI_API_KEY trên hệ thống). Vui lòng liên hệ trực tiếp với Lê Võ Đăng Khoa qua email: khoalevodang301007@gmail.com!',
-        }),
-        {
-          status: 200,
-          headers: { 'Content-Type': 'application/json' },
-        }
-      )
-    }
-
-    // Call Google Gemini 1.5 Flash API
+    // Call Google Gemini API
     const geminiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`
 
-    // Build context history for Gemini
-    const contents: any[] = [
+    const contents = [
       {
         role: 'user',
         parts: [{ text: SYSTEM_INSTRUCTION }],
@@ -111,7 +99,9 @@ export default async function handler(req: Request) {
     if (!geminiRes.ok) {
       const errData = await geminiRes.text()
       console.error('Gemini API error:', errData)
-      throw new Error('Gemini API call failed')
+      return res.status(200).json({
+        reply: 'Rất tiếc, AI đang gặp sự cố khi kết nối tới dịch vụ. Bạn có thể liên hệ trực tiếp với Khoa qua email: khoalevodang301007@gmail.com nhé!',
+      })
     }
 
     const data = await geminiRes.json()
@@ -119,20 +109,29 @@ export default async function handler(req: Request) {
       data.candidates?.[0]?.content?.parts?.[0]?.text ||
       'Rất tiếc, tôi chưa thể trả lời câu hỏi này lúc này. Bạn có thể liên hệ trực tiếp với Khoa qua email nhé!'
 
-    return new Response(JSON.stringify({ reply: replyText }), {
-      status: 200,
-      headers: { 'Content-Type': 'application/json' },
-    })
-  } catch (error: any) {
+    return res.status(200).json({ reply: replyText })
+  } catch (error) {
     console.error('Server error:', error)
-    return new Response(
-      JSON.stringify({
-        reply: 'Xin chào! Hiện tại hệ thống AI đang bảo trì. Bạn có thể liên hệ trực tiếp với Khoa qua email: khoalevodang301007@gmail.com.',
-      }),
-      {
-        status: 200,
-        headers: { 'Content-Type': 'application/json' },
-      }
-    )
+    return res.status(200).json({
+      reply: 'Xin chào! Hiện tại hệ thống AI đang bảo trì. Bạn có thể liên hệ trực tiếp với Khoa qua email: khoalevodang301007@gmail.com.',
+    })
   }
-}
+})
+
+// Health check endpoint
+app.get('/api/health', (req, res) => {
+  res.json({ status: 'ok', timestamp: new Date().toISOString() })
+})
+
+// Serve static frontend files from 'dist' directory
+const distPath = path.join(__dirname, 'dist')
+app.use(express.static(distPath))
+
+// SPA Fallback: send index.html for all other non-API routes
+app.use((req, res) => {
+  res.sendFile(path.join(distPath, 'index.html'))
+})
+
+app.listen(PORT, '0.0.0.0', () => {
+  console.log(`🚀 Server is running on port ${PORT}`)
+})
