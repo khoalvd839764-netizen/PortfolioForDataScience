@@ -3,7 +3,7 @@ import react from '@vitejs/plugin-react'
 import tailwindcss from '@tailwindcss/vite'
 import path from 'node:path'
 
-import siteConfiguration from './.figma/make/site.json'
+import siteConfiguration from './.figma/make/site.json' with { type: 'json' }
 
 // Vite config — https://vitejs.dev/config/
 export default defineConfig(({ mode }) => {
@@ -23,10 +23,11 @@ export default defineConfig(({ mode }) => {
       figmaErrorOverlayReplay(),
       figmaReactRefreshBoundaryFallback(),
       figmaMakeKitPlugin({ storiesGlob: '/src/**/*.stories.{ts,tsx,js,jsx}' }),
+      devApiPlugin(),
     ],
     resolve: {
       alias: {
-        '@': path.resolve(__dirname, './src'),
+        '@': path.resolve(import.meta.dirname || process.cwd(), './src'),
       },
     },
     server: {
@@ -41,6 +42,82 @@ export default defineConfig(({ mode }) => {
     },
   }
 })
+
+/** Local dev middleware for /api/chat so dev server handles chat without full server */
+function devApiPlugin(): Plugin {
+  return {
+    name: 'dev-api-plugin',
+    apply: 'serve',
+    configureServer(server) {
+      server.middlewares.use((req, res, next) => {
+        if (req.url === '/api/chat' && req.method === 'POST') {
+          let body = ''
+          req.on('data', (chunk) => { body += chunk })
+          req.on('end', async () => {
+            try {
+              const { message, history } = JSON.parse(body || '{}')
+              const apiKey = process.env.GEMINI_API_KEY || process.env.VITE_GEMINI_API_KEY
+              if (!apiKey) {
+                res.setHeader('Content-Type', 'application/json')
+                return res.end(JSON.stringify({
+                  reply: '⚠️ Chế độ Local Dev: Chưa tìm thấy GEMINI_API_KEY trong biến môi trường. Bạn có thể thêm `GEMINI_API_KEY=your_key` vào file .env để chat ở local hoặc cấu hình trên Vercel khi deploy!'
+                }))
+              }
+
+              const SYSTEM_INSTRUCTION = `Bạn là Khoa's AI Assistant đại diện cho Lê Võ Đăng Khoa, sinh viên năm 2 Data Science & AI tại Trường ĐH Giao thông Vận tải TP.HCM (UTH). 3 kỹ năng cốt lõi: C++, Python, MySQL. Hãy trả lời ngắn gọn, thân thiện, lịch sự và dưới 150 từ.`
+              const contents: any[] = [
+                { role: 'user', parts: [{ text: SYSTEM_INSTRUCTION }] },
+                { role: 'model', parts: [{ text: 'Tôi hiểu rõ vai trò Trợ lý AI của mình.' }] },
+              ]
+
+              if (Array.isArray(history)) {
+                history.slice(-6).forEach((h: any) => {
+                  contents.push({
+                    role: h.role === 'user' ? 'user' : 'model',
+                    parts: [{ text: h.content }],
+                  })
+                })
+              }
+
+              contents.push({ role: 'user', parts: [{ text: message }] })
+
+              const candidateModels = ['gemini-1.5-flash', 'gemini-2.0-flash', 'gemini-2.5-flash', 'gemini-1.5-pro']
+              let replyText = null
+
+              for (const model of candidateModels) {
+                try {
+                  const r = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                      contents,
+                      generationConfig: { maxOutputTokens: 1000, temperature: 0.7 }
+                    }),
+                  })
+                  if (r.ok) {
+                    const data = await r.json()
+                    replyText = data.candidates?.[0]?.content?.parts?.[0]?.text
+                    if (replyText) break
+                  }
+                } catch (e) {}
+              }
+
+              res.setHeader('Content-Type', 'application/json')
+              return res.end(JSON.stringify({
+                reply: replyText || 'Xin lỗi, tôi chưa thể trả lời câu hỏi này lúc này.'
+              }))
+            } catch (err) {
+              res.setHeader('Content-Type', 'application/json')
+              return res.end(JSON.stringify({ reply: 'Lỗi xử lý yêu cầu.' }))
+            }
+          })
+          return
+        }
+        next()
+      })
+    },
+  }
+}
 
 type FigmaSiteConfiguration = {
   title?: string

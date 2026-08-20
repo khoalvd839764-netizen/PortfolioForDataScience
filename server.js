@@ -49,16 +49,12 @@ app.post('/api/chat', async (req, res) => {
       return res.status(400).json({ error: 'Message cannot be empty' })
     }
 
-    const apiKey = process.env.GEMINI_API_KEY
+    const apiKey = process.env.GEMINI_API_KEY || process.env.VITE_GEMINI_API_KEY
     if (!apiKey) {
       return res.status(200).json({
-        reply: '⚠️ AI hiện tại chưa hoạt động (chưa được cấu hình GEMINI_API_KEY trên hệ thống Render). Vui lòng thêm biến môi trường GEMINI_API_KEY hoặc liên hệ với Khoa qua email: khoalevodang301007@gmail.com!',
+        reply: '⚠️ AI hiện tại chưa hoạt động (chưa được cấu hình GEMINI_API_KEY). Vui lòng thêm biến môi trường GEMINI_API_KEY hoặc liên hệ với Khoa qua email: khoalevodang301007@gmail.com!',
       })
     }
-
-    // Call Google Gemini API (gemini-flash-lite-latest for speed and high availability, fallback to gemini-flash-latest)
-    const primaryUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-lite-latest:generateContent?key=${apiKey}`
-    const fallbackUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:generateContent?key=${apiKey}`
 
     const contents = [
       {
@@ -93,33 +89,43 @@ app.post('/api/chat', async (req, res) => {
       },
     }
 
-    let geminiRes = await fetch(primaryUrl, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(payload),
-    })
+    const candidateModels = [
+      'gemini-1.5-flash',
+      'gemini-2.0-flash',
+      'gemini-2.5-flash',
+      'gemini-1.5-pro',
+    ]
 
-    if (!geminiRes.ok) {
-      console.warn('Primary model failed, trying fallback model...')
-      geminiRes = await fetch(fallbackUrl, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload),
-      })
+    let replyText = null
+    let lastError = ''
+
+    for (const model of candidateModels) {
+      try {
+        const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`
+        const geminiRes = await fetch(url, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload),
+        })
+
+        if (geminiRes.ok) {
+          const data = await geminiRes.json()
+          replyText = data.candidates?.[0]?.content?.parts?.[0]?.text
+          if (replyText) break
+        } else {
+          lastError = await geminiRes.text()
+          console.warn(`Model ${model} returned error:`, lastError)
+        }
+      } catch (err) {
+        lastError = err?.message || String(err)
+        console.warn(`Fetch error for model ${model}:`, lastError)
+      }
     }
 
-    if (!geminiRes.ok) {
-      const errData = await geminiRes.text()
-      console.error('Gemini API error:', errData)
-      return res.status(200).json({
-        reply: 'Rất tiếc, AI đang gặp sự cố khi kết nối tới dịch vụ. Bạn có thể liên hệ trực tiếp với Khoa qua email: khoalevodang301007@gmail.com nhé!',
-      })
+    if (!replyText) {
+      console.error('All Gemini models failed. Last error:', lastError)
+      replyText = 'Rất tiếc, AI tạm thời chưa thể phản hồi lúc này. Bạn có thể liên hệ trực tiếp với Khoa qua email khoalevodang301007@gmail.com nhé!'
     }
-
-    const data = await geminiRes.json()
-    const replyText =
-      data.candidates?.[0]?.content?.parts?.[0]?.text ||
-      'Rất tiếc, tôi chưa thể trả lời câu hỏi này lúc này. Bạn có thể liên hệ trực tiếp với Khoa qua email nhé!'
 
     return res.status(200).json({ reply: replyText })
   } catch (error) {

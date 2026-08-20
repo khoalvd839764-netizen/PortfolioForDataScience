@@ -1,7 +1,9 @@
 {
-  "description": "Create a professional portfolio for data science and AI, showcasing your projects, education, and certifications to enhance career opportunities.",
+  "title": "Lê Võ Đăng Khoa | Data Science & AI Portfolio",
+  "description": "Portfolio cá nhân của Lê Võ Đăng Khoa - Sinh viên chuyên ngành Data Science & AI tại UTH (Đại học Giao thông Vận tải TP.HCM). C++, Python, MySQL, Machine Learning.",
+  "language": "vi",
   "robots": {
-    "index": false
+    "index": true
   },
   "accessibility": {
     "addBypassLinks": false,
