@@ -49,7 +49,13 @@ app.post('/api/chat', async (req, res) => {
       return res.status(400).json({ error: 'Message cannot be empty' })
     }
 
-    const apiKey = process.env.GEMINI_API_KEY || process.env.VITE_GEMINI_API_KEY
+    const apiKey =
+      process.env.GEMINI_API_KEY ||
+      process.env.GOOGLE_API_KEY ||
+      process.env.VITE_GEMINI_API_KEY ||
+      process.env.VITE_GOOGLE_API_KEY ||
+      process.env.API_KEY
+
     if (!apiKey) {
       return res.status(200).json({
         reply: '⚠️ AI hiện tại chưa hoạt động (chưa được cấu hình GEMINI_API_KEY). Vui lòng thêm biến môi trường GEMINI_API_KEY hoặc liên hệ với Khoa qua email: khoalevodang301007@gmail.com!',
@@ -90,10 +96,12 @@ app.post('/api/chat', async (req, res) => {
     }
 
     const candidateModels = [
+      'gemini-3.7-flash',
+      'gemini-3.6-flash',
+      'gemini-3.5-flash',
+      'gemini-3.1-flash-lite',
+      'gemini-flash-latest',
       'gemini-1.5-flash',
-      'gemini-2.0-flash',
-      'gemini-2.5-flash',
-      'gemini-1.5-pro',
     ]
 
     let replyText = null
@@ -104,7 +112,10 @@ app.post('/api/chat', async (req, res) => {
         const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`
         const geminiRes = await fetch(url, {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
+          headers: {
+            'Content-Type': 'application/json',
+            'x-goog-api-key': apiKey,
+          },
           body: JSON.stringify(payload),
         })
 

@@ -67,8 +67,14 @@ export default async function handler(req: Request) {
       })
     }
 
-    // Check GEMINI_API_KEY from environment variables
-    const apiKey = process.env.GEMINI_API_KEY || process.env.VITE_GEMINI_API_KEY
+    // Check API Key from any standard environment variable
+    const apiKey =
+      process.env.GEMINI_API_KEY ||
+      process.env.GOOGLE_API_KEY ||
+      process.env.VITE_GEMINI_API_KEY ||
+      process.env.VITE_GOOGLE_API_KEY ||
+      process.env.API_KEY
+
     if (!apiKey) {
       return new Response(
         JSON.stringify({
@@ -115,12 +121,16 @@ export default async function handler(req: Request) {
       },
     }
 
-    // Try reliable Gemini models in order
+    // Modern supported Gemini models
     const candidateModels = [
+      'gemini-3.6-flash',
+      'gemini-3.7-flash',
+      'gemini-flash-latest',
+      'gemini-2.5-flash-lite',
+      'gemini-3.1-flash-lite',
+      'gemini-3.5-flash',
+      'gemini-2.5-pro',
       'gemini-1.5-flash',
-      'gemini-2.0-flash',
-      'gemini-2.5-flash',
-      'gemini-1.5-pro',
     ]
 
     let replyText: string | null = null
@@ -131,7 +141,10 @@ export default async function handler(req: Request) {
         const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`
         const res = await fetch(url, {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
+          headers: {
+            'Content-Type': 'application/json',
+            'x-goog-api-key': apiKey,
+          },
           body: JSON.stringify(payload),
         })
 
@@ -141,7 +154,7 @@ export default async function handler(req: Request) {
           if (replyText) break
         } else {
           lastError = await res.text()
-          console.warn(`Model ${model} returned error:`, lastError)
+          console.warn(`Model ${model} returned:`, lastError)
         }
       } catch (err: any) {
         lastError = err?.message || String(err)

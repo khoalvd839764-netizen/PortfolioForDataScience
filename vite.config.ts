@@ -81,14 +81,24 @@ function devApiPlugin(): Plugin {
 
               contents.push({ role: 'user', parts: [{ text: message }] })
 
-              const candidateModels = ['gemini-1.5-flash', 'gemini-2.0-flash', 'gemini-2.5-flash', 'gemini-1.5-pro']
+              const candidateModels = [
+                'gemini-3.7-flash',
+                'gemini-3.6-flash',
+                'gemini-3.5-flash',
+                'gemini-3.1-flash-lite',
+                'gemini-flash-latest',
+                'gemini-1.5-flash',
+              ]
               let replyText = null
 
               for (const model of candidateModels) {
                 try {
                   const r = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`, {
                     method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
+                    headers: {
+                      'Content-Type': 'application/json',
+                      'x-goog-api-key': apiKey,
+                    },
                     body: JSON.stringify({
                       contents,
                       generationConfig: { maxOutputTokens: 1000, temperature: 0.7 }
