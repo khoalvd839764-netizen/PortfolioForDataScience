@@ -47,14 +47,15 @@ const PROJECTS = [
     tags: ['React', 'TypeScript', 'Tailwind CSS', 'PWA', 'Vercel'],
     link: 'https://khoalevo-bavame.vercel.app/',
     featured: true,
-    status: 'Live App',
-    badge: 'FEATURED APP',
+    status: 'Đang phát triển',
+    startDate: '21/08/2026',
+    badge: 'ĐANG PHÁT TRIỂN',
     icon: '🏡',
     grad: ['#f59e0b', '#ec4899', '#6366f1'],
     stats: [
-      { label: 'Platform', value: 'Web & PWA' },
-      { label: 'Deployment', value: 'Vercel' },
-      { label: 'Status', value: 'Live 24/7' },
+      { label: 'Ngày bắt đầu', value: '21/08/2026' },
+      { label: 'Nền tảng', value: 'Web & PWA' },
+      { label: 'Trạng thái', value: 'Đang phát triển' },
     ],
   },
 ]
@@ -63,9 +64,9 @@ const EDUCATION = [
   {
     degree: 'Chuyên ngành Data Science & AI',
     school: 'Trường Đại học Giao thông Vận tải TP.HCM (UTH)',
-    period: '2024 – Hiện tại',
-    status: 'Đang theo học (Năm 2)',
-    desc: 'Đang học tập chuyên ngành Data Science & AI tại UTH. Tập trung nghiên cứu về Cấu trúc dữ liệu & Giải thuật C++, Xử lý & Phân tích Dữ liệu với Python và Hệ quản trị Cơ sở Dữ liệu MySQL.',
+    period: '01/09/2025 – Hiện tại',
+    status: 'Đang theo học',
+    desc: 'Trúng tuyển và nhập học ngày 01/09/2025, theo học chương trình đào tạo chính quy chuyên ngành Data Science & AI tại UTH. Tập trung nghiên cứu về Cấu trúc dữ liệu & Giải thuật C++, Xử lý & Phân tích Dữ liệu với Python và Hệ quản trị Cơ sở Dữ liệu MySQL.',
     badge: 'UTH',
   },
 ]
@@ -1004,7 +1005,7 @@ function Projects() {
             padding: 'clamp(1.5rem, 4vw, 2.5rem)',
             position: 'relative',
           }}>
-            {/* Header: Status Pills & Live Badge */}
+            {/* Header: Status Pills & Active Development Badge */}
             <div style={{
               display: 'flex',
               alignItems: 'center',
@@ -1022,7 +1023,7 @@ function Projects() {
                   padding: '0.25rem 0.75rem', borderRadius: '6px',
                   letterSpacing: '0.06em',
                 }}>
-                  ✦ FEATURED PROJECT
+                  ✦ DỰ ÁN ĐANG PHÁT TRIỂN
                 </span>
                 <span style={{
                   fontFamily: C.mono, fontSize: '0.7rem',
@@ -1035,7 +1036,7 @@ function Projects() {
                 </span>
               </div>
 
-              {/* Live Status indicator */}
+              {/* In Development Status indicator */}
               <div style={{
                 display: 'inline-flex', alignItems: 'center', gap: '0.5rem',
                 background: 'rgba(34, 197, 94, 0.12)',
@@ -1050,7 +1051,7 @@ function Projects() {
                   display: 'inline-block',
                 }} />
                 <span style={{ fontFamily: C.mono, fontSize: '0.72rem', color: '#4ade80', fontWeight: 600, letterSpacing: '0.04em' }}>
-                  Live on Vercel
+                  Đang phát triển · Bắt đầu: 21/08/2026
                 </span>
               </div>
             </div>
@@ -1140,7 +1141,7 @@ function Projects() {
                       transition: 'all 0.25s cubic-bezier(0.16,1,0.3,1)',
                     }}
                   >
-                    <span>Truy cập ứng dụng (Live Demo)</span>
+                    <span>Truy cập ứng dụng (Đang phát triển)</span>
                     <span style={{ fontSize: '1.1rem' }}>↗</span>
                   </a>
                 </div>
@@ -1157,13 +1158,14 @@ function Projects() {
                 gap: '1rem',
               }}>
                 <div style={{ fontFamily: C.mono, fontSize: '0.72rem', color: '#818cf8', fontWeight: 600, letterSpacing: '0.08em' }}>
-                  HIGHLIGHTS & KEY SPECS
+                  THÔNG TIN DỰ ÁN & CÔNG NGHỆ
                 </div>
 
                 {[
+                  { icon: '🗓️', title: 'Ngày bắt đầu dự án', desc: '21/08/2026 (Đang tích cực phát triển & hoàn thiện)' },
                   { icon: '📱', title: 'Progressive Web App (PWA)', desc: 'Cài đặt trực tiếp trên iOS/Android như app gốc' },
-                  { icon: '⚡', title: 'Vercel Edge Deployment', desc: 'Tốc độ phản hồi tức thì với CDN toàn cầu' },
-                  { icon: '💖', title: 'Rich Life & Parenting Hub', desc: 'Chia sẻ kinh nghiệm nuôi dạy và kiến thức gia đình' },
+                  { icon: '⚡', title: 'Vercel Edge Deployment', desc: 'Cập nhật trực tiếp và phản hồi tức thì với CDN' },
+                  { icon: '💖', title: 'Gìn giữ yêu thương & lời dạy', desc: 'Chia sẻ kinh nghiệm nuôi dạy và cẩm nang gia đình' },
                 ].map((item) => (
                   <div key={item.title} style={{ display: 'flex', gap: '0.75rem', alignItems: 'flex-start' }}>
                     <span style={{ fontSize: '1.1rem', flexShrink: 0, marginTop: '0.1rem' }}>{item.icon}</span>

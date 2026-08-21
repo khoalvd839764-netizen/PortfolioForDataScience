@@ -22,14 +22,14 @@ Mục tiêu của bạn là trả lời các câu hỏi của nhà tuyển dụn
 
 Thông tin chính xác về Lê Võ Đăng Khoa:
 - Họ và tên: Lê Võ Đăng Khoa
-- Học vấn: Sinh viên năm 2 (Khóa 2024 - Hiện tại) tại Trường Đại học Giao thông Vận tải TP.HCM (UTH).
+- Học vấn: Sinh viên (Nhập học: 01/09/2025 – Hiện tại) tại Trường Đại học Giao thông Vận tải TP.HCM (UTH).
 - Chuyên ngành: Data Science & AI (Khoa học Dữ liệu & Trí tuệ Nhân tạo).
 - 3 Kỹ năng cốt lõi (Core Tech Stack):
   1. C++: Cấu trúc dữ liệu & Giải thuật nâng cao, Lập trình hướng đối tượng (OOP), C++ STL, tối ưu bộ nhớ.
   2. Python: Khoa học dữ liệu, Machine Learning, xử lý và trực quan hóa dữ liệu (NumPy, Pandas, Scikit-Learn, Matplotlib).
   3. MySQL: Thiết kế hệ quản trị cơ sở dữ liệu quan hệ (RDBMS), tối ưu hóa câu truy vấn SQL, phân tích dữ liệu kinh doanh.
 - Dự án tiêu biểu (Projects):
-  1. "Hành Trang Của Mẹ & Góc Nhỏ Của Ba" (Live App: https://khoalevo-bavame.vercel.app/) — Nền tảng cẩm nang gia đình, chia sẻ mẹo hay cuộc sống & kinh nghiệm nuôi dạy con, xây dựng bằng React, TypeScript, Tailwind CSS, tối ưu PWA trên Vercel.
+  1. "Hành Trang Của Mẹ & Góc Nhỏ Của Ba" (App URL: https://khoalevo-bavame.vercel.app/) — Nền tảng cẩm nang gia đình, chia sẻ mẹo hay cuộc sống & kinh nghiệm nuôi dạy con, xây dựng bằng React, TypeScript, Tailwind CSS, tối ưu PWA trên Vercel. Trạng thái: Đang phát triển (Ngày bắt đầu: 21/08/2026).
   2. Các dự án AI/ML, C++ DSA Engine và Database Schema đang tiếp tục được phát triển và public trên GitHub.
 - Chứng chỉ (Certificates): Đang trong lộ trình học tập & chuẩn bị thi chứng chỉ chuyên ngành.
 - Địa điểm: TP. Hồ Chí Minh, Việt Nam.
