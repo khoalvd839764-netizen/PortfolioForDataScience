@@ -1347,24 +1347,36 @@ function Contact() {
     setStatusMsg(null)
 
     try {
-      const res = await fetch('/api/contact', {
+      const accessKey =
+        import.meta.env.VITE_WEB3FORMS_ACCESS_KEY ||
+        '23f28cfa-5bdd-42aa-b4ea-b3a46f2ffcbc'
+
+      const formData = new FormData()
+      formData.append('access_key', accessKey)
+      formData.append('name', form.name)
+      formData.append('email', form.email)
+      formData.append('message', form.message)
+      formData.append('subject', `🔔 [Portfolio Contact] Tin nhắn mới từ ${form.name}`)
+      formData.append('from_name', 'Lê Võ Đăng Khoa Portfolio')
+      formData.append('replyto', form.email)
+
+      const response = await fetch('https://api.web3forms.com/submit', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(form),
+        body: formData,
       })
 
-      const data = await res.json()
+      const data = await response.json()
 
-      if (res.ok && data.success) {
+      if (data.success) {
         setStatusMsg({
           type: 'success',
-          text: '✓ Tin nhắn đã được gửi thành công! Email xác nhận cảm ơn đã được gửi tới hòm thư của bạn.',
+          text: '✓ Tin nhắn đã được gửi thành công! Cảm ơn bạn, Khoa đã nhận được thông báo và sẽ phản hồi sớm nhất.',
         })
         setForm({ name: '', email: '', message: '' })
       } else {
         setStatusMsg({
           type: 'error',
-          text: data.error || 'Có lỗi xảy ra khi gửi email. Vui lòng thử lại sau!',
+          text: data.message || 'Có lỗi xảy ra khi gửi tin nhắn. Vui lòng thử lại!',
         })
       }
     } catch (err) {
@@ -1377,6 +1389,7 @@ function Contact() {
       setLoading(false)
     }
   }
+
 
   const field = (id: string): React.CSSProperties => ({
     background: focus === id ? 'rgba(17,28,48,0.85)' : 'rgba(11,17,32,0.6)',
