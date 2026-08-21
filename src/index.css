@@ -199,7 +199,6 @@ body {
   box-shadow: 0 12px 36px rgba(0, 0, 0, 0.45), 0 0 24px rgba(99, 102, 241, 0.2) !important;
 }
 
-/* ─── Coming Soon Pulse & Radar Animations ─── */
 @keyframes pulseRing {
   0% { transform: scale(0.85); opacity: 0.8; }
   50% { transform: scale(1.15); opacity: 0.3; }
@@ -221,3 +220,65 @@ body {
     transform: translate3d(0, 0, 0) scale(1);
   }
 }
+
+@keyframes mobileSheetSlideUp {
+  0% {
+    opacity: 0;
+    transform: translate3d(0, 100%, 0);
+  }
+  100% {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+@keyframes mobileMenuSlideDown {
+  0% {
+    opacity: 0;
+    transform: translate3d(0, -16px, 0) scale(0.97);
+  }
+  100% {
+    opacity: 1;
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+}
+
+@keyframes fadeInBackdrop {
+  0% { opacity: 0; }
+  100% { opacity: 1; }
+}
+
+/* ─── Responsive & Safe Area Utilities ─── */
+:root {
+  --sat: env(safe-area-inset-top, 0px);
+  --sab: env(safe-area-inset-bottom, 0px);
+  --sal: env(safe-area-inset-left, 0px);
+  --sar: env(safe-area-inset-right, 0px);
+}
+
+.responsive-container {
+  width: 100%;
+  max-width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: clamp(1rem, 3.5vw, 2rem);
+  padding-right: clamp(1rem, 3.5vw, 2rem);
+}
+
+.break-words-anywhere {
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+
+/* Smooth mobile scrolling */
+.touch-scroll {
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
+}
+
+/* Minimum touch target for accessibility & mobile usability */
+.touch-target {
+  min-height: 44px;
+  min-width: 44px;
+}
+

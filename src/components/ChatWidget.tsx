@@ -16,17 +16,49 @@ const QUICK_QUESTIONS = [
 
 export default function ChatWidget() {
   const [isOpen, setIsOpen] = useState(false)
+  const [isMobile, setIsMobile] = useState(false)
   const [messages, setMessages] = useState<Message[]>([
     {
       id: 'welcome',
       role: 'assistant',
-      content: 'Xin chào! 👋 Tôi là **Khoa\'s AI Assistant**. Tôi có thể giúp gì cho bạn về thông tin học vấn, kỹ năng (C++, Python, MySQL) hoặc liên hệ với Khoa?',
+      content: "Xin chào! 👋 Tôi là **Khoa's AI Assistant**. Tôi có thể giúp gì cho bạn về thông tin học vấn, kỹ năng (C++, Python, MySQL) hoặc liên hệ với Khoa?",
       time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
     },
   ])
   const [input, setInput] = useState('')
   const [loading, setLoading] = useState(false)
   const messagesEndRef = useRef<HTMLDivElement | null>(null)
+
+  // Track screen size for responsive chat layout
+  useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth < 640)
+    checkMobile()
+    window.addEventListener('resize', checkMobile, { passive: true })
+    return () => window.removeEventListener('resize', checkMobile)
+  }, [])
+
+  // Close on Escape key
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape' && isOpen) {
+        setIsOpen(false)
+      }
+    }
+    window.addEventListener('keydown', handleKeyDown)
+    return () => window.removeEventListener('keydown', handleKeyDown)
+  }, [isOpen])
+
+  // Prevent background body scroll when full modal is open on mobile
+  useEffect(() => {
+    if (isOpen && isMobile) {
+      document.body.style.overflow = 'hidden'
+    } else {
+      document.body.style.overflow = ''
+    }
+    return () => {
+      document.body.style.overflow = ''
+    }
+  }, [isOpen, isMobile])
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' })
@@ -54,7 +86,6 @@ export default function ChatWidget() {
     setLoading(true)
 
     try {
-      // Build history for API
       const history = messages
         .filter((m) => m.id !== 'welcome')
         .map((m) => ({
@@ -106,43 +137,44 @@ export default function ChatWidget() {
   return (
     <>
       {/* Round Floating Mini-Chat Button with Chatbot Logo */}
-      <div style={{
+      <div className="chat-trigger-container" style={{
         position: 'fixed',
-        bottom: '2rem',
-        right: '5.2rem',
         zIndex: 95,
         display: 'flex',
         alignItems: 'center',
       }}>
-        {/* Tooltip on hover */}
-        <div className="chat-tooltip" style={{
-          position: 'absolute',
-          right: 'calc(100% + 12px)',
-          whiteSpace: 'nowrap',
-          background: 'rgba(11, 17, 32, 0.92)',
-          backdropFilter: 'blur(16px)',
-          WebkitBackdropFilter: 'blur(16px)',
-          border: '1px solid rgba(99, 102, 241, 0.35)',
-          borderRadius: '8px',
-          padding: '0.4rem 0.8rem',
-          fontFamily: "'Inter', sans-serif",
-          fontSize: '0.78rem',
-          color: '#dce4f0',
-          boxShadow: '0 8px 24px rgba(0,0,0,0.5)',
-          pointerEvents: 'none',
-          opacity: 0,
-          transform: 'translate3d(8px, 0, 0)',
-          transition: 'all 0.25s cubic-bezier(0.16,1,0.3,1)',
-        }}>
-          ✨ Chat with Khoa AI
-        </div>
+        {/* Tooltip on hover (desktop only) */}
+        {!isMobile && (
+          <div className="chat-tooltip" style={{
+            position: 'absolute',
+            right: 'calc(100% + 12px)',
+            whiteSpace: 'nowrap',
+            background: 'rgba(11, 17, 32, 0.92)',
+            backdropFilter: 'blur(16px)',
+            WebkitBackdropFilter: 'blur(16px)',
+            border: '1px solid rgba(99, 102, 241, 0.35)',
+            borderRadius: '8px',
+            padding: '0.4rem 0.8rem',
+            fontFamily: "'Inter', sans-serif",
+            fontSize: '0.78rem',
+            color: '#dce4f0',
+            boxShadow: '0 8px 24px rgba(0,0,0,0.5)',
+            pointerEvents: 'none',
+            opacity: 0,
+            transform: 'translate3d(8px, 0, 0)',
+            transition: 'all 0.25s cubic-bezier(0.16,1,0.3,1)',
+          }}>
+            ✨ Chat with Khoa AI
+          </div>
+        )}
 
         <button
           onClick={() => setIsOpen(!isOpen)}
           aria-label="Open AI Chatbot"
+          className="touch-target"
           style={{
-            width: '54px',
-            height: '54px',
+            width: isMobile ? '50px' : '54px',
+            height: isMobile ? '50px' : '54px',
             borderRadius: '50%',
             background: isOpen
               ? 'rgba(17, 28, 48, 0.9)'
@@ -160,27 +192,30 @@ export default function ChatWidget() {
             position: 'relative',
           }}
           onMouseEnter={(e) => {
-            e.currentTarget.style.transform = 'translate3d(0,-3px,0) scale(1.05)'
-            e.currentTarget.style.boxShadow = '0 12px 32px rgba(99,102,241,0.7), 0 0 28px rgba(56,189,248,0.5)'
-            const tooltip = e.currentTarget.parentElement?.querySelector('.chat-tooltip') as HTMLElement
-            if (tooltip) {
-              tooltip.style.opacity = '1'
-              tooltip.style.transform = 'translate3d(0, 0, 0)'
+            if (!isMobile) {
+              e.currentTarget.style.transform = 'translate3d(0,-3px,0) scale(1.05)'
+              e.currentTarget.style.boxShadow = '0 12px 32px rgba(99,102,241,0.7), 0 0 28px rgba(56,189,248,0.5)'
+              const tooltip = e.currentTarget.parentElement?.querySelector('.chat-tooltip') as HTMLElement
+              if (tooltip) {
+                tooltip.style.opacity = '1'
+                tooltip.style.transform = 'translate3d(0, 0, 0)'
+              }
             }
           }}
           onMouseLeave={(e) => {
-            e.currentTarget.style.transform = isOpen ? 'scale(0.95)' : 'translate3d(0,0,0)'
-            e.currentTarget.style.boxShadow = isOpen
-              ? '0 8px 24px rgba(0,0,0,0.4)'
-              : '0 8px 28px rgba(99,102,241,0.6), 0 0 20px rgba(56,189,248,0.35)'
-            const tooltip = e.currentTarget.parentElement?.querySelector('.chat-tooltip') as HTMLElement
-            if (tooltip) {
-              tooltip.style.opacity = '0'
-              tooltip.style.transform = 'translate3d(8px, 0, 0)'
+            if (!isMobile) {
+              e.currentTarget.style.transform = isOpen ? 'scale(0.95)' : 'translate3d(0,0,0)'
+              e.currentTarget.style.boxShadow = isOpen
+                ? '0 8px 24px rgba(0,0,0,0.4)'
+                : '0 8px 28px rgba(99,102,241,0.6), 0 0 20px rgba(56,189,248,0.35)'
+              const tooltip = e.currentTarget.parentElement?.querySelector('.chat-tooltip') as HTMLElement
+              if (tooltip) {
+                tooltip.style.opacity = '0'
+                tooltip.style.transform = 'translate3d(8px, 0, 0)'
+              }
             }
           }}
         >
-          {/* Subtle Outer Pulsing Wave Ring */}
           {!isOpen && (
             <div style={{
               position: 'absolute', inset: -4, borderRadius: '50%',
@@ -190,29 +225,22 @@ export default function ChatWidget() {
             }} />
           )}
 
-          {/* Icon: Logo Robot / Chatbot or Close Icon */}
           {isOpen ? (
             <span style={{ fontSize: '1.25rem', color: '#fff', lineHeight: 1 }}>✕</span>
           ) : (
             <div style={{ position: 'relative', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-              {/* Custom SVG Chatbot Logo */}
-              <svg width="26" height="26" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                {/* Antennas */}
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path d="M12 2V5" stroke="white" strokeWidth="2" strokeLinecap="round" />
                 <circle cx="12" cy="2" r="1" fill="#38bdf8" />
-                {/* Robot Head Body */}
                 <rect x="3" y="5" width="18" height="14" rx="5" fill="rgba(255,255,255,0.15)" stroke="white" strokeWidth="1.8" />
-                {/* Glowing AI Eyes */}
                 <circle cx="8" cy="11.5" r="1.75" fill="#38bdf8" />
                 <circle cx="16" cy="11.5" r="1.75" fill="#38bdf8" />
-                {/* Friendly AI Smile */}
                 <path d="M8.5 15C9.5 16 14.5 16 15.5 15" stroke="white" strokeWidth="1.6" strokeLinecap="round" />
               </svg>
 
-              {/* Status active indicator dot */}
               <span style={{
                 position: 'absolute', top: -3, right: -4,
-                width: 9, height: 9, borderRadius: '50%',
+                width: 8, height: 8, borderRadius: '50%',
                 background: '#22c55e', border: '1.5px solid #0b1120',
                 boxShadow: '0 0 8px #22c55e',
               }} />
@@ -221,42 +249,62 @@ export default function ChatWidget() {
         </button>
       </div>
 
-      {/* Floating Chat Dialog Window */}
+      {isOpen && isMobile && (
+        <div
+          onClick={() => setIsOpen(false)}
+          style={{
+            position: 'fixed',
+            inset: 0,
+            zIndex: 99,
+            background: 'rgba(3, 7, 18, 0.8)',
+            backdropFilter: 'blur(8px)',
+            WebkitBackdropFilter: 'blur(8px)',
+            animation: 'fadeInBackdrop 0.25s ease',
+          }}
+        />
+      )}
+
       {isOpen && (
-        <div style={{
+        <div className="chat-dialog-window" style={{
           position: 'fixed',
-          bottom: '5.2rem',
-          right: '2rem',
-          width: 'clamp(320px, 90vw, 400px)',
-          height: 'clamp(460px, 70vh, 560px)',
           zIndex: 100,
-          background: 'rgba(9, 14, 26, 0.82)',
+          background: 'rgba(9, 14, 26, 0.94)',
           backdropFilter: 'blur(28px) saturate(190%)',
           WebkitBackdropFilter: 'blur(28px) saturate(190%)',
           border: '1px solid rgba(99, 102, 241, 0.35)',
-          borderRadius: '20px',
-          boxShadow: '0 24px 60px rgba(0,0,0,0.65), 0 0 40px rgba(99,102,241,0.2)',
+          boxShadow: '0 24px 60px rgba(0,0,0,0.7), 0 0 40px rgba(99,102,241,0.25)',
           display: 'flex',
           flexDirection: 'column',
           overflow: 'hidden',
-          animation: 'chatAppear 0.35s cubic-bezier(0.16,1,0.3,1)',
         }}>
-          {/* Header */}
+          {isMobile && (
+            <div style={{
+              display: 'flex',
+              justifyContent: 'center',
+              paddingTop: '0.6rem',
+              paddingBottom: '0.2rem',
+              background: 'rgba(99,102,241,0.15)',
+            }}>
+              <div style={{ width: 36, height: 4, borderRadius: 2, background: 'rgba(255,255,255,0.3)' }} />
+            </div>
+          )}
+
           <div style={{
-            padding: '1rem 1.25rem',
+            padding: '0.85rem 1.15rem',
             background: 'linear-gradient(90deg, rgba(99,102,241,0.2) 0%, rgba(167,139,250,0.15) 100%)',
             borderBottom: '1px solid rgba(255,255,255,0.08)',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'space-between',
           }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.65rem' }}>
               <div style={{
-                width: 36, height: 36, borderRadius: '50%',
+                width: 34, height: 34, borderRadius: '50%',
                 background: 'linear-gradient(135deg, #6366f1 0%, #38bdf8 100%)',
                 display: 'flex', alignItems: 'center', justifyContent: 'center',
                 boxShadow: '0 0 14px rgba(99,102,241,0.5)',
-                fontSize: '1.1rem',
+                fontSize: '1rem',
+                flexShrink: 0,
               }}>
                 🤖
               </div>
@@ -264,7 +312,7 @@ export default function ChatWidget() {
                 <div style={{
                   fontFamily: "'Outfit', sans-serif",
                   fontWeight: 700,
-                  fontSize: '0.92rem',
+                  fontSize: '0.9rem',
                   color: '#fff',
                   display: 'flex', alignItems: 'center', gap: '0.4rem'
                 }}>
@@ -272,7 +320,7 @@ export default function ChatWidget() {
                 </div>
                 <div style={{
                   fontFamily: "'JetBrains Mono', monospace",
-                  fontSize: '0.66rem',
+                  fontSize: '0.65rem',
                   color: '#22c55e',
                   display: 'flex', alignItems: 'center', gap: '0.35rem',
                 }}>
@@ -282,8 +330,7 @@ export default function ChatWidget() {
               </div>
             </div>
 
-            {/* Action Buttons */}
-            <div style={{ display: 'flex', gap: '0.4rem' }}>
+            <div style={{ display: 'flex', gap: '0.4rem', alignItems: 'center' }}>
               <button
                 onClick={() => setMessages([messages[0]])}
                 title="Xóa lịch sử chat"
@@ -292,7 +339,7 @@ export default function ChatWidget() {
                   border: '1px solid rgba(255,255,255,0.1)',
                   borderRadius: '6px',
                   color: '#94a3b8',
-                  padding: '0.3rem 0.5rem',
+                  padding: '0.3rem 0.55rem',
                   cursor: 'pointer',
                   fontSize: '0.7rem',
                   fontFamily: "'JetBrains Mono', monospace",
@@ -303,15 +350,16 @@ export default function ChatWidget() {
               <button
                 onClick={() => setIsOpen(false)}
                 title="Đóng"
+                className="touch-target"
                 style={{
                   background: 'rgba(255,255,255,0.05)',
                   border: '1px solid rgba(255,255,255,0.1)',
                   borderRadius: '6px',
                   color: '#94a3b8',
-                  width: '26px', height: '26px',
+                  width: '30px', height: '30px',
                   display: 'flex', alignItems: 'center', justifyContent: 'center',
                   cursor: 'pointer',
-                  fontSize: '0.85rem',
+                  fontSize: '0.9rem',
                 }}
               >
                 ✕
@@ -319,14 +367,13 @@ export default function ChatWidget() {
             </div>
           </div>
 
-          {/* Message List */}
-          <div style={{
+          <div className="touch-scroll" style={{
             flex: 1,
             overflowY: 'auto',
-            padding: '1.2rem',
+            padding: '1rem',
             display: 'flex',
             flexDirection: 'column',
-            gap: '1rem',
+            gap: '0.85rem',
           }}>
             {messages.map((m) => (
               <div
@@ -339,8 +386,8 @@ export default function ChatWidget() {
                 }}
               >
                 <div style={{
-                  maxWidth: '85%',
-                  padding: '0.75rem 1rem',
+                  maxWidth: isMobile ? '88%' : '84%',
+                  padding: '0.75rem 0.95rem',
                   borderRadius: m.role === 'user' ? '14px 14px 2px 14px' : '14px 14px 14px 2px',
                   background: m.role === 'user'
                     ? 'linear-gradient(135deg, #6366f1 0%, #4f46e5 100%)'
@@ -352,6 +399,7 @@ export default function ChatWidget() {
                   lineHeight: 1.55,
                   boxShadow: m.role === 'user' ? '0 4px 14px rgba(99,102,241,0.3)' : '0 2px 8px rgba(0,0,0,0.2)',
                   whiteSpace: 'pre-wrap',
+                  wordBreak: 'break-word',
                 }}>
                   {m.content}
                 </div>
@@ -365,8 +413,6 @@ export default function ChatWidget() {
                 </span>
               </div>
             ))}
-
-            {/* Typing Indicator */}
             {loading && (
               <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', padding: '0.5rem 0.8rem', background: 'rgba(255,255,255,0.04)', borderRadius: 10, width: 'fit-content' }}>
                 <span style={{ fontSize: '0.75rem', color: '#818cf8', fontFamily: "'JetBrains Mono', monospace" }}>AI đang gõ</span>
@@ -375,17 +421,15 @@ export default function ChatWidget() {
                 <span style={{ width: 4, height: 4, borderRadius: '50%', background: '#818cf8', animation: 'cursorBlink 1s infinite 0.4s' }} />
               </div>
             )}
-
             <div ref={messagesEndRef} />
           </div>
 
-          {/* Quick Questions Suggestions */}
           {messages.length <= 2 && (
             <div style={{
-              padding: '0 1rem 0.75rem',
+              padding: '0 0.85rem 0.65rem',
               display: 'flex',
               flexDirection: 'column',
-              gap: '0.4rem',
+              gap: '0.35rem',
             }}>
               <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: '0.65rem', color: '#64748b' }}>
                 GỢI Ý CÂU HỎI NHANH:
@@ -399,7 +443,7 @@ export default function ChatWidget() {
                       background: 'rgba(99,102,241,0.12)',
                       border: '1px solid rgba(99,102,241,0.3)',
                       borderRadius: '999px',
-                      padding: '0.3rem 0.65rem',
+                      padding: '0.32rem 0.7rem',
                       fontFamily: "'Inter', sans-serif",
                       fontSize: '0.73rem',
                       color: '#c4d1e6',
@@ -423,10 +467,10 @@ export default function ChatWidget() {
             </div>
           )}
 
-          {/* Chat Input Bar */}
           <div style={{
-            padding: '0.85rem 1rem',
-            background: 'rgba(5, 8, 15, 0.9)',
+            padding: '0.75rem 1rem',
+            paddingBottom: isMobile ? 'calc(0.75rem + var(--sab))' : '0.75rem',
+            background: 'rgba(5, 8, 15, 0.95)',
             borderTop: '1px solid rgba(255,255,255,0.08)',
             display: 'flex',
             gap: '0.5rem',
@@ -441,27 +485,33 @@ export default function ChatWidget() {
               disabled={loading}
               style={{
                 flex: 1,
-                background: 'rgba(255,255,255,0.05)',
-                border: '1px solid rgba(255,255,255,0.12)',
+                background: 'rgba(255,255,255,0.06)',
+                border: '1px solid rgba(255,255,255,0.14)',
                 borderRadius: '999px',
-                padding: '0.6rem 1rem',
+                padding: '0.65rem 1.1rem',
                 color: '#fff',
                 fontFamily: "'Inter', sans-serif",
-                fontSize: '0.85rem',
+                fontSize: '16px',
                 outline: 'none',
               }}
             />
             <button
               onClick={() => handleSend()}
               disabled={!input.trim() || loading}
+              className="touch-target"
               style={{
-                width: 36, height: 36, borderRadius: '50%',
+                width: '38px',
+                height: '38px',
+                borderRadius: '50%',
                 background: input.trim() && !loading ? 'linear-gradient(135deg, #6366f1, #38bdf8)' : 'rgba(255,255,255,0.1)',
                 border: 'none',
                 color: '#fff',
-                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
                 cursor: input.trim() && !loading ? 'pointer' : 'default',
                 transition: 'all 0.2s ease',
+                flexShrink: 0,
               }}
             >
               ➔
@@ -469,6 +519,41 @@ export default function ChatWidget() {
           </div>
         </div>
       )}
+
+      {/* Responsive positioning CSS */}
+      <style>{`
+        @media (min-width: 640px) {
+          .chat-trigger-container {
+            bottom: calc(2rem + var(--sab));
+            right: calc(5.4rem + var(--sar));
+          }
+          .chat-dialog-window {
+            bottom: calc(5.4rem + var(--sab));
+            right: calc(2rem + var(--sar));
+            width: 380px;
+            height: 560px;
+            border-radius: 20px;
+            animation: chatAppear 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+          }
+        }
+        @media (max-width: 639px) {
+          .chat-trigger-container {
+            bottom: calc(1.25rem + var(--sab));
+            right: calc(1.25rem + var(--sar));
+          }
+          .chat-dialog-window {
+            bottom: 0;
+            left: 0;
+            right: 0;
+            width: 100%;
+            height: 85vh;
+            max-height: calc(100dvh - 3.5rem);
+            border-radius: 22px 22px 0 0;
+            animation: mobileSheetSlideUp 0.32s cubic-bezier(0.16, 1, 0.3, 1);
+          }
+        }
+      `}</style>
     </>
   )
 }
+

@@ -106,40 +106,58 @@ function ScrollToTopButton({ show }: { show: boolean }) {
   }
 
   return (
-    <button
-      onClick={scrollToTop}
-      onMouseEnter={() => setHov(true)}
-      onMouseLeave={() => setHov(false)}
-      aria-label="Scroll to top"
-      style={{
-        position: 'fixed',
-        bottom: '2rem',
-        right: '2rem',
-        zIndex: 90,
-        width: '42px',
-        height: '42px',
-        borderRadius: '50%',
-        background: hov ? 'rgba(99,102,241,0.9)' : 'rgba(17,28,48,0.85)',
-        backdropFilter: 'blur(12px)',
-        border: `1px solid ${hov ? '#6366f1' : 'rgba(255,255,255,0.12)'}`,
-        color: '#fff',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        cursor: 'pointer',
-        opacity: show ? 1 : 0,
-        pointerEvents: show ? 'auto' : 'none',
-        transform: show ? (hov ? 'translate3d(0,-4px,0)' : 'translate3d(0,0,0)') : 'translate3d(0,16px,0)',
-        boxShadow: show ? (hov ? '0 0 20px rgba(99,102,241,0.5)' : '0 4px 16px rgba(0,0,0,0.4)') : 'none',
-        transition: 'all 0.3s cubic-bezier(0.16,1,0.3,1)',
-      }}
-    >
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
-        <path d="m18 15-6-6-6 6" />
-      </svg>
-    </button>
+    <>
+      <button
+        onClick={scrollToTop}
+        onMouseEnter={() => setHov(true)}
+        onMouseLeave={() => setHov(false)}
+        aria-label="Scroll to top"
+        className="scroll-to-top-btn touch-target"
+        style={{
+          position: 'fixed',
+          zIndex: 90,
+          width: '42px',
+          height: '42px',
+          borderRadius: '50%',
+          background: hov ? 'rgba(99,102,241,0.9)' : 'rgba(17,28,48,0.85)',
+          backdropFilter: 'blur(12px)',
+          WebkitBackdropFilter: 'blur(12px)',
+          border: `1px solid ${hov ? '#6366f1' : 'rgba(255,255,255,0.12)'}`,
+          color: '#fff',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          cursor: 'pointer',
+          opacity: show ? 1 : 0,
+          pointerEvents: show ? 'auto' : 'none',
+          transform: show ? (hov ? 'translate3d(0,-4px,0)' : 'translate3d(0,0,0)') : 'translate3d(0,16px,0)',
+          boxShadow: show ? (hov ? '0 0 20px rgba(99,102,241,0.5)' : '0 4px 16px rgba(0,0,0,0.4)') : 'none',
+          transition: 'all 0.3s cubic-bezier(0.16,1,0.3,1)',
+        }}
+      >
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+          <path d="m18 15-6-6-6 6" />
+        </svg>
+      </button>
+
+      <style>{`
+        @media (min-width: 640px) {
+          .scroll-to-top-btn {
+            bottom: calc(2rem + var(--sab));
+            right: calc(2rem + var(--sar));
+          }
+        }
+        @media (max-width: 639px) {
+          .scroll-to-top-btn {
+            bottom: calc(5rem + var(--sab));
+            right: calc(1.35rem + var(--sar));
+          }
+        }
+      `}</style>
+    </>
   )
 }
+
 
 /* ─── Neural Network & Deep Space Canvas Background ─────────────────────── */
 function NeuralSpaceBackground() {
@@ -162,8 +180,8 @@ function NeuralSpaceBackground() {
     }
     window.addEventListener('resize', handleResize, { passive: true })
 
-    // Mouse coordinates for interactive connection
-    const mouse = { x: -1000, y: -1000, radius: 140 }
+    // Mouse / Touch coordinates for interactive connection
+    const mouse = { x: -1000, y: -1000, radius: width < 640 ? 100 : 140 }
     const handleMouseMove = (e: MouseEvent) => {
       mouse.x = e.clientX
       mouse.y = e.clientY
@@ -172,24 +190,41 @@ function NeuralSpaceBackground() {
       mouse.x = -1000
       mouse.y = -1000
     }
+
+    // Touch support for mobile / tablet
+    const handleTouchMove = (e: TouchEvent) => {
+      if (e.touches.length > 0) {
+        mouse.x = e.touches[0].clientX
+        mouse.y = e.touches[0].clientY
+      }
+    }
+    const handleTouchEnd = () => {
+      mouse.x = -1000
+      mouse.y = -1000
+    }
+
     window.addEventListener('mousemove', handleMouseMove, { passive: true })
     window.addEventListener('mouseleave', handleMouseLeave, { passive: true })
+    window.addEventListener('touchstart', handleTouchMove, { passive: true })
+    window.addEventListener('touchmove', handleTouchMove, { passive: true })
+    window.addEventListener('touchend', handleTouchEnd, { passive: true })
 
-    // Generate Stars (Cosmic Twinkling Starfield)
-    const starCount = Math.floor(Math.min(width, height) / 12)
+    // Generate Stars (Adaptive density: fewer on mobile for optimal 60fps & battery)
+    const isMobile = width < 640
+    const starCount = isMobile ? Math.floor(Math.min(width, height) / 20) : Math.floor(Math.min(width, height) / 12)
     const stars: { x: number; y: number; size: number; alpha: number; speed: number }[] = []
     for (let i = 0; i < starCount; i++) {
       stars.push({
         x: Math.random() * width,
         y: Math.random() * height,
-        size: Math.random() * 1.5 + 0.5,
+        size: Math.random() * 1.4 + 0.4,
         alpha: Math.random() * 0.7 + 0.2,
         speed: Math.random() * 0.02 + 0.005,
       })
     }
 
-    // Generate Neural Nodes (Data Synapses)
-    const nodeCount = Math.floor(Math.min(width, 1200) / 22)
+    // Generate Neural Nodes (Adaptive density)
+    const nodeCount = isMobile ? 18 : Math.floor(Math.min(width, 1200) / 22)
     const nodes: {
       x: number
       y: number
@@ -205,9 +240,9 @@ function NeuralSpaceBackground() {
       nodes.push({
         x: Math.random() * width,
         y: Math.random() * height,
-        vx: (Math.random() - 0.5) * 0.45,
-        vy: (Math.random() - 0.5) * 0.45,
-        radius: Math.random() * 2 + 1.2,
+        vx: (Math.random() - 0.5) * (isMobile ? 0.3 : 0.45),
+        vy: (Math.random() - 0.5) * (isMobile ? 0.3 : 0.45),
+        radius: Math.random() * 1.8 + 1.1,
         color: colors[Math.floor(Math.random() * colors.length)],
       })
     }
@@ -229,6 +264,7 @@ function NeuralSpaceBackground() {
       }
 
       // 2. Update & Draw Neural Nodes
+      const maxConnectDist = isMobile ? 90 : 120
       for (let i = 0; i < nodes.length; i++) {
         const node = nodes[i]
 
@@ -242,7 +278,7 @@ function NeuralSpaceBackground() {
         ctx.arc(node.x, node.y, node.radius, 0, Math.PI * 2)
         ctx.fillStyle = node.color
         ctx.shadowColor = node.color
-        ctx.shadowBlur = 8
+        ctx.shadowBlur = 6
         ctx.fill()
         ctx.shadowBlur = 0
 
@@ -253,18 +289,18 @@ function NeuralSpaceBackground() {
           const dy = node.y - other.y
           const dist = Math.sqrt(dx * dx + dy * dy)
 
-          if (dist < 120) {
-            const alpha = (1 - dist / 120) * 0.22
+          if (dist < maxConnectDist) {
+            const alpha = (1 - dist / maxConnectDist) * 0.22
             ctx.beginPath()
             ctx.moveTo(node.x, node.y)
             ctx.lineTo(other.x, other.y)
             ctx.strokeStyle = `rgba(99, 102, 241, ${alpha})`
-            ctx.lineWidth = 0.85
+            ctx.lineWidth = 0.8
             ctx.stroke()
           }
         }
 
-        // Connect node to Mouse Cursor (Interactive Neural Spark)
+        // Connect node to Pointer / Touch Cursor
         const mdx = node.x - mouse.x
         const mdy = node.y - mouse.y
         const mdist = Math.sqrt(mdx * mdx + mdy * mdy)
@@ -289,22 +325,25 @@ function NeuralSpaceBackground() {
       window.removeEventListener('resize', handleResize)
       window.removeEventListener('mousemove', handleMouseMove)
       window.removeEventListener('mouseleave', handleMouseLeave)
+      window.removeEventListener('touchstart', handleTouchMove)
+      window.removeEventListener('touchmove', handleTouchMove)
+      window.removeEventListener('touchend', handleTouchEnd)
     }
   }, [])
 
   return (
     <div style={{ position: 'fixed', inset: 0, zIndex: 0, pointerEvents: 'none', overflow: 'hidden' }}>
-      {/* Deep Space / Black Hole Cosmic Ambient Backdrop */}
+      {/* Deep Space / Cosmic Ambient Backdrops */}
       <div style={{
         position: 'absolute', top: '-10%', left: '50%', transform: 'translateX(-50%)',
-        width: '1000px', height: '600px',
+        width: 'min(100vw, 1000px)', height: '600px',
         background: 'radial-gradient(ellipse 60% 50% at 50% 30%, rgba(99,102,241,0.14) 0%, rgba(167,139,250,0.07) 45%, transparent 70%)',
         borderRadius: '50%',
         pointerEvents: 'none',
       }} />
       <div style={{
         position: 'absolute', bottom: '10%', right: '5%',
-        width: '600px', height: '600px',
+        width: 'min(90vw, 600px)', height: 'min(90vw, 600px)',
         background: 'radial-gradient(circle, rgba(56,189,248,0.06) 0%, transparent 65%)',
         borderRadius: '50%',
         pointerEvents: 'none',
@@ -353,7 +392,7 @@ function SkillChip({ skill }: { skill: typeof SKILLS[0] }) {
         background: hov ? 'rgba(17,28,48,0.92)' : 'rgba(11,17,32,0.65)',
         border: `1px solid ${hov ? `${skill.grad[0]}60` : 'rgba(255,255,255,0.07)'}`,
         borderRadius: 14,
-        padding: '1.15rem 1.25rem',
+        padding: 'clamp(0.9rem, 2.5vw, 1.25rem)',
         transition: 'all 0.28s cubic-bezier(0.16,1,0.3,1)',
         transform: hov ? 'translate3d(0,-2px,0)' : 'translate3d(0,0,0)',
         boxShadow: hov ? `0 10px 28px rgba(0,0,0,0.4), 0 0 20px ${skill.grad[0]}22` : '0 2px 8px rgba(0,0,0,0.1)',
@@ -370,12 +409,12 @@ function SkillChip({ skill }: { skill: typeof SKILLS[0] }) {
       )}
 
       {/* Header: Icon, Name & Badge */}
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.85rem' }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.75rem', flexWrap: 'wrap', gap: '0.5rem' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.65rem' }}>
           <div style={{
-            width: 40, height: 40, borderRadius: 10,
+            width: 38, height: 38, borderRadius: 10,
             display: 'flex', alignItems: 'center', justifyContent: 'center',
-            fontSize: '1rem',
+            fontSize: '0.95rem',
             background: hov ? gradStr : `${skill.grad[0]}18`,
             border: `1px solid ${skill.grad[0]}35`,
             color: hov ? '#fff' : skill.grad[0],
@@ -383,19 +422,19 @@ function SkillChip({ skill }: { skill: typeof SKILLS[0] }) {
             transition: 'all 0.25s',
             flexShrink: 0,
           }}>
-            <span style={{ fontFamily: C.mono, fontWeight: 700, fontSize: '1rem' }}>{skill.icon}</span>
+            <span style={{ fontFamily: C.mono, fontWeight: 700, fontSize: '0.95rem' }}>{skill.icon}</span>
           </div>
 
           <div>
             <div style={{
-              fontFamily: C.display, fontWeight: 700, fontSize: '1.05rem',
+              fontFamily: C.display, fontWeight: 700, fontSize: '1rem',
               color: hov ? '#fff' : C.text,
               lineHeight: 1.2,
               transition: 'color 0.25s',
             }}>
               {skill.name}
             </div>
-            <div style={{ fontFamily: C.body, fontSize: '0.76rem', color: C.muted, marginTop: '0.15rem' }}>
+            <div style={{ fontFamily: C.body, fontSize: '0.74rem', color: C.muted, marginTop: '0.15rem' }}>
               {skill.desc}
             </div>
           </div>
@@ -403,11 +442,11 @@ function SkillChip({ skill }: { skill: typeof SKILLS[0] }) {
 
         {/* Category badge */}
         <span style={{
-          fontFamily: C.mono, fontSize: '0.68rem', fontWeight: 600,
+          fontFamily: C.mono, fontSize: '0.66rem', fontWeight: 600,
           color: skill.grad[0],
           background: `${skill.grad[0]}14`,
           border: `1px solid ${skill.grad[0]}28`,
-          padding: '0.22rem 0.55rem', borderRadius: 6,
+          padding: '0.2rem 0.5rem', borderRadius: 6,
           letterSpacing: '0.03em',
           whiteSpace: 'nowrap',
           flexShrink: 0,
@@ -420,11 +459,11 @@ function SkillChip({ skill }: { skill: typeof SKILLS[0] }) {
       <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.35rem' }}>
         {skill.tags.map(t => (
           <span key={t} style={{
-            fontFamily: C.mono, fontSize: '0.66rem', letterSpacing: '0.02em',
+            fontFamily: C.mono, fontSize: '0.65rem', letterSpacing: '0.02em',
             background: `${skill.grad[0]}10`,
             border: `1px solid ${skill.grad[0]}22`,
             color: hov ? skill.grad[0] : '#94a3b8',
-            padding: '0.2rem 0.55rem', borderRadius: 5,
+            padding: '0.18rem 0.5rem', borderRadius: 5,
             transition: 'all 0.2s',
           }}>{t}</span>
         ))}
@@ -435,16 +474,25 @@ function SkillChip({ skill }: { skill: typeof SKILLS[0] }) {
 
 function SectionHeader({ label, title, sub }: { label: string; title: string; sub?: string }) {
   return (
-    <div style={{ marginBottom: '3rem' }}>
-      <div className="reveal" style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', marginBottom: '0.85rem' }}>
+    <div style={{ marginBottom: 'clamp(2rem, 4vw, 3rem)' }}>
+      <div className="reveal" style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', marginBottom: '0.65rem' }}>
         <span style={{ fontFamily: C.mono, color: C.accent, fontSize: '0.72rem', letterSpacing: '0.14em' }}>{label}</span>
-        <div style={{ height: 1, width: 48, background: C.accent, opacity: 0.4 }} />
+        <div style={{ height: 1, width: 42, background: C.accent, opacity: 0.4 }} />
       </div>
-      <h2 className="reveal delay-1" style={{ fontFamily: C.display, fontWeight: 800, fontSize: 'clamp(1.9rem, 4vw, 2.6rem)', letterSpacing: '-0.03em', color: C.text, lineHeight: 1.15, marginBottom: sub ? '0.75rem' : 0 }}>
+      <h2 className="reveal delay-1" style={{
+        fontFamily: C.display, fontWeight: 800,
+        fontSize: 'clamp(1.75rem, 4.5vw, 2.6rem)',
+        letterSpacing: '-0.03em', color: C.text, lineHeight: 1.15,
+        marginBottom: sub ? '0.65rem' : 0
+      }}>
         {title}
       </h2>
       {sub && (
-        <p className="reveal delay-2" style={{ fontFamily: C.body, color: C.muted, fontSize: '0.98rem', maxWidth: '540px', lineHeight: 1.7 }}>
+        <p className="reveal delay-2" style={{
+          fontFamily: C.body, color: C.muted,
+          fontSize: 'clamp(0.88rem, 1.6vw, 0.98rem)',
+          maxWidth: '540px', lineHeight: 1.7
+        }}>
           {sub}
         </p>
       )}
@@ -458,37 +506,70 @@ function NavBar({ activeSection }: { activeSection: string }) {
   const [open, setOpen] = useState(false)
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 40)
+    const onScroll = () => setScrolled(window.scrollY > 30)
     window.addEventListener('scroll', onScroll, { passive: true })
     return () => window.removeEventListener('scroll', onScroll)
   }, [])
+
+  // Close menu on resize to desktop
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth >= 768 && open) {
+        setOpen(false)
+      }
+    }
+    window.addEventListener('resize', handleResize, { passive: true })
+    return () => window.removeEventListener('resize', handleResize)
+  }, [open])
+
+  // Prevent background scroll when mobile menu is open
+  useEffect(() => {
+    if (open) {
+      document.body.style.overflow = 'hidden'
+    } else {
+      document.body.style.overflow = ''
+    }
+    return () => {
+      document.body.style.overflow = ''
+    }
+  }, [open])
 
   return (
     <>
       {/* Floating pill navbar */}
       <header style={{
-        position: 'fixed', top: '1.2rem', left: 0, right: 0, zIndex: 100,
-        display: 'flex', justifyContent: 'center', pointerEvents: 'none',
-        padding: '0 1rem',
+        position: 'fixed',
+        top: 'calc(0.75rem + var(--sat))',
+        left: 0,
+        right: 0,
+        zIndex: 100,
+        display: 'flex',
+        justifyContent: 'center',
+        pointerEvents: 'none',
+        padding: '0 clamp(0.75rem, 3vw, 1.5rem)',
       }}>
         <div style={{
           pointerEvents: 'auto',
-          display: 'flex', alignItems: 'center',
-          background: scrolled ? 'rgba(11,17,32,0.92)' : 'rgba(11,17,32,0.7)',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          background: scrolled ? 'rgba(11,17,32,0.92)' : 'rgba(11,17,32,0.72)',
           backdropFilter: 'blur(20px) saturate(180%)',
-          border: `1px solid ${scrolled ? 'rgba(99,102,241,0.25)' : C.border}`,
+          WebkitBackdropFilter: 'blur(20px) saturate(180%)',
+          border: `1px solid ${scrolled ? 'rgba(99,102,241,0.28)' : C.border}`,
           borderRadius: '999px',
-          padding: '0.35rem 0.5rem',
+          padding: '0.35rem 0.55rem',
           transition: 'all 0.35s cubic-bezier(0.16,1,0.3,1)',
           boxShadow: scrolled ? '0 8px 32px rgba(0,0,0,0.5), 0 0 0 1px rgba(99,102,241,0.1)' : '0 4px 16px rgba(0,0,0,0.25)',
+          maxWidth: '100%',
         }}>
           {/* Logo */}
           <a href="#about" style={{
             fontFamily: C.mono, fontWeight: 700, fontSize: '0.84rem',
             color: C.accent, letterSpacing: '-0.01em',
-            padding: '0.35rem 0.9rem',
+            padding: '0.35rem 0.75rem',
             borderRight: `1px solid ${C.border}`,
-            marginRight: '0.3rem',
+            marginRight: '0.25rem',
             textDecoration: 'none',
             display: 'flex', alignItems: 'center',
           }}>
@@ -552,65 +633,125 @@ function NavBar({ activeSection }: { activeSection: string }) {
             Hire me
           </a>
 
-          {/* Mobile burger */}
+          {/* Mobile burger button with touch-friendly 44px hit area */}
           <button
             onClick={() => setOpen(!open)}
-            className="nav-burger"
-            aria-label="Toggle menu"
+            className="nav-burger touch-target"
+            aria-label="Toggle navigation menu"
             style={{
-              display: 'none',
-              background: 'none',
-              border: 'none',
-              color: C.text,
-              fontSize: '1.25rem',
+              background: open ? 'rgba(99,102,241,0.2)' : 'transparent',
+              border: `1px solid ${open ? 'rgba(99,102,241,0.4)' : 'transparent'}`,
+              borderRadius: '999px',
+              color: open ? '#fff' : C.text,
               cursor: 'pointer',
+              display: 'none',
+              alignItems: 'center',
+              justifyContent: 'center',
               padding: '0.35rem 0.65rem',
+              transition: 'all 0.2s ease',
             }}
           >
-            {open ? '✕' : '☰'}
+            <span style={{ fontSize: '1.15rem', lineHeight: 1 }}>{open ? '✕' : '☰'}</span>
           </button>
         </div>
       </header>
 
-      {/* Mobile dropdown */}
+      {/* Mobile Drawer & Backdrop Overlay */}
       {open && (
-        <div style={{
-          position: 'fixed', top: '4.5rem', left: '1rem', right: '1rem', zIndex: 99,
-          background: 'rgba(11,17,32,0.97)', backdropFilter: 'blur(24px)',
-          border: `1px solid ${C.border}`, borderRadius: '16px',
-          overflow: 'hidden', boxShadow: '0 16px 36px rgba(0,0,0,0.6)',
-        }}>
-          {NAV.map((l) => (
-            <a
-              key={l.href}
-              href={l.href}
-              onClick={() => setOpen(false)}
-              style={{
-                display: 'block', padding: '0.85rem 1.5rem',
-                fontFamily: C.body, color: activeSection === l.href.substring(1) ? C.accent : C.muted,
-                fontSize: '0.9rem', textDecoration: 'none', borderBottom: `1px solid ${C.border}`
-              }}
-            >
-              {l.label}
-            </a>
-          ))}
-          <div style={{ padding: '0.75rem 1rem' }}>
-            <a href="#contact" onClick={() => setOpen(false)} style={{
-              display: 'block', textAlign: 'center', padding: '0.75rem',
-              background: C.accent, color: '#fff', borderRadius: '10px',
-              fontFamily: C.body, fontSize: '0.875rem', fontWeight: 600, textDecoration: 'none',
-            }}>Hire me</a>
+        <>
+          <div
+            onClick={() => setOpen(false)}
+            style={{
+              position: 'fixed',
+              inset: 0,
+              zIndex: 98,
+              background: 'rgba(3, 7, 18, 0.75)',
+              backdropFilter: 'blur(8px)',
+              WebkitBackdropFilter: 'blur(8px)',
+              animation: 'fadeInBackdrop 0.25s ease',
+            }}
+          />
+
+          <div style={{
+            position: 'fixed',
+            top: 'calc(4.8rem + var(--sat))',
+            left: 'clamp(0.75rem, 4vw, 1.5rem)',
+            right: 'clamp(0.75rem, 4vw, 1.5rem)',
+            zIndex: 99,
+            background: 'rgba(11,17,32,0.96)',
+            backdropFilter: 'blur(28px)',
+            WebkitBackdropFilter: 'blur(28px)',
+            border: `1px solid ${C.borderAccent}`,
+            borderRadius: '20px',
+            overflow: 'hidden',
+            boxShadow: '0 20px 48px rgba(0,0,0,0.7), 0 0 30px rgba(99,102,241,0.15)',
+            animation: 'mobileMenuSlideDown 0.3s cubic-bezier(0.16,1,0.3,1)',
+          }}>
+            <div style={{ padding: '0.5rem 0' }}>
+              {NAV.map((l) => {
+                const isActive = activeSection === l.href.substring(1)
+                return (
+                  <a
+                    key={l.href}
+                    href={l.href}
+                    onClick={() => setOpen(false)}
+                    style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'space-between',
+                      padding: '0.9rem 1.4rem',
+                      fontFamily: C.body,
+                      color: isActive ? '#fff' : C.text,
+                      background: isActive ? 'rgba(99,102,241,0.15)' : 'transparent',
+                      borderLeft: `3px solid ${isActive ? C.accent : 'transparent'}`,
+                      fontSize: '0.95rem',
+                      fontWeight: isActive ? 600 : 400,
+                      textDecoration: 'none',
+                      transition: 'background 0.2s',
+                    }}
+                  >
+                    <span>{l.label}</span>
+                    {isActive && (
+                      <span style={{ fontSize: '0.75rem', color: C.accent, fontFamily: C.mono }}>ACTIVE</span>
+                    )}
+                  </a>
+                )
+              })}
+            </div>
+
+            <div style={{ padding: '0.75rem 1.25rem 1.25rem', borderTop: `1px solid ${C.border}` }}>
+              <a
+                href="#contact"
+                onClick={() => setOpen(false)}
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  padding: '0.85rem',
+                  background: 'linear-gradient(135deg, #6366f1 0%, #4f46e5 100%)',
+                  color: '#fff',
+                  borderRadius: '12px',
+                  fontFamily: C.body,
+                  fontSize: '0.92rem',
+                  fontWeight: 600,
+                  textDecoration: 'none',
+                  boxShadow: '0 4px 16px rgba(99,102,241,0.4)',
+                }}
+              >
+                Hire me 🚀
+              </a>
+            </div>
           </div>
-        </div>
+        </>
       )}
 
       <style>{`
-        @media (min-width: 680px) {
+        @media (min-width: 768px) {
           .nav-pills { display: flex !important; }
           .nav-cta { display: inline-flex !important; }
           .nav-burger { display: none !important; }
         }
-        @media (max-width: 679px) {
+        @media (max-width: 767px) {
           .nav-pills { display: none !important; }
           .nav-cta { display: none !important; }
           .nav-burger { display: flex !important; }
@@ -623,7 +764,15 @@ function NavBar({ activeSection }: { activeSection: string }) {
 /* ─── Hero ───────────────────────────────────────────────────────────────── */
 function Hero() {
   return (
-    <section id="about" style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', paddingTop: '6rem', paddingBottom: '4rem', position: 'relative', overflow: 'hidden' }}>
+    <section id="about" style={{
+      minHeight: '100vh',
+      display: 'flex',
+      alignItems: 'center',
+      paddingTop: 'calc(6rem + var(--sat))',
+      paddingBottom: 'clamp(3rem, 6vw, 5rem)',
+      position: 'relative',
+      overflow: 'hidden'
+    }}>
       {/* Subtle grid background */}
       <div style={{
         position: 'absolute', inset: 0, pointerEvents: 'none',
@@ -635,21 +784,21 @@ function Hero() {
 
       {/* Lightweight GPU-accelerated ambient glows */}
       <div className="ambient-glow-1" style={{
-        position: 'absolute', top: '15%', right: '8%', width: 440, height: 440,
+        position: 'absolute', top: '15%', right: '8%', width: 'min(440px, 60vw)', height: 'min(440px, 60vw)',
         borderRadius: '50%', background: 'radial-gradient(circle, rgba(99,102,241,0.14) 0%, transparent 70%)',
         pointerEvents: 'none'
       }} />
       <div className="ambient-glow-2" style={{
-        position: 'absolute', bottom: '15%', left: '4%', width: 320, height: 320,
+        position: 'absolute', bottom: '15%', left: '4%', width: 'min(320px, 50vw)', height: 'min(320px, 50vw)',
         borderRadius: '50%', background: 'radial-gradient(circle, rgba(245,158,11,0.08) 0%, transparent 70%)',
         pointerEvents: 'none'
       }} />
 
-      <div style={{ maxWidth: 1160, margin: '0 auto', padding: '0 1.5rem', width: '100%', position: 'relative', zIndex: 1 }}>
+      <div className="responsive-container" style={{ position: 'relative', zIndex: 1 }}>
         <div style={{
           display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 460px), 1fr))',
-          gap: '3.5rem',
+          gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 420px), 1fr))',
+          gap: 'clamp(2.5rem, 5vw, 4rem)',
           alignItems: 'center',
         }}>
           {/* Left info column */}
@@ -657,7 +806,7 @@ function Hero() {
             <div className="reveal" style={{
               display: 'inline-flex', alignItems: 'center', gap: '0.5rem',
               background: C.accentSoft, border: `1px solid ${C.borderAccent}`,
-              borderRadius: '999px', padding: '0.3rem 0.95rem', marginBottom: '1.75rem',
+              borderRadius: '999px', padding: '0.3rem 0.95rem', marginBottom: '1.5rem',
             }}>
               <span style={{ width: 7, height: 7, background: '#22c55e', borderRadius: '50%', display: 'inline-block', boxShadow: '0 0 8px #22c55e' }} />
               <span style={{ fontFamily: C.mono, fontSize: '0.72rem', color: C.accent, letterSpacing: '0.08em' }}>Last Update: 08/2026</span>
@@ -665,15 +814,15 @@ function Hero() {
 
             <h1 className="reveal delay-1" style={{
               fontFamily: C.display, fontWeight: 800,
-              fontSize: 'clamp(2.6rem, 5.5vw, 4.8rem)',
-              lineHeight: 1.05, letterSpacing: '-0.04em', color: C.text, marginBottom: '0.2rem'
+              fontSize: 'clamp(2.4rem, 6vw, 4.6rem)',
+              lineHeight: 1.08, letterSpacing: '-0.04em', color: C.text, marginBottom: '0.2rem'
             }}>
               Lê Võ
             </h1>
             <h1 className="reveal delay-2" style={{
               fontFamily: C.display, fontWeight: 800,
-              fontSize: 'clamp(2.6rem, 5.5vw, 4.8rem)',
-              lineHeight: 1.05, letterSpacing: '-0.04em', marginBottom: '1.25rem'
+              fontSize: 'clamp(2.4rem, 6vw, 4.6rem)',
+              lineHeight: 1.08, letterSpacing: '-0.04em', marginBottom: '1.15rem'
             }}>
               <span style={{
                 background: 'linear-gradient(135deg, #6366f1 0%, #a78bfa 50%, #f59e0b 100%)',
@@ -682,25 +831,28 @@ function Hero() {
             </h1>
 
             <div className="reveal delay-2" style={{
-              fontFamily: C.body, fontWeight: 400,
-              fontSize: 'clamp(0.9rem, 1.3vw, 1.05rem)',
-              color: '#8b9bb4', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '1.25rem'
+              fontFamily: C.body, fontWeight: 500,
+              fontSize: 'clamp(0.82rem, 1.4vw, 1rem)',
+              color: '#8b9bb4', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '1.15rem'
             }}>
               Data Scientist &nbsp;·&nbsp; AI Engineer
             </div>
 
             <p className="reveal delay-3" style={{
-              fontFamily: C.body, color: '#8b9bb4', fontSize: '0.98rem',
-              lineHeight: 1.8, maxWidth: 520, marginBottom: '2.25rem'
+              fontFamily: C.body, color: '#8b9bb4',
+              fontSize: 'clamp(0.92rem, 1.5vw, 0.98rem)',
+              lineHeight: 1.8, maxWidth: 520, marginBottom: '2rem'
             }}>
               I am a sophomore at <strong style={{ color: C.text, fontWeight: 600 }}>University of Transport and Communications HCMC (UTH)</strong>. Passionate about building hands-on applications and AI solutions that directly impact real-world problems, with the goal of contributing to a dynamic, project-driven environment.
             </p>
 
-            <div className="reveal delay-4" style={{ display: 'flex', gap: '0.85rem', flexWrap: 'wrap', marginBottom: '2.5rem' }}>
-              <a href="#projects" style={{
+            {/* Action buttons (fluid and touch friendly) */}
+            <div className="reveal delay-4 hero-btn-group" style={{ display: 'flex', gap: '0.85rem', flexWrap: 'wrap', marginBottom: '2.25rem' }}>
+              <a href="#projects" className="hero-btn touch-target" style={{
                 fontFamily: C.body, fontWeight: 600, fontSize: '0.875rem',
                 background: C.accent, color: '#fff',
-                padding: '0.75rem 1.65rem', borderRadius: '8px', textDecoration: 'none',
+                padding: '0.75rem 1.65rem', borderRadius: '10px', textDecoration: 'none',
+                display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
                 transition: 'transform 0.2s, box-shadow 0.2s',
                 boxShadow: `0 0 24px rgba(99,102,241,0.35)`,
               }}
@@ -715,10 +867,11 @@ function Hero() {
               >
                 View Projects
               </a>
-              <a href="#contact" style={{
+              <a href="#contact" className="hero-btn touch-target" style={{
                 fontFamily: C.body, fontWeight: 600, fontSize: '0.875rem',
                 border: `1px solid ${C.border}`, color: C.text,
-                padding: '0.75rem 1.65rem', borderRadius: '8px', textDecoration: 'none',
+                padding: '0.75rem 1.65rem', borderRadius: '10px', textDecoration: 'none',
+                display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
                 transition: 'border-color 0.2s, background 0.2s',
               }}
                 onMouseEnter={e => {
@@ -734,17 +887,19 @@ function Hero() {
               </a>
             </div>
 
-            {/* Quick Metrics */}
-            <div className="reveal delay-5" style={{
-              display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(85px, 1fr))',
-              gap: '0.85rem', paddingTop: '1.75rem', borderTop: `1px solid ${C.border}`
+            {/* Quick Metrics: Balanced 4-column on desktop/tablet, 2x2 grid on mobile */}
+            <div className="reveal delay-5 metrics-grid" style={{
+              display: 'grid',
+              gap: '0.75rem',
+              paddingTop: '1.5rem',
+              borderTop: `1px solid ${C.border}`
             }}>
-              {[['N/A', 'Years exp.'], ['N/A', 'Projects'], ['N/A', 'Certifications'], ['N/A', 'Degrees']].map(([v, l]) => (
+              {[['N/A', 'Years exp.'], ['N/A', 'Projects'], ['N/A', 'Certificates'], ['N/A', 'Degrees']].map(([v, l]) => (
                 <div key={l} className="glass-card" style={{
-                  padding: '0.85rem 0.75rem', borderRadius: 12, textAlign: 'center',
+                  padding: '0.85rem 0.65rem', borderRadius: 12, textAlign: 'center',
                 }}>
-                  <div style={{ fontFamily: C.mono, fontWeight: 700, fontSize: '1.25rem', color: '#64748b', lineHeight: 1 }}>{v}</div>
-                  <div style={{ fontFamily: C.body, color: C.muted, fontSize: '0.72rem', marginTop: '0.35rem', letterSpacing: '0.02em', whiteSpace: 'nowrap' }}>{l}</div>
+                  <div style={{ fontFamily: C.mono, fontWeight: 700, fontSize: '1.2rem', color: '#64748b', lineHeight: 1 }}>{v}</div>
+                  <div style={{ fontFamily: C.body, color: C.muted, fontSize: '0.7rem', marginTop: '0.35rem', letterSpacing: '0.02em', whiteSpace: 'nowrap' }}>{l}</div>
                 </div>
               ))}
             </div>
@@ -752,8 +907,8 @@ function Hero() {
 
           {/* Skill card column with animated glowing border */}
           <div className="reveal-right glow-card-container" style={{ width: '100%' }}>
-            <div className="glow-card-inner">
-              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1.25rem' }}>
+            <div className="glow-card-inner" style={{ padding: 'clamp(1.1rem, 3vw, 1.6rem)' }}>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1.15rem', flexWrap: 'wrap', gap: '0.5rem' }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '0.55rem' }}>
                   <div style={{ width: 7, height: 7, borderRadius: '50%', background: 'linear-gradient(135deg,#6366f1,#38bdf8)', boxShadow: '0 0 10px #38bdf8' }} />
                   <span style={{ fontFamily: C.mono, color: C.text, fontSize: '0.74rem', letterSpacing: '0.14em', fontWeight: 700 }}>CORE TECH STACK</span>
@@ -776,6 +931,23 @@ function Hero() {
           </div>
         </div>
       </div>
+
+      <style>{`
+        @media (max-width: 520px) {
+          .metrics-grid {
+            grid-template-columns: repeat(2, 1fr) !important;
+          }
+          .hero-btn {
+            flex: 1 1 calc(50% - 0.5rem) !important;
+            text-align: center;
+          }
+        }
+        @media (min-width: 521px) {
+          .metrics-grid {
+            grid-template-columns: repeat(4, 1fr) !important;
+          }
+        }
+      `}</style>
     </section>
   )
 }
@@ -783,15 +955,15 @@ function Hero() {
 /* ─── Projects Section (Pure Coming Soon) ─────────────────────────────────── */
 function Projects() {
   return (
-    <section id="projects" style={{ padding: '6rem 0', borderTop: `1px solid ${C.border}`, position: 'relative', overflow: 'hidden' }}>
+    <section id="projects" style={{ padding: 'clamp(4rem, 8vw, 6rem) 0', borderTop: `1px solid ${C.border}`, position: 'relative', overflow: 'hidden' }}>
       {/* Ambient background glows */}
       <div className="ambient-glow-1" style={{
         position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)',
-        width: 500, height: 350, background: 'radial-gradient(circle, rgba(99,102,241,0.12) 0%, transparent 70%)',
+        width: 'min(500px, 80vw)', height: 'min(350px, 60vw)', background: 'radial-gradient(circle, rgba(99,102,241,0.12) 0%, transparent 70%)',
         pointerEvents: 'none', zIndex: 0
       }} />
 
-      <div style={{ maxWidth: 1160, margin: '0 auto', padding: '0 1.5rem', position: 'relative', zIndex: 1 }}>
+      <div className="responsive-container" style={{ position: 'relative', zIndex: 1 }}>
         <SectionHeader
           label="// PROJECTS"
           title="My Projects"
@@ -801,35 +973,35 @@ function Projects() {
         {/* Pure Aesthetic Coming Soon Box with Rotating Border Beam */}
         <div className="reveal delay-1 glow-card-container" style={{ maxWidth: 860, margin: '0 auto' }}>
           <div className="glow-card-inner" style={{
-            padding: 'clamp(3rem, 6vw, 4.5rem) clamp(1.5rem, 4vw, 3rem)',
+            padding: 'clamp(2.5rem, 5vw, 4.5rem) clamp(1.25rem, 4vw, 3rem)',
             textAlign: 'center',
             alignItems: 'center',
             justifyContent: 'center',
             position: 'relative',
           }}>
             {/* Concentric Pulse Rings with Rocket Icon */}
-            <div style={{ position: 'relative', width: 90, height: 90, margin: '0 auto 2rem', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <div style={{ position: 'relative', width: 84, height: 84, margin: '0 auto 1.75rem', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
               {/* Outer pulse ring 1 */}
               <div style={{
-                position: 'absolute', inset: -18, borderRadius: '50%',
+                position: 'absolute', inset: -16, borderRadius: '50%',
                 border: '1px solid rgba(99,102,241,0.3)',
                 animation: 'pulseRing 3s ease-out infinite',
               }} />
               {/* Outer pulse ring 2 */}
               <div style={{
-                position: 'absolute', inset: -8, borderRadius: '50%',
+                position: 'absolute', inset: -7, borderRadius: '50%',
                 border: '1px solid rgba(167,139,250,0.4)',
                 animation: 'pulseRing 3s ease-out infinite 1.5s',
               }} />
               {/* Center glowing circle */}
               <div style={{
-                width: 72, height: 72, borderRadius: '50%',
+                width: 68, height: 68, borderRadius: '50%',
                 background: 'linear-gradient(135deg, rgba(99,102,241,0.2) 0%, rgba(167,139,250,0.3) 100%)',
                 border: '1px solid rgba(99,102,241,0.5)',
                 display: 'flex', alignItems: 'center', justifyContent: 'center',
                 boxShadow: '0 0 30px rgba(99,102,241,0.4), inset 0 0 15px rgba(167,139,250,0.3)',
               }}>
-                <span style={{ fontSize: '2rem' }}>🚀</span>
+                <span style={{ fontSize: '1.85rem' }}>🚀</span>
               </div>
             </div>
 
@@ -837,7 +1009,7 @@ function Projects() {
             <div style={{
               display: 'inline-flex', alignItems: 'center', gap: '0.6rem',
               background: 'rgba(99,102,241,0.12)', border: '1px solid rgba(99,102,241,0.35)',
-              borderRadius: '999px', padding: '0.35rem 1.1rem', marginBottom: '1.25rem',
+              borderRadius: '999px', padding: '0.35rem 1rem', marginBottom: '1.15rem',
             }}>
               <span style={{
                 width: 8, height: 8, borderRadius: '50%',
@@ -852,9 +1024,9 @@ function Projects() {
             {/* Giant Gradient Title */}
             <h3 style={{
               fontFamily: C.display, fontWeight: 900,
-              fontSize: 'clamp(2.4rem, 6.5vw, 4.2rem)',
+              fontSize: 'clamp(2.1rem, 5.5vw, 4rem)',
               lineHeight: 1.1, letterSpacing: '-0.03em',
-              marginBottom: '1rem',
+              marginBottom: '0.85rem',
               background: 'linear-gradient(135deg, #ffffff 0%, #a78bfa 50%, #38bdf8 100%)',
               WebkitBackgroundClip: 'text',
               WebkitTextFillColor: 'transparent',
@@ -865,19 +1037,19 @@ function Projects() {
 
             <p style={{
               fontFamily: C.body, color: '#94a3b8',
-              fontSize: 'clamp(0.95rem, 1.4vw, 1.1rem)',
-              lineHeight: 1.75, maxWidth: 520, margin: '0 auto 2rem',
+              fontSize: 'clamp(0.92rem, 1.4vw, 1.05rem)',
+              lineHeight: 1.75, maxWidth: 520, margin: '0 auto 1.75rem',
             }}>
               Các dự án thực tế đang được hoàn thiện kỹ lưỡng và sẽ sớm ra mắt trong thời gian tới.
             </p>
 
             {/* Tech badges indicator */}
-            <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: '0.6rem' }}>
+            <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: '0.5rem' }}>
               {['C++', 'Python', 'MySQL', 'Data Science', 'AI & Machine Learning'].map((t) => (
                 <span key={t} style={{
-                  fontFamily: C.mono, fontSize: '0.72rem', color: '#cbd5e1',
+                  fontFamily: C.mono, fontSize: '0.7rem', color: '#cbd5e1',
                   background: 'rgba(255,255,255,0.04)', border: `1px solid ${C.border}`,
-                  padding: '0.3rem 0.8rem', borderRadius: 999,
+                  padding: '0.28rem 0.75rem', borderRadius: 999,
                   letterSpacing: '0.03em'
                 }}>
                   ✦ {t}
@@ -894,8 +1066,8 @@ function Projects() {
 /* ─── Education Section ──────────────────────────────────────────────────── */
 function Education() {
   return (
-    <section id="education" style={{ padding: '6rem 0', borderTop: `1px solid ${C.border}`, position: 'relative' }}>
-      <div style={{ maxWidth: 1160, margin: '0 auto', padding: '0 1.5rem', position: 'relative', zIndex: 1 }}>
+    <section id="education" style={{ padding: 'clamp(4rem, 8vw, 6rem) 0', borderTop: `1px solid ${C.border}`, position: 'relative' }}>
+      <div className="responsive-container" style={{ position: 'relative', zIndex: 1 }}>
         <SectionHeader label="// EDUCATION" title="Học vấn" sub="Quá trình đào tạo đại học chính quy tại Trường Đại học Giao thông Vận tải TP.HCM (UTH)." />
 
         <div style={{
@@ -905,33 +1077,34 @@ function Education() {
         }}>
           {EDUCATION.map((edu, i) => (
             <div key={i} className={`reveal delay-${i + 1} glass-card`} style={{
-              borderRadius: 18, padding: '2.2rem', position: 'relative', overflow: 'hidden',
+              borderRadius: 18, padding: 'clamp(1.35rem, 4vw, 2.2rem)', position: 'relative', overflow: 'hidden',
             }}>
               <div style={{
                 position: 'absolute', top: 0, left: 0, right: 0, height: '2px',
                 background: 'linear-gradient(90deg, #6366f1, #38bdf8)',
               }} />
 
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '1.25rem' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '1.25rem', flexWrap: 'wrap', gap: '0.65rem' }}>
                 <div style={{
-                  width: 48, height: 48, borderRadius: 12,
+                  width: 44, height: 44, borderRadius: 12,
                   background: C.accentSoft,
                   border: `1px solid ${C.borderAccent}`,
                   display: 'flex', alignItems: 'center', justifyContent: 'center',
                   fontFamily: C.mono, fontWeight: 700, fontSize: '0.8rem',
                   color: C.accent,
+                  flexShrink: 0,
                 }}>
                   {edu.badge}
                 </div>
                 <div style={{ textAlign: 'right' }}>
                   <div style={{ fontFamily: C.mono, color: C.muted, fontSize: '0.72rem' }}>{edu.period}</div>
-                  <div style={{ fontFamily: C.mono, fontWeight: 600, fontSize: '0.82rem', color: '#38bdf8', marginTop: '0.2rem' }}>
+                  <div style={{ fontFamily: C.mono, fontWeight: 600, fontSize: '0.82rem', color: '#38bdf8', marginTop: '0.15rem' }}>
                     {edu.status}
                   </div>
                 </div>
               </div>
 
-              <h3 style={{ fontFamily: C.display, fontWeight: 700, fontSize: '1.2rem', color: C.text, marginBottom: '0.35rem' }}>
+              <h3 style={{ fontFamily: C.display, fontWeight: 700, fontSize: 'clamp(1.1rem, 2.5vw, 1.25rem)', color: C.text, marginBottom: '0.35rem' }}>
                 {edu.degree}
               </h3>
               <div style={{ fontFamily: C.body, fontSize: '0.92rem', color: C.accent, marginBottom: '1rem', fontWeight: 500 }}>
@@ -951,14 +1124,14 @@ function Education() {
 /* ─── Certificates Section ───────────────────────────────────────────────── */
 function Certificates() {
   return (
-    <section id="certificates" style={{ padding: '6rem 0', borderTop: `1px solid ${C.border}`, position: 'relative' }}>
-      <div style={{ maxWidth: 1160, margin: '0 auto', padding: '0 1.5rem', position: 'relative', zIndex: 1 }}>
+    <section id="certificates" style={{ padding: 'clamp(4rem, 8vw, 6rem) 0', borderTop: `1px solid ${C.border}`, position: 'relative' }}>
+      <div className="responsive-container" style={{ position: 'relative', zIndex: 1 }}>
         <SectionHeader label="// CERTIFICATES" title="Chứng chỉ" sub="Các chứng nhận & chứng chỉ chuyên môn quốc tế." />
 
         <div className="reveal delay-1 glass-card" style={{
           border: `1px dashed ${C.border}`,
           borderRadius: 18,
-          padding: '3.2rem 2rem',
+          padding: 'clamp(2.2rem, 5vw, 3.2rem) clamp(1.2rem, 4vw, 2rem)',
           textAlign: 'center',
           maxWidth: 620,
           margin: '0 auto',
@@ -1005,39 +1178,52 @@ function Contact() {
     WebkitBackdropFilter: 'blur(16px)',
     border: `1px solid ${focus === id ? C.borderAccent : C.border}`,
     borderRadius: 10, padding: '0.85rem 1.1rem',
-    color: C.text, fontFamily: C.body, fontSize: '0.9rem',
+    color: C.text, fontFamily: C.body,
+    fontSize: '16px', // Prevents iOS Safari auto-zoom on mobile inputs
     width: '100%', outline: 'none', transition: 'all 0.25s ease',
     boxShadow: focus === id ? '0 0 16px rgba(99,102,241,0.2)' : 'none',
   })
 
   return (
-    <section id="contact" style={{ padding: '6rem 0', borderTop: `1px solid ${C.border}`, position: 'relative' }}>
-      <div style={{ maxWidth: 1160, margin: '0 auto', padding: '0 1.5rem', position: 'relative', zIndex: 1 }}>
+    <section id="contact" style={{ padding: 'clamp(4rem, 8vw, 6rem) 0', borderTop: `1px solid ${C.border}`, position: 'relative' }}>
+      <div className="responsive-container" style={{ position: 'relative', zIndex: 1 }}>
         <SectionHeader label="// CONTACT" title="Liên hệ" sub="Có dự án thú vị? Hãy cùng trao đổi." />
 
         <div style={{
           display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 380px), 1fr))',
-          gap: '3.5rem',
+          gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 340px), 1fr))',
+          gap: 'clamp(2rem, 5vw, 3.5rem)',
           alignItems: 'start',
         }}>
           {/* Info */}
           <div className="reveal-left">
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.85rem', marginBottom: '2rem' }}>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.85rem', marginBottom: '1.75rem' }}>
               {[
-                { icon: '✉', label: 'Email', val: 'khoalevodang301007@gmail.com' },
-                { icon: '📍', label: 'Location', val: 'TPHCM, Việt Nam' },
-                { icon: '💼', label: 'LinkedIn', val: 'Update laster' },
-                { icon: '⌨', label: 'GitHub', val: 'https://github.com/khoalvd839764-netizen' },
+                { icon: '✉', label: 'Email', val: 'khoalevodang301007@gmail.com', href: 'mailto:khoalevodang301007@gmail.com' },
+                { icon: '📍', label: 'Location', val: 'TPHCM, Việt Nam', href: undefined },
+                { icon: '💼', label: 'LinkedIn', val: 'Update later', href: undefined },
+                { icon: '⌨', label: 'GitHub', val: 'github.com/khoalvd839764-netizen', href: 'https://github.com/khoalvd839764-netizen' },
               ].map((info) => (
                 <div key={info.label} className="glass-card" style={{
-                  display: 'flex', gap: '1rem', alignItems: 'center',
-                  padding: '0.95rem 1.25rem', borderRadius: 14
+                  display: 'flex', gap: '0.9rem', alignItems: 'center',
+                  padding: '0.95rem 1.15rem', borderRadius: 14
                 }}>
                   <span style={{ fontSize: '1.15rem', flexShrink: 0, opacity: 0.9 }}>{info.icon}</span>
-                  <div>
+                  <div style={{ minWidth: 0, flex: 1 }}>
                     <div style={{ fontFamily: C.mono, color: C.muted, fontSize: '0.65rem', letterSpacing: '0.1em', marginBottom: '0.15rem' }}>{info.label.toUpperCase()}</div>
-                    <div style={{ fontFamily: C.body, color: '#c4d1e6', fontSize: '0.88rem' }}>{info.val}</div>
+                    {info.href ? (
+                      <a href={info.href} target="_blank" rel="noopener noreferrer" className="break-words-anywhere" style={{
+                        fontFamily: C.body, color: '#c4d1e6', fontSize: '0.88rem', textDecoration: 'none', transition: 'color 0.2s',
+                        display: 'block',
+                      }}
+                        onMouseEnter={e => (e.currentTarget.style.color = C.accent)}
+                        onMouseLeave={e => (e.currentTarget.style.color = '#c4d1e6')}
+                      >
+                        {info.val}
+                      </a>
+                    ) : (
+                      <div className="break-words-anywhere" style={{ fontFamily: C.body, color: '#c4d1e6', fontSize: '0.88rem' }}>{info.val}</div>
+                    )}
                   </div>
                 </div>
               ))}
@@ -1057,7 +1243,7 @@ function Contact() {
           {/* Form */}
           <form className="reveal-right glass-card" onSubmit={handleSubmit} style={{
             display: 'flex', flexDirection: 'column', gap: '1.1rem',
-            padding: '2rem', borderRadius: 18,
+            padding: 'clamp(1.25rem, 4vw, 2rem)', borderRadius: 18,
           }}>
             <div style={{
               display: 'grid',
@@ -1087,12 +1273,13 @@ function Contact() {
                 onFocus={() => setFocus('message')} onBlur={() => setFocus('')}
               />
             </div>
-            <button type="submit" style={{
-              fontFamily: C.body, fontWeight: 700, fontSize: '0.9rem',
+            <button type="submit" className="touch-target" style={{
+              fontFamily: C.body, fontWeight: 700, fontSize: '0.92rem',
               background: sent ? 'rgba(34,197,94,0.2)' : 'linear-gradient(135deg, #6366f1 0%, #4f46e5 100%)',
               color: sent ? '#22c55e' : '#fff',
               border: sent ? '1px solid rgba(34,197,94,0.4)' : '1px solid rgba(255,255,255,0.15)',
               padding: '0.9rem', borderRadius: 10, cursor: 'pointer',
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
               transition: 'all 0.3s cubic-bezier(0.16,1,0.3,1)',
               boxShadow: sent ? 'none' : `0 0 24px rgba(99,102,241,0.4)`,
             }}>
@@ -1107,18 +1294,28 @@ function Contact() {
 
 /* ─── Footer ─────────────────────────────────────────────────────────────── */
 function Footer() {
-  
   return (
     <footer style={{
-      borderTop: `1px solid ${C.border}`, padding: '2rem 0',
-      background: 'rgba(5, 8, 15, 0.75)', backdropFilter: 'blur(16px)', WebkitBackdropFilter: 'blur(16px)',
-      position: 'relative', zIndex: 10
+      borderTop: `1px solid ${C.border}`,
+      padding: 'clamp(1.5rem, 3vw, 2.25rem) 0',
+      paddingBottom: 'calc(clamp(1.5rem, 3vw, 2.25rem) + var(--sab))',
+      background: 'rgba(5, 8, 15, 0.75)',
+      backdropFilter: 'blur(16px)',
+      WebkitBackdropFilter: 'blur(16px)',
+      position: 'relative',
+      zIndex: 10
     }}>
-      <div style={{ maxWidth: 1160, margin: '0 auto', padding: '0 1.5rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '1rem' }}>
+      <div className="responsive-container" style={{
+        display: 'flex',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        flexWrap: 'wrap',
+        gap: '1.25rem'
+      }}>
         <div style={{ fontFamily: C.mono, fontSize: '0.75rem', color: C.muted }}>
           © {new Date().getFullYear()} Lê Võ Đăng Khoa — Data Scientist & AI Engineer
         </div>
-        <div style={{ display: 'flex', gap: '1.5rem' }}>
+        <div style={{ display: 'flex', gap: 'clamp(1rem, 3vw, 1.5rem)', flexWrap: 'wrap' }}>
           {['GitHub', 'LinkedIn', 'Kaggle', 'HuggingFace'].map(s => (
             <a key={s} href="#" style={{ fontFamily: C.body, fontSize: '0.8rem', color: C.muted, textDecoration: 'none', transition: 'color 0.2s' }}
               onMouseEnter={e => (e.currentTarget.style.color = C.text)}
@@ -1210,3 +1407,4 @@ export default function App() {
     </div>
   )
 }
+
