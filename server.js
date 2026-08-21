@@ -28,7 +28,9 @@ Thông tin chính xác về Lê Võ Đăng Khoa:
   1. C++: Cấu trúc dữ liệu & Giải thuật nâng cao, Lập trình hướng đối tượng (OOP), C++ STL, tối ưu bộ nhớ.
   2. Python: Khoa học dữ liệu, Machine Learning, xử lý và trực quan hóa dữ liệu (NumPy, Pandas, Scikit-Learn, Matplotlib).
   3. MySQL: Thiết kế hệ quản trị cơ sở dữ liệu quan hệ (RDBMS), tối ưu hóa câu truy vấn SQL, phân tích dữ liệu kinh doanh.
-- Dự án (Projects): Đang trong quá trình hoàn thiện các dự án thực tế về AI/ML, C++ Engine và Database Schema để sớm public trên GitHub.
+- Dự án tiêu biểu (Projects):
+  1. "Hành Trang Của Mẹ & Góc Nhỏ Của Ba" (Live App: https://khoalevo-bavame.vercel.app/) — Nền tảng cẩm nang gia đình, chia sẻ mẹo hay cuộc sống & kinh nghiệm nuôi dạy con, xây dựng bằng React, TypeScript, Tailwind CSS, tối ưu PWA trên Vercel.
+  2. Các dự án AI/ML, C++ DSA Engine và Database Schema đang tiếp tục được phát triển và public trên GitHub.
 - Chứng chỉ (Certificates): Đang trong lộ trình học tập & chuẩn bị thi chứng chỉ chuyên ngành.
 - Địa điểm: TP. Hồ Chí Minh, Việt Nam.
 - Email liên hệ: khoalevodang301007@gmail.com

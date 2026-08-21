@@ -38,7 +38,26 @@ const SKILLS = [
   },
 ]
 
-
+const PROJECTS = [
+  {
+    id: 'bavame',
+    title: 'Hành Trang Của Mẹ & Góc Nhỏ Của Ba',
+    subtitle: 'Family Knowledge & Life Hub Platform',
+    desc: 'Nền tảng chia sẻ mẹo hay cuộc sống, cẩm nang gia đình, kinh nghiệm nuôi dạy con và lưu giữ những lời dạy yêu thương. Được thiết kế hiện đại, tối ưu PWA trên cả di động và máy tính.',
+    tags: ['React', 'TypeScript', 'Tailwind CSS', 'PWA', 'Vercel'],
+    link: 'https://khoalevo-bavame.vercel.app/',
+    featured: true,
+    status: 'Live App',
+    badge: 'FEATURED APP',
+    icon: '🏡',
+    grad: ['#f59e0b', '#ec4899', '#6366f1'],
+    stats: [
+      { label: 'Platform', value: 'Web & PWA' },
+      { label: 'Deployment', value: 'Vercel' },
+      { label: 'Status', value: 'Live 24/7' },
+    ],
+  },
+]
 
 const EDUCATION = [
   {
@@ -894,11 +913,18 @@ function Hero() {
               paddingTop: '1.5rem',
               borderTop: `1px solid ${C.border}`
             }}>
-              {[['N/A', 'Years exp.'], ['N/A', 'Projects'], ['N/A', 'Certificates'], ['N/A', 'Degrees']].map(([v, l]) => (
+              {[['N/A', 'Years exp.'], ['01', 'Projects'], ['N/A', 'Certificates'], ['N/A', 'Degrees']].map(([v, l]) => (
                 <div key={l} className="glass-card" style={{
                   padding: '0.85rem 0.65rem', borderRadius: 12, textAlign: 'center',
                 }}>
-                  <div style={{ fontFamily: C.mono, fontWeight: 700, fontSize: '1.2rem', color: '#64748b', lineHeight: 1 }}>{v}</div>
+                  <div style={{
+                    fontFamily: C.mono,
+                    fontWeight: 700,
+                    fontSize: '1.2rem',
+                    color: v === '01' ? '#38bdf8' : '#64748b',
+                    lineHeight: 1,
+                    textShadow: v === '01' ? '0 0 12px rgba(56,189,248,0.5)' : 'none',
+                  }}>{v}</div>
                   <div style={{ fontFamily: C.body, color: C.muted, fontSize: '0.7rem', marginTop: '0.35rem', letterSpacing: '0.02em', whiteSpace: 'nowrap' }}>{l}</div>
                 </div>
               ))}
@@ -952,116 +978,261 @@ function Hero() {
   )
 }
 
-/* ─── Projects Section (Pure Coming Soon) ─────────────────────────────────── */
+/* ─── Projects Section ───────────────────────────────────────────────────── */
 function Projects() {
+  const [featuredHov, setFeaturedHov] = useState(false)
+
   return (
     <section id="projects" style={{ padding: 'clamp(4rem, 8vw, 6rem) 0', borderTop: `1px solid ${C.border}`, position: 'relative', overflow: 'hidden' }}>
       {/* Ambient background glows */}
       <div className="ambient-glow-1" style={{
-        position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)',
-        width: 'min(500px, 80vw)', height: 'min(350px, 60vw)', background: 'radial-gradient(circle, rgba(99,102,241,0.12) 0%, transparent 70%)',
+        position: 'absolute', top: '35%', left: '50%', transform: 'translate(-50%, -50%)',
+        width: 'min(600px, 85vw)', height: 'min(400px, 65vw)', background: 'radial-gradient(circle, rgba(99,102,241,0.14) 0%, transparent 70%)',
         pointerEvents: 'none', zIndex: 0
       }} />
 
       <div className="responsive-container" style={{ position: 'relative', zIndex: 1 }}>
         <SectionHeader
-          label="// PROJECTS"
-          title="My Projects"
-          sub="Các dự án cá nhân & học thuật đang trong quá trình phát triển."
+          label="// FEATURED PROJECTS"
+          title="Dự án của tôi"
+          sub="Các sản phẩm, ứng dụng thực tế và dự án học thuật được xây dựng & triển khai trực tiếp."
         />
 
-        {/* Pure Aesthetic Coming Soon Box with Rotating Border Beam */}
-        <div className="reveal delay-1 glow-card-container" style={{ maxWidth: 860, margin: '0 auto' }}>
+        {/* 1. Featured Project: Hành Trang Của Mẹ & Góc Nhỏ Của Ba */}
+        <div className="reveal delay-1 glow-card-container" style={{ maxWidth: 960, margin: '0 auto 3rem' }}>
           <div className="glow-card-inner" style={{
-            padding: 'clamp(2.5rem, 5vw, 4.5rem) clamp(1.25rem, 4vw, 3rem)',
-            textAlign: 'center',
-            alignItems: 'center',
-            justifyContent: 'center',
+            padding: 'clamp(1.5rem, 4vw, 2.5rem)',
             position: 'relative',
           }}>
-            {/* Concentric Pulse Rings with Rocket Icon */}
-            <div style={{ position: 'relative', width: 84, height: 84, margin: '0 auto 1.75rem', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-              {/* Outer pulse ring 1 */}
+            {/* Header: Status Pills & Live Badge */}
+            <div style={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              marginBottom: '1.5rem',
+              flexWrap: 'wrap',
+              gap: '0.75rem',
+            }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', flexWrap: 'wrap' }}>
+                <span style={{
+                  fontFamily: C.mono, fontSize: '0.7rem', fontWeight: 700,
+                  color: '#fbbf24',
+                  background: 'rgba(245, 158, 11, 0.14)',
+                  border: '1px solid rgba(245, 158, 11, 0.35)',
+                  padding: '0.25rem 0.75rem', borderRadius: '6px',
+                  letterSpacing: '0.06em',
+                }}>
+                  ✦ FEATURED PROJECT
+                </span>
+                <span style={{
+                  fontFamily: C.mono, fontSize: '0.7rem',
+                  color: '#94a3b8',
+                  background: 'rgba(255, 255, 255, 0.04)',
+                  border: `1px solid ${C.border}`,
+                  padding: '0.25rem 0.65rem', borderRadius: '6px',
+                }}>
+                  Life & Family Hub
+                </span>
+              </div>
+
+              {/* Live Status indicator */}
               <div style={{
-                position: 'absolute', inset: -16, borderRadius: '50%',
-                border: '1px solid rgba(99,102,241,0.3)',
-                animation: 'pulseRing 3s ease-out infinite',
-              }} />
-              {/* Outer pulse ring 2 */}
-              <div style={{
-                position: 'absolute', inset: -7, borderRadius: '50%',
-                border: '1px solid rgba(167,139,250,0.4)',
-                animation: 'pulseRing 3s ease-out infinite 1.5s',
-              }} />
-              {/* Center glowing circle */}
-              <div style={{
-                width: 68, height: 68, borderRadius: '50%',
-                background: 'linear-gradient(135deg, rgba(99,102,241,0.2) 0%, rgba(167,139,250,0.3) 100%)',
-                border: '1px solid rgba(99,102,241,0.5)',
-                display: 'flex', alignItems: 'center', justifyContent: 'center',
-                boxShadow: '0 0 30px rgba(99,102,241,0.4), inset 0 0 15px rgba(167,139,250,0.3)',
+                display: 'inline-flex', alignItems: 'center', gap: '0.5rem',
+                background: 'rgba(34, 197, 94, 0.12)',
+                border: '1px solid rgba(34, 197, 94, 0.35)',
+                borderRadius: '999px',
+                padding: '0.3rem 0.85rem',
               }}>
-                <span style={{ fontSize: '1.85rem' }}>🚀</span>
+                <span style={{
+                  width: 8, height: 8, borderRadius: '50%',
+                  background: '#22c55e',
+                  boxShadow: '0 0 10px #22c55e',
+                  display: 'inline-block',
+                }} />
+                <span style={{ fontFamily: C.mono, fontSize: '0.72rem', color: '#4ade80', fontWeight: 600, letterSpacing: '0.04em' }}>
+                  Live on Vercel
+                </span>
               </div>
             </div>
 
-            {/* Status pill */}
+            {/* Project Content Body */}
             <div style={{
-              display: 'inline-flex', alignItems: 'center', gap: '0.6rem',
-              background: 'rgba(99,102,241,0.12)', border: '1px solid rgba(99,102,241,0.35)',
-              borderRadius: '999px', padding: '0.35rem 1rem', marginBottom: '1.15rem',
+              display: 'grid',
+              gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 360px), 1fr))',
+              gap: 'clamp(1.5rem, 3.5vw, 2.5rem)',
+              alignItems: 'center',
+              marginBottom: '1.75rem',
             }}>
-              <span style={{
-                width: 8, height: 8, borderRadius: '50%',
-                background: '#22c55e', boxShadow: '0 0 10px #22c55e',
-                display: 'inline-block',
-              }} />
-              <span style={{ fontFamily: C.mono, fontSize: '0.72rem', color: '#818cf8', fontWeight: 600, letterSpacing: '0.12em' }}>
-                IN ACTIVE DEVELOPMENT
-              </span>
-            </div>
+              <div>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '0.65rem' }}>
+                  <div style={{
+                    width: 44, height: 44, borderRadius: 12,
+                    background: 'linear-gradient(135deg, rgba(245,158,11,0.2) 0%, rgba(236,72,153,0.25) 100%)',
+                    border: '1px solid rgba(245,158,11,0.4)',
+                    display: 'flex', alignItems: 'center', justifyContent: 'center',
+                    fontSize: '1.4rem', flexShrink: 0,
+                  }}>
+                    🏡
+                  </div>
+                  <div>
+                    <h3 style={{
+                      fontFamily: C.display, fontWeight: 800,
+                      fontSize: 'clamp(1.35rem, 3vw, 1.85rem)',
+                      lineHeight: 1.2, color: '#fff',
+                      letterSpacing: '-0.02em',
+                    }}>
+                      Hành Trang Của Mẹ & Góc Nhỏ Của Ba
+                    </h3>
+                  </div>
+                </div>
 
-            {/* Giant Gradient Title */}
-            <h3 style={{
-              fontFamily: C.display, fontWeight: 900,
-              fontSize: 'clamp(2.1rem, 5.5vw, 4rem)',
-              lineHeight: 1.1, letterSpacing: '-0.03em',
-              marginBottom: '0.85rem',
-              background: 'linear-gradient(135deg, #ffffff 0%, #a78bfa 50%, #38bdf8 100%)',
-              WebkitBackgroundClip: 'text',
-              WebkitTextFillColor: 'transparent',
-              textShadow: '0 0 40px rgba(99,102,241,0.3)',
-            }}>
-              Coming Soon
-            </h3>
-
-            <p style={{
-              fontFamily: C.body, color: '#94a3b8',
-              fontSize: 'clamp(0.92rem, 1.4vw, 1.05rem)',
-              lineHeight: 1.75, maxWidth: 520, margin: '0 auto 1.75rem',
-            }}>
-              Các dự án thực tế đang được hoàn thiện kỹ lưỡng và sẽ sớm ra mắt trong thời gian tới.
-            </p>
-
-            {/* Tech badges indicator */}
-            <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: '0.5rem' }}>
-              {['C++', 'Python', 'MySQL', 'Data Science', 'AI & Machine Learning'].map((t) => (
-                <span key={t} style={{
-                  fontFamily: C.mono, fontSize: '0.7rem', color: '#cbd5e1',
-                  background: 'rgba(255,255,255,0.04)', border: `1px solid ${C.border}`,
-                  padding: '0.28rem 0.75rem', borderRadius: 999,
-                  letterSpacing: '0.03em'
+                <div style={{
+                  fontFamily: C.mono, fontSize: '0.8rem',
+                  color: '#a78bfa', marginBottom: '0.9rem', fontWeight: 500,
                 }}>
-                  ✦ {t}
-                </span>
-              ))}
+                  Family Knowledge & Life Hub Platform
+                </div>
+
+                <p style={{
+                  fontFamily: C.body, color: '#94a3b8',
+                  fontSize: 'clamp(0.88rem, 1.5vw, 0.95rem)',
+                  lineHeight: 1.75, marginBottom: '1.25rem',
+                }}>
+                  Nền tảng chia sẻ mẹo hay cuộc sống, cẩm nang gia đình, kinh nghiệm nuôi dạy con và lưu giữ những lời dạy yêu thương. Được thiết kế hiện đại, tối ưu PWA trên cả di động và máy tính.
+                </p>
+
+                {/* Tech Badges */}
+                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.4rem', marginBottom: '1.5rem' }}>
+                  {['React', 'TypeScript', 'Tailwind CSS', 'PWA', 'Vercel'].map((t) => (
+                    <span key={t} style={{
+                      fontFamily: C.mono, fontSize: '0.7rem', color: '#cbd5e1',
+                      background: 'rgba(255,255,255,0.05)', border: `1px solid ${C.borderAccent}`,
+                      padding: '0.25rem 0.65rem', borderRadius: 6,
+                    }}>
+                      {t}
+                    </span>
+                  ))}
+                </div>
+
+                {/* Direct Action Link Button */}
+                <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
+                  <a
+                    href="https://khoalevo-bavame.vercel.app/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="touch-target"
+                    onMouseEnter={() => setFeaturedHov(true)}
+                    onMouseLeave={() => setFeaturedHov(false)}
+                    style={{
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      gap: '0.55rem',
+                      fontFamily: C.body,
+                      fontWeight: 700,
+                      fontSize: '0.9rem',
+                      background: 'linear-gradient(135deg, #6366f1 0%, #a855f7 50%, #ec4899 100%)',
+                      color: '#fff',
+                      padding: '0.75rem 1.4rem',
+                      borderRadius: '10px',
+                      textDecoration: 'none',
+                      boxShadow: featuredHov ? '0 8px 24px rgba(236,72,153,0.5)' : '0 4px 16px rgba(99,102,241,0.4)',
+                      transform: featuredHov ? 'translate3d(0,-2px,0)' : 'translate3d(0,0,0)',
+                      transition: 'all 0.25s cubic-bezier(0.16,1,0.3,1)',
+                    }}
+                  >
+                    <span>Truy cập ứng dụng (Live Demo)</span>
+                    <span style={{ fontSize: '1.1rem' }}>↗</span>
+                  </a>
+                </div>
+              </div>
+
+              {/* Highlights & Metrics Subcard */}
+              <div style={{
+                background: 'rgba(17, 28, 48, 0.55)',
+                border: `1px solid ${C.border}`,
+                borderRadius: 16,
+                padding: 'clamp(1.1rem, 2.5vw, 1.5rem)',
+                display: 'flex',
+                flexDirection: 'column',
+                gap: '1rem',
+              }}>
+                <div style={{ fontFamily: C.mono, fontSize: '0.72rem', color: '#818cf8', fontWeight: 600, letterSpacing: '0.08em' }}>
+                  HIGHLIGHTS & KEY SPECS
+                </div>
+
+                {[
+                  { icon: '📱', title: 'Progressive Web App (PWA)', desc: 'Cài đặt trực tiếp trên iOS/Android như app gốc' },
+                  { icon: '⚡', title: 'Vercel Edge Deployment', desc: 'Tốc độ phản hồi tức thì với CDN toàn cầu' },
+                  { icon: '💖', title: 'Rich Life & Parenting Hub', desc: 'Chia sẻ kinh nghiệm nuôi dạy và kiến thức gia đình' },
+                ].map((item) => (
+                  <div key={item.title} style={{ display: 'flex', gap: '0.75rem', alignItems: 'flex-start' }}>
+                    <span style={{ fontSize: '1.1rem', flexShrink: 0, marginTop: '0.1rem' }}>{item.icon}</span>
+                    <div>
+                      <div style={{ fontFamily: C.body, fontWeight: 600, fontSize: '0.85rem', color: C.text }}>
+                        {item.title}
+                      </div>
+                      <div style={{ fontFamily: C.body, fontSize: '0.75rem', color: C.muted, marginTop: '0.15rem' }}>
+                        {item.desc}
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
             </div>
+          </div>
+        </div>
+
+        {/* 2. Next In Development / Coming Soon Projects */}
+        <div className="reveal delay-2 glass-card" style={{
+          maxWidth: 960, margin: '0 auto',
+          borderRadius: 20,
+          padding: 'clamp(2rem, 4vw, 3rem) clamp(1.2rem, 3.5vw, 2.5rem)',
+          textAlign: 'center',
+        }}>
+          <div style={{
+            display: 'inline-flex', alignItems: 'center', gap: '0.5rem',
+            background: 'rgba(99,102,241,0.12)', border: '1px solid rgba(99,102,241,0.3)',
+            borderRadius: '999px', padding: '0.3rem 0.95rem', marginBottom: '1.15rem',
+          }}>
+            <span style={{ width: 7, height: 7, borderRadius: '50%', background: '#38bdf8', boxShadow: '0 0 8px #38bdf8' }} />
+            <span style={{ fontFamily: C.mono, fontSize: '0.7rem', color: '#818cf8', fontWeight: 600, letterSpacing: '0.1em' }}>
+              UPCOMING AI & DATA SCIENCE PROJECTS
+            </span>
+          </div>
+
+          <h4 style={{
+            fontFamily: C.display, fontWeight: 800,
+            fontSize: 'clamp(1.5rem, 3.5vw, 2.2rem)',
+            color: '#fff', marginBottom: '0.65rem',
+          }}>
+            Dự án AI & Khoa học Dữ liệu tiếp theo
+          </h4>
+
+          <p style={{
+            fontFamily: C.body, color: C.muted,
+            fontSize: 'clamp(0.88rem, 1.5vw, 0.95rem)',
+            maxWidth: 560, margin: '0 auto 1.5rem', lineHeight: 1.7,
+          }}>
+            Các dự án chuyên sâu về Machine Learning, C++ DSA Engine và MySQL Database Optimization đang trong lộ trình phát triển và sẽ sớm được công bố.
+          </p>
+
+          <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: '0.45rem' }}>
+            {['C++ Engine', 'Python Machine Learning', 'Computer Vision', 'Database Query Optimizer', 'LLM Agent'].map((t) => (
+              <span key={t} style={{
+                fontFamily: C.mono, fontSize: '0.7rem', color: '#cbd5e1',
+                background: 'rgba(255,255,255,0.04)', border: `1px solid ${C.border}`,
+                padding: '0.25rem 0.75rem', borderRadius: 999,
+              }}>
+                ✦ {t}
+              </span>
+            ))}
           </div>
         </div>
       </div>
     </section>
   )
 }
+
 
 /* ─── Education Section ──────────────────────────────────────────────────── */
 function Education() {
