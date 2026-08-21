@@ -1337,6 +1337,8 @@ function Contact() {
   const [form, setForm] = useState({ name: '', email: '', message: '' })
   const [loading, setLoading] = useState(false)
   const [statusMsg, setStatusMsg] = useState<{ type: 'success' | 'error'; text: string } | null>(null)
+  const [showSuccessModal, setShowSuccessModal] = useState(false)
+  const [submittedData, setSubmittedData] = useState<{ name: string; email: string } | null>(null)
   const [focus, setFocus] = useState('')
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -1346,6 +1348,9 @@ function Contact() {
     setLoading(true)
     setStatusMsg(null)
 
+    const senderName = form.name.trim()
+    const senderEmail = form.email.trim()
+
     try {
       const accessKey =
         import.meta.env.VITE_WEB3FORMS_ACCESS_KEY ||
@@ -1353,12 +1358,12 @@ function Contact() {
 
       const formData = new FormData()
       formData.append('access_key', accessKey)
-      formData.append('name', form.name)
-      formData.append('email', form.email)
+      formData.append('name', senderName)
+      formData.append('email', senderEmail)
       formData.append('message', form.message)
-      formData.append('subject', `🔔 [Portfolio Contact] Tin nhắn mới từ ${form.name}`)
+      formData.append('subject', `🔔 [Portfolio Contact] Tin nhắn mới từ ${senderName}`)
       formData.append('from_name', 'Lê Võ Đăng Khoa Portfolio')
-      formData.append('replyto', form.email)
+      formData.append('replyto', senderEmail)
 
       const response = await fetch('https://api.web3forms.com/submit', {
         method: 'POST',
@@ -1368,9 +1373,11 @@ function Contact() {
       const data = await response.json()
 
       if (data.success) {
+        setSubmittedData({ name: senderName, email: senderEmail })
+        setShowSuccessModal(true)
         setStatusMsg({
           type: 'success',
-          text: '✓ Tin nhắn đã được gửi thành công! Cảm ơn bạn, Khoa đã nhận được thông báo và sẽ phản hồi sớm nhất.',
+          text: '✓ Tin nhắn đã được gửi thành công! Khoa sẽ phản hồi bạn qua email trong vòng 24 giờ.',
         })
         setForm({ name: '', email: '', message: '' })
       } else {
@@ -1389,7 +1396,6 @@ function Contact() {
       setLoading(false)
     }
   }
-
 
   const field = (id: string): React.CSSProperties => ({
     background: focus === id ? 'rgba(17,28,48,0.85)' : 'rgba(11,17,32,0.6)',
@@ -1454,7 +1460,7 @@ function Contact() {
             }}>
               <div style={{ fontFamily: C.mono, color: '#818cf8', fontSize: '0.7rem', letterSpacing: '0.1em', fontWeight: 600, marginBottom: '0.4rem' }}>AUTOMATED RESPONSE</div>
               <div style={{ fontFamily: C.body, color: '#b0bcd4', fontSize: '0.88rem', lineHeight: 1.6 }}>
-                Hệ thống tự động gửi email cảm ơn xác nhận ngay lập tức, và Khoa sẽ phản hồi trực tiếp trong vòng <strong style={{ color: C.text }}>24 giờ</strong>.
+                Hệ thống tự động chuyển thông tin về Gmail của Khoa và Khoa sẽ phản hồi trực tiếp tới bạn trễ nhất trong vòng <strong style={{ color: C.text }}>24 giờ</strong>.
               </div>
             </div>
           </div>
@@ -1543,6 +1549,215 @@ function Contact() {
           </form>
         </div>
       </div>
+
+      {/* ─── Luxury Success Pop-up Modal ─── */}
+      {showSuccessModal && (
+        <div
+          onClick={() => setShowSuccessModal(false)}
+          style={{
+            position: 'fixed',
+            inset: 0,
+            zIndex: 110,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            background: 'rgba(3, 7, 18, 0.85)',
+            backdropFilter: 'blur(16px)',
+            WebkitBackdropFilter: 'blur(16px)',
+            padding: '1.25rem',
+            animation: 'fadeInBackdrop 0.25s ease',
+          }}
+        >
+          <div
+            onClick={(e) => e.stopPropagation()}
+            style={{
+              position: 'relative',
+              maxWidth: '520px',
+              width: '100%',
+              background: 'rgba(11, 17, 32, 0.96)',
+              backdropFilter: 'blur(28px) saturate(190%)',
+              WebkitBackdropFilter: 'blur(28px) saturate(190%)',
+              border: '1px solid rgba(99, 102, 241, 0.5)',
+              borderRadius: '24px',
+              padding: 'clamp(1.5rem, 5vw, 2.25rem)',
+              boxShadow: '0 28px 70px rgba(0,0,0,0.85), 0 0 50px rgba(99,102,241,0.3)',
+              textAlign: 'center',
+              animation: 'chatAppear 0.3s cubic-bezier(0.16, 1, 0.3, 1)',
+            }}
+          >
+            {/* Top Close Button */}
+            <button
+              onClick={() => setShowSuccessModal(false)}
+              aria-label="Đóng pop-up"
+              style={{
+                position: 'absolute',
+                top: '1rem',
+                right: '1rem',
+                width: '32px',
+                height: '32px',
+                borderRadius: '50%',
+                background: 'rgba(255,255,255,0.06)',
+                border: '1px solid rgba(255,255,255,0.12)',
+                color: '#94a3b8',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                cursor: 'pointer',
+                fontSize: '0.9rem',
+                transition: 'all 0.2s',
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.background = 'rgba(255,255,255,0.15)'
+                e.currentTarget.style.color = '#fff'
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.background = 'rgba(255,255,255,0.06)'
+                e.currentTarget.style.color = '#94a3b8'
+              }}
+            >
+              ✕
+            </button>
+
+            {/* Glowing Success Badge Icon */}
+            <div
+              style={{
+                width: '64px',
+                height: '64px',
+                borderRadius: '50%',
+                background: 'linear-gradient(135deg, rgba(34,197,94,0.25), rgba(56,189,248,0.25))',
+                border: '2px solid rgba(34,197,94,0.6)',
+                boxShadow: '0 0 28px rgba(34,197,94,0.4)',
+                fontSize: '1.85rem',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                margin: '0 auto 1.25rem',
+              }}
+            >
+              ✨
+            </div>
+
+            {/* Modal Title */}
+            <h3
+              style={{
+                fontFamily: C.heading,
+                fontSize: 'clamp(1.2rem, 3.5vw, 1.45rem)',
+                fontWeight: 800,
+                color: '#ffffff',
+                margin: '0 0 0.75rem',
+                letterSpacing: '-0.01em',
+              }}
+            >
+              Tin nhắn đã được gửi thành công!
+            </h3>
+
+            {/* Modal Description */}
+            <div
+              style={{
+                fontFamily: C.body,
+                fontSize: '0.92rem',
+                lineHeight: 1.65,
+                color: '#cbd5e1',
+                textAlign: 'left',
+                margin: '0 0 1.25rem',
+              }}
+            >
+              <p style={{ margin: '0 0 0.5rem' }}>
+                Xin chào <strong style={{ color: '#38bdf8' }}>{submittedData?.name || 'bạn'}</strong>,
+              </p>
+              <p style={{ margin: '0 0 0.65rem' }}>
+                Tin nhắn của bạn đã được chuyển trực tiếp đến email của Khoa (
+                <span style={{ color: '#818cf8', fontWeight: 600 }}>khoalevodang301007@gmail.com</span>).
+              </p>
+              <p style={{ margin: 0 }}>
+                Khoa sẽ đọc kỹ nội dung và <strong style={{ color: '#4ade80' }}>phản hồi trễ nhất trong vòng 24 giờ</strong> qua địa chỉ email bạn đã nhập:
+              </p>
+            </div>
+
+            {/* Highlighted Sender Email Pill */}
+            <div
+              style={{
+                background: 'rgba(99,102,241,0.14)',
+                border: '1px solid rgba(99,102,241,0.4)',
+                borderRadius: '12px',
+                padding: '0.85rem 1.15rem',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '0.65rem',
+                marginBottom: '1.25rem',
+              }}
+            >
+              <span style={{ fontSize: '1.2rem' }}>✉️</span>
+              <span
+                className="break-words-anywhere"
+                style={{
+                  fontFamily: C.mono,
+                  color: '#38bdf8',
+                  fontWeight: 700,
+                  fontSize: '0.92rem',
+                }}
+              >
+                {submittedData?.email}
+              </span>
+            </div>
+
+            {/* Additional Response Guarantees */}
+            <div
+              style={{
+                display: 'flex',
+                flexDirection: 'column',
+                gap: '0.4rem',
+                fontSize: '0.78rem',
+                color: '#94a3b8',
+                background: 'rgba(255,255,255,0.03)',
+                border: '1px solid rgba(255,255,255,0.06)',
+                borderRadius: '12px',
+                padding: '0.75rem 1rem',
+                textAlign: 'left',
+                marginBottom: '1.4rem',
+                fontFamily: C.body,
+              }}
+            >
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.45rem' }}>
+                <span style={{ color: '#22c55e', fontWeight: 'bold' }}>✓</span>
+                <span>Đã lưu trữ tin nhắn an toàn & thông báo trực tiếp đến hộp thư</span>
+              </div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.45rem' }}>
+                <span style={{ color: '#38bdf8', fontWeight: 'bold' }}>⏱</span>
+                <span>Thời gian phản hồi cam kết: <strong>Tối đa 24 giờ làm việc</strong></span>
+              </div>
+            </div>
+
+            {/* Action CTA Button */}
+            <button
+              onClick={() => setShowSuccessModal(false)}
+              className="touch-target"
+              style={{
+                width: '100%',
+                padding: '0.85rem',
+                borderRadius: '12px',
+                background: 'linear-gradient(135deg, #6366f1 0%, #38bdf8 100%)',
+                border: '1px solid rgba(255,255,255,0.2)',
+                fontWeight: 700,
+                fontSize: '0.95rem',
+                color: '#fff',
+                cursor: 'pointer',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                gap: '0.4rem',
+                boxShadow: '0 8px 24px rgba(99,102,241,0.45)',
+                transition: 'all 0.25s ease',
+              }}
+              onMouseEnter={(e) => (e.currentTarget.style.transform = 'translate3d(0,-2px,0) scale(1.02)')}
+              onMouseLeave={(e) => (e.currentTarget.style.transform = 'translate3d(0,0,0) scale(1)')}
+            >
+              <span>Đã hiểu & Đóng thông báo</span>
+              <span>✨</span>
+            </button>
+          </div>
+        </div>
+      )}
     </section>
   )
 }
