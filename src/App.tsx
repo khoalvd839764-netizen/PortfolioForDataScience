@@ -45,7 +45,7 @@ const PROJECTS = [
     subtitle: 'Family Knowledge & Life Hub Platform',
     desc: 'Nền tảng chia sẻ mẹo hay cuộc sống, cẩm nang gia đình, kinh nghiệm nuôi dạy con và lưu giữ những lời dạy yêu thương. Được thiết kế hiện đại, tối ưu PWA trên cả di động và máy tính.',
     tags: ['React', 'TypeScript', 'Tailwind CSS', 'PWA', 'Vercel'],
-    link: 'https://khoalevo-bavame.vercel.app/',
+    link: 'https://khoalevodang-bavame.vercel.app/',
     featured: true,
     status: 'Đang phát triển',
     startDate: '21/08/2026',
@@ -1118,7 +1118,7 @@ function Projects() {
                 {/* Direct Action Link Button */}
                 <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
                   <a
-                    href="https://khoalevo-bavame.vercel.app/"
+                    href="https://khoalevodang-bavame.vercel.app/"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="touch-target"
