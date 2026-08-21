@@ -73,7 +73,7 @@ export default async function handler(req: Request) {
 
     // Option 1: Resend API
     if (resendKey) {
-      // 1. Notification Email to Khoa
+      // 1. Notification Email to Khoa (Sent to your verified Resend email & personal email)
       const notifyHtml = `
         <!DOCTYPE html>
         <html>
@@ -132,7 +132,7 @@ export default async function handler(req: Request) {
               <p style="margin: 2px 0 0; font-size: 13px; color: #94a3b8;">Sinh viên Data Science & AI · UTH</p>
               <p style="margin: 4px 0 0; font-size: 13px;">
                 <a href="https://github.com/khoalvd839764-netizen" style="color: #38bdf8; text-decoration: none;">GitHub</a> · 
-                <a href="mailto:${RECIPIENT_EMAIL}" style="color: #38bdf8; text-decoration: none;">Email trực tiếp</a>
+                <a href="mailto:khoalevodang301007@gmail.com" style="color: #38bdf8; text-decoration: none;">Email trực tiếp</a>
               </p>
             </div>
           </div>
@@ -140,7 +140,9 @@ export default async function handler(req: Request) {
         </html>
       `
 
-      // Send Email 1: Notification to Khoa
+      // Send Email 1: Notification to Khoa's account
+      const notifyEmails = ['khoalvd839764@ut.edu.vn', 'khoalevodang301007@gmail.com']
+      
       const sendNotify = fetch('https://api.resend.com/emails', {
         method: 'POST',
         headers: {
@@ -149,7 +151,7 @@ export default async function handler(req: Request) {
         },
         body: JSON.stringify({
           from: 'Portfolio Contact <onboarding@resend.dev>',
-          to: [RECIPIENT_EMAIL],
+          to: notifyEmails,
           reply_to: email,
           subject: `🔔 [Portfolio Contact] Tin nhắn mới từ ${name}`,
           html: notifyHtml,
@@ -166,13 +168,16 @@ export default async function handler(req: Request) {
         body: JSON.stringify({
           from: 'Lê Võ Đăng Khoa <onboarding@resend.dev>',
           to: [email],
-          reply_to: RECIPIENT_EMAIL,
+          reply_to: 'khoalevodang301007@gmail.com',
           subject: `✨ Cảm ơn bạn đã liên hệ với Lê Võ Đăng Khoa!`,
           html: thankYouHtml,
         }),
+      }).catch((err) => {
+        console.warn('Auto-reply email skipped or domain not verified:', err)
+        return null
       })
 
-      const [resNotify, resThankYou] = await Promise.all([sendNotify, sendThankYou])
+      const [resNotify] = await Promise.all([sendNotify, sendThankYou])
 
       if (!resNotify.ok) {
         const errData = await resNotify.text()
