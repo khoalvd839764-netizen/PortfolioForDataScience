@@ -1335,14 +1335,47 @@ function Certificates() {
 /* ─── Contact Section ────────────────────────────────────────────────────── */
 function Contact() {
   const [form, setForm] = useState({ name: '', email: '', message: '' })
-  const [sent, setSent] = useState(false)
+  const [loading, setLoading] = useState(false)
+  const [statusMsg, setStatusMsg] = useState<{ type: 'success' | 'error'; text: string } | null>(null)
   const [focus, setFocus] = useState('')
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    setSent(true)
-    setForm({ name: '', email: '', message: '' })
-    setTimeout(() => setSent(false), 3500)
+    if (loading) return
+
+    setLoading(true)
+    setStatusMsg(null)
+
+    try {
+      const res = await fetch('/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(form),
+      })
+
+      const data = await res.json()
+
+      if (res.ok && data.success) {
+        setStatusMsg({
+          type: 'success',
+          text: '✓ Tin nhắn đã được gửi thành công! Email xác nhận cảm ơn đã được gửi tới hòm thư của bạn.',
+        })
+        setForm({ name: '', email: '', message: '' })
+      } else {
+        setStatusMsg({
+          type: 'error',
+          text: data.error || 'Có lỗi xảy ra khi gửi email. Vui lòng thử lại sau!',
+        })
+      }
+    } catch (err) {
+      console.error('Contact submission error:', err)
+      setStatusMsg({
+        type: 'error',
+        text: 'Không thể kết nối đến máy chủ gửi email. Vui lòng gửi email trực tiếp tới khoalevodang301007@gmail.com!',
+      })
+    } finally {
+      setLoading(false)
+    }
   }
 
   const field = (id: string): React.CSSProperties => ({
@@ -1406,9 +1439,9 @@ function Contact() {
               background: 'rgba(99,102,241,0.12)', border: `1px solid ${C.borderAccent}`,
               borderRadius: 14, padding: '1.25rem 1.4rem',
             }}>
-              <div style={{ fontFamily: C.mono, color: '#818cf8', fontSize: '0.7rem', letterSpacing: '0.1em', fontWeight: 600, marginBottom: '0.4rem' }}>RESPONSE TIME</div>
+              <div style={{ fontFamily: C.mono, color: '#818cf8', fontSize: '0.7rem', letterSpacing: '0.1em', fontWeight: 600, marginBottom: '0.4rem' }}>AUTOMATED RESPONSE</div>
               <div style={{ fontFamily: C.body, color: '#b0bcd4', fontSize: '0.88rem', lineHeight: 1.6 }}>
-                Thường phản hồi trong vòng <strong style={{ color: C.text }}>24 giờ</strong> trong ngày làm việc.
+                Hệ thống tự động gửi email cảm ơn xác nhận ngay lập tức, và Khoa sẽ phản hồi trực tiếp trong vòng <strong style={{ color: C.text }}>24 giờ</strong>.
               </div>
             </div>
           </div>
@@ -1418,6 +1451,25 @@ function Contact() {
             display: 'flex', flexDirection: 'column', gap: '1.1rem',
             padding: 'clamp(1.25rem, 4vw, 2rem)', borderRadius: 18,
           }}>
+            {/* Status notification banner */}
+            {statusMsg && (
+              <div style={{
+                padding: '0.85rem 1.1rem',
+                borderRadius: '10px',
+                fontSize: '0.85rem',
+                fontFamily: C.body,
+                lineHeight: 1.5,
+                background: statusMsg.type === 'success' ? 'rgba(34, 197, 94, 0.12)' : 'rgba(239, 68, 68, 0.12)',
+                border: `1px solid ${statusMsg.type === 'success' ? 'rgba(34, 197, 94, 0.4)' : 'rgba(239, 68, 68, 0.4)'}`,
+                color: statusMsg.type === 'success' ? '#4ade80' : '#f87171',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '0.5rem',
+              }}>
+                <span>{statusMsg.text}</span>
+              </div>
+            )}
+
             <div style={{
               display: 'grid',
               gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 180px), 1fr))',
@@ -1432,6 +1484,7 @@ function Contact() {
                     type={f === 'email' ? 'email' : 'text'}
                     placeholder={f === 'name' ? 'Họ và tên' : 'email@example.com'}
                     required
+                    disabled={loading}
                     onChange={e => setForm({ ...form, [f]: e.target.value })}
                     onFocus={() => setFocus(f)} onBlur={() => setFocus('')}
                   />
@@ -1442,21 +1495,37 @@ function Contact() {
               <label style={{ fontFamily: C.mono, color: C.muted, fontSize: '0.67rem', letterSpacing: '0.1em', display: 'block', marginBottom: '0.4rem' }}>MESSAGE</label>
               <textarea style={{ ...field('message'), resize: 'vertical', minHeight: 140 }}
                 value={form.message} placeholder="Nội dung tin nhắn..." required
+                disabled={loading}
                 onChange={e => setForm({ ...form, message: e.target.value })}
                 onFocus={() => setFocus('message')} onBlur={() => setFocus('')}
               />
             </div>
-            <button type="submit" className="touch-target" style={{
-              fontFamily: C.body, fontWeight: 700, fontSize: '0.92rem',
-              background: sent ? 'rgba(34,197,94,0.2)' : 'linear-gradient(135deg, #6366f1 0%, #4f46e5 100%)',
-              color: sent ? '#22c55e' : '#fff',
-              border: sent ? '1px solid rgba(34,197,94,0.4)' : '1px solid rgba(255,255,255,0.15)',
-              padding: '0.9rem', borderRadius: 10, cursor: 'pointer',
-              display: 'flex', alignItems: 'center', justifyContent: 'center',
-              transition: 'all 0.3s cubic-bezier(0.16,1,0.3,1)',
-              boxShadow: sent ? 'none' : `0 0 24px rgba(99,102,241,0.4)`,
-            }}>
-              {sent ? '✓ Đã gửi thành công!' : 'Gửi tin nhắn →'}
+            <button
+              type="submit"
+              disabled={loading}
+              className="touch-target"
+              style={{
+                fontFamily: C.body, fontWeight: 700, fontSize: '0.92rem',
+                background: loading
+                  ? 'rgba(99,102,241,0.5)'
+                  : 'linear-gradient(135deg, #6366f1 0%, #4f46e5 100%)',
+                color: '#fff',
+                border: '1px solid rgba(255,255,255,0.15)',
+                padding: '0.9rem', borderRadius: 10,
+                cursor: loading ? 'not-allowed' : 'pointer',
+                display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem',
+                transition: 'all 0.3s cubic-bezier(0.16,1,0.3,1)',
+                boxShadow: `0 0 24px rgba(99,102,241,0.4)`,
+              }}
+            >
+              {loading ? (
+                <>
+                  <span style={{ width: 16, height: 16, border: '2px solid #ffffff', borderTopColor: 'transparent', borderRadius: '50%', display: 'inline-block', animation: 'spin 0.8s linear infinite' }} />
+                  <span>Đang gửi email...</span>
+                </>
+              ) : (
+                'Gửi tin nhắn →'
+              )}
             </button>
           </form>
         </div>
@@ -1464,6 +1533,7 @@ function Contact() {
     </section>
   )
 }
+
 
 /* ─── Footer ─────────────────────────────────────────────────────────────── */
 function Footer() {

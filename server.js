@@ -149,6 +149,138 @@ app.post('/api/chat', async (req, res) => {
   }
 })
 
+// API Contact Endpoint (Auto notification & Thank-you email)
+app.post('/api/contact', async (req, res) => {
+  try {
+    const { name, email, message } = req.body
+
+    if (!name || !email || !message) {
+      return res.status(400).json({ error: 'Vui lòng điền đầy đủ Tên, Email và Tin nhắn.' })
+    }
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+    if (!emailRegex.test(email.trim())) {
+      return res.status(400).json({ error: 'Địa chỉ email không hợp lệ.' })
+    }
+
+    const resendKey =
+      process.env.RESEND_API_KEY ||
+      process.env.VITE_RESEND_API_KEY ||
+      process.env.EMAIL_API_KEY
+
+    const web3FormsKey =
+      process.env.WEB3FORMS_ACCESS_KEY ||
+      process.env.VITE_WEB3FORMS_ACCESS_KEY
+
+    if (!resendKey && !web3FormsKey) {
+      return res.status(500).json({
+        error:
+          'Chưa cấu hình API Key gửi email. Vui lòng thêm RESEND_API_KEY hoặc WEB3FORMS_ACCESS_KEY vào file .env!',
+      })
+    }
+
+    const RECIPIENT_EMAIL = 'khoalevodang301007@gmail.com'
+    const currentTime = new Date().toLocaleString('vi-VN', { timeZone: 'Asia/Ho_Chi_Minh' })
+
+    if (resendKey) {
+      const notifyHtml = `
+        <div style="font-family: Arial, sans-serif; background-color: #0b1120; color: #f1f5f9; padding: 24px;">
+          <div style="max-width: 600px; margin: 0 auto; background-color: #111c30; border: 1px solid rgba(99,102,241,0.3); border-radius: 12px; padding: 24px;">
+            <h2 style="color: #38bdf8; margin-top: 0;">🔔 Có tin nhắn liên hệ mới từ Portfolio!</h2>
+            <p><strong>Người gửi:</strong> ${name}</p>
+            <p><strong>Email:</strong> <a href="mailto:${email}" style="color: #818cf8;">${email}</a></p>
+            <p><strong>Thời gian:</strong> ${currentTime}</p>
+            <div style="background-color: rgba(255,255,255,0.04); border-left: 3px solid #6366f1; padding: 14px; margin: 18px 0;">
+              <strong>Nội dung tin nhắn:</strong><br><br>${message.replace(/\n/g, '<br>')}
+            </div>
+          </div>
+        </div>
+      `
+
+      const thankYouHtml = `
+        <div style="font-family: Arial, sans-serif; background-color: #0b1120; color: #f1f5f9; padding: 24px;">
+          <div style="max-width: 600px; margin: 0 auto; background-color: #111c30; border: 1px solid rgba(99,102,241,0.3); border-radius: 12px; padding: 28px;">
+            <h2 style="color: #ffffff; margin-top: 0;">✨ Cảm ơn bạn đã liên hệ với Lê Võ Đăng Khoa!</h2>
+            <p>Xin chào <strong>${name}</strong>,</p>
+            <p>Khoa đã nhận được tin nhắn của bạn qua website Portfolio. Khoa sẽ đọc kỹ nội dung và phản hồi lại bạn qua email <strong>${email}</strong> trong vòng 24 giờ tới.</p>
+            <div style="background-color: rgba(99,102,241,0.08); border: 1px solid rgba(99,102,241,0.25); border-radius: 8px; padding: 14px; margin: 18px 0;">
+              <em>"${message.replace(/\n/g, '<br>')}"</em>
+            </div>
+            <p style="margin-top: 24px; border-top: 1px solid rgba(255,255,255,0.08); padding-top: 14px;">
+              Trân trọng,<br><strong>Lê Võ Đăng Khoa</strong><br>Sinh viên Data Science & AI · UTH
+            </p>
+          </div>
+        </div>
+      `
+
+      const sendNotify = fetch('https://api.resend.com/emails', {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${resendKey}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          from: 'Portfolio Contact <onboarding@resend.dev>',
+          to: [RECIPIENT_EMAIL],
+          reply_to: email,
+          subject: `🔔 [Portfolio Contact] Tin nhắn mới từ ${name}`,
+          html: notifyHtml,
+        }),
+      })
+
+      const sendThankYou = fetch('https://api.resend.com/emails', {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${resendKey}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          from: 'Lê Võ Đăng Khoa <onboarding@resend.dev>',
+          to: [email],
+          reply_to: RECIPIENT_EMAIL,
+          subject: `✨ Cảm ơn bạn đã liên hệ với Lê Võ Đăng Khoa!`,
+          html: thankYouHtml,
+        }),
+      })
+
+      const [resNotify] = await Promise.all([sendNotify, sendThankYou])
+
+      if (!resNotify.ok) {
+        const errData = await resNotify.text()
+        console.error('Resend error:', errData)
+        return res.status(500).json({ error: `Lỗi khi gửi email qua Resend: ${errData}` })
+      }
+
+      return res.status(200).json({ success: true, message: 'Đã gửi thông báo và email cảm ơn tự động thành công!' })
+    }
+
+    if (web3FormsKey) {
+      const response = await fetch('https://api.web3forms.com/submit', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          access_key: web3FormsKey,
+          name,
+          email,
+          message,
+          subject: `🔔 [Portfolio Contact] Tin nhắn mới từ ${name}`,
+          from_name: 'Lê Võ Đăng Khoa Portfolio',
+        }),
+      })
+
+      const data = await response.json()
+      if (data.success) {
+        return res.status(200).json({ success: true, message: 'Đã gửi tin nhắn thành công qua Web3Forms!' })
+      } else {
+        return res.status(500).json({ error: data.message || 'Lỗi gửi mail qua Web3Forms' })
+      }
+    }
+  } catch (err) {
+    console.error('Contact error:', err)
+    return res.status(500).json({ error: 'Lỗi máy chủ khi gửi email.' })
+  }
+})
+
 // Health check endpoint
 app.get('/api/health', (req, res) => {
   res.json({ status: 'ok', timestamp: new Date().toISOString() })
