@@ -71,6 +71,39 @@ const EDUCATION = [
   },
 ]
 
+const CERTIFICATES = [
+  {
+    id: 'cplusplus-essentials-1',
+    title: 'C++ Essentials 1',
+    issuer: 'Cisco Networking Academy',
+    issuerSub: 'C++ Institute · Open Education & Development Group',
+    recipient: 'Lê Võ Đăng Khoa',
+    issueDate: '22 Aug 2026',
+    issueDateVN: '22/08/2026',
+    certId: '5af2e763-9146-4b4a-a909-b236739c7c4c',
+    verifyUrl: 'https://www.netacad.com/recognitions/verify/5af2e763-9146-4b4a-a909-b236739c7c4c',
+    image: '/certificates/cplusplus-essentials-1.webp',
+    pngImage: '/certificates/cplusplus-essentials-1.png',
+    qrImage: '/certificates/cplusplus-essentials-1-qr-hd.png',
+    pdfUrl: '/certificates/cplusplus-essentials-1.pdf',
+    signatory: 'Lynn Bloomer (Director, Cisco Networking Academy)',
+    badge: 'OFFICIAL CISCO NETACAD',
+    statusText: 'Đã xác thực chính thức (Verified)',
+    desc: 'Chứng nhận hoàn thành xuất sắc khoá đào tạo C++ Essentials 1 do Cisco Networking Academy phối hợp cùng C++ Institute tổ chức. Khẳng định nền tảng vững vàng về ngôn ngữ C++, tư duy thuật toán, kiểu dữ liệu, luồng điều khiển, hàm, mảng, con trỏ và quản lý bộ nhớ.',
+    skills: [
+      'C++ Core Syntax',
+      'Data Types & Variables',
+      'Control Flow & Logic',
+      'Functions & Modularity',
+      'Pointers & Memory',
+      'Arrays & Structures',
+    ],
+    grad: ['#06b6d4', '#3b82f6', '#6366f1'],
+    accentColor: '#06b6d4',
+  },
+]
+
+
 /* ─── Shared Styling Constants ───────────────────────────────────────────── */
 
 const C = {
@@ -86,6 +119,7 @@ const C = {
   gold: '#f59e0b',
   mono: "'JetBrains Mono', monospace",
   display: "'Outfit', sans-serif",
+  heading: "'Outfit', sans-serif",
   body: "'Inter', sans-serif",
 }
 
@@ -914,7 +948,7 @@ function Hero() {
               paddingTop: '1.5rem',
               borderTop: `1px solid ${C.border}`
             }}>
-              {[['N/A', 'Years exp.'], ['01', 'Projects'], ['N/A', 'Certificates'], ['N/A', 'Degrees']].map(([v, l]) => (
+              {[['N/A', 'Years exp.'], ['01', 'Projects'], ['01', 'Certificates'], ['N/A', 'Degrees']].map(([v, l]) => (
                 <div key={l} className="glass-card" style={{
                   padding: '0.85rem 0.65rem', borderRadius: 12, textAlign: 'center',
                 }}>
@@ -1294,43 +1328,1233 @@ function Education() {
   )
 }
 
+/* ─── QR Scanner Cyber HUD Modal ─────────────────────────────────────────── */
+function QRScannerModal({
+  isOpen,
+  onClose,
+  cert,
+  onOpenFullCert,
+}: {
+  isOpen: boolean
+  onClose: () => void
+  cert: (typeof CERTIFICATES)[0]
+  onOpenFullCert: () => void
+}) {
+  const [scanState, setScanState] = useState<'scanning' | 'verified'>('verified')
+  const [scanProgress, setScanProgress] = useState(100)
+  const [copied, setCopied] = useState(false)
+
+  // Handle ESC key to close
+  useEffect(() => {
+    if (!isOpen) return
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') onClose()
+    }
+    window.addEventListener('keydown', handleKeyDown)
+    document.body.style.overflow = 'hidden'
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown)
+      document.body.style.overflow = ''
+    }
+  }, [isOpen, onClose])
+
+  const handleRescan = () => {
+    setScanState('scanning')
+    setScanProgress(0)
+
+    let progress = 0
+    const interval = setInterval(() => {
+      progress += 10
+      if (progress >= 100) {
+        clearInterval(interval)
+        setScanProgress(100)
+        setScanState('verified')
+      } else {
+        setScanProgress(progress)
+      }
+    }, 90)
+  }
+
+  const handleCopyId = () => {
+    navigator.clipboard.writeText(cert.certId)
+    setCopied(true)
+    setTimeout(() => setCopied(false), 2200)
+  }
+
+  if (!isOpen) return null
+
+  return (
+    <div
+      style={{
+        position: 'fixed',
+        inset: 0,
+        zIndex: 9999,
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        padding: 'clamp(0.75rem, 3vw, 1.5rem)',
+        background: 'rgba(3, 7, 18, 0.88)',
+        backdropFilter: 'blur(20px) saturate(180%)',
+        WebkitBackdropFilter: 'blur(20px) saturate(180%)',
+        animation: 'fadeInBackdrop 0.25s ease-out',
+      }}
+      onClick={onClose}
+    >
+      <div
+        style={{
+          position: 'relative',
+          width: '100%',
+          maxWidth: 900,
+          maxHeight: '92vh',
+          overflowY: 'auto',
+          background: 'linear-gradient(180deg, rgba(15, 23, 42, 0.96) 0%, rgba(10, 15, 30, 0.98) 100%)',
+          border: '1px solid rgba(6, 182, 212, 0.45)',
+          borderRadius: 24,
+          boxShadow: '0 25px 60px rgba(0,0,0,0.7), 0 0 45px rgba(6, 182, 212, 0.25)',
+          padding: 'clamp(1.2rem, 3vw, 2rem)',
+          animation: 'chatAppear 0.3s cubic-bezier(0.16, 1, 0.3, 1)',
+        }}
+        onClick={(e) => e.stopPropagation()}
+      >
+        {/* Header Bar with Cyberpunk HUD Branding */}
+        <div
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            borderBottom: '1px solid rgba(6, 182, 212, 0.25)',
+            paddingBottom: '1rem',
+            marginBottom: '1.4rem',
+            flexWrap: 'wrap',
+            gap: '0.75rem',
+          }}
+        >
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+            <div
+              style={{
+                width: 10,
+                height: 10,
+                borderRadius: '50%',
+                background: scanState === 'scanning' ? '#f59e0b' : '#10b981',
+                boxShadow: scanState === 'scanning' ? '0 0 12px #f59e0b' : '0 0 14px #10b981',
+                animation: 'hudReticlePulse 1.5s infinite',
+              }}
+            />
+            <div>
+              <div
+                style={{
+                  fontFamily: C.mono,
+                  fontSize: '0.72rem',
+                  letterSpacing: '0.14em',
+                  color: '#06b6d4',
+                  fontWeight: 700,
+                  textTransform: 'uppercase',
+                }}
+              >
+                // CYBER SCANNER HUD · CREDENTIAL VERIFIER
+              </div>
+              <div
+                style={{
+                  fontFamily: C.display,
+                  fontSize: '1.15rem',
+                  fontWeight: 800,
+                  color: '#ffffff',
+                  letterSpacing: '-0.01em',
+                }}
+              >
+                Xác thực mã QR Chứng chỉ Cisco NetAcad
+              </div>
+            </div>
+          </div>
+
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+            <button
+              onClick={handleRescan}
+              disabled={scanState === 'scanning'}
+              title="Quét lại mã QR"
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '0.4rem',
+                background: 'rgba(6, 182, 212, 0.12)',
+                border: '1px solid rgba(6, 182, 212, 0.35)',
+                color: '#38bdf8',
+                borderRadius: 8,
+                padding: '0.45rem 0.8rem',
+                fontSize: '0.76rem',
+                fontFamily: C.mono,
+                fontWeight: 600,
+                cursor: scanState === 'scanning' ? 'not-allowed' : 'pointer',
+                transition: 'all 0.2s',
+              }}
+            >
+              <span style={{ fontSize: '0.9rem', display: 'inline-block', transform: scanState === 'scanning' ? 'rotate(180deg)' : 'none', transition: 'transform 0.5s' }}>
+                ⚡
+              </span>
+              {scanState === 'scanning' ? `Đang quét (${scanProgress}%)` : 'Quét lại'}
+            </button>
+
+            <button
+              onClick={onClose}
+              aria-label="Đóng"
+              style={{
+                width: 36,
+                height: 36,
+                borderRadius: 10,
+                background: 'rgba(255, 255, 255, 0.06)',
+                border: `1px solid ${C.border}`,
+                color: '#94a3b8',
+                fontSize: '1.1rem',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                cursor: 'pointer',
+                transition: 'all 0.2s',
+              }}
+            >
+              ✕
+            </button>
+          </div>
+        </div>
+
+        {/* Main Grid: Scanner Viewport (Left) & Decoded Data Report (Right) */}
+        <div
+          style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(290px, 1fr))',
+            gap: '1.4rem',
+            alignItems: 'start',
+          }}
+        >
+          {/* Scanner Viewfinder Box */}
+          <div
+            style={{
+              background: 'rgba(5, 10, 20, 0.85)',
+              border: '1px solid rgba(6, 182, 212, 0.3)',
+              borderRadius: 18,
+              padding: '1.25rem',
+              position: 'relative',
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              boxShadow: 'inset 0 0 30px rgba(6, 182, 212, 0.08)',
+            }}
+          >
+            {/* Viewfinder Top Status Readout */}
+            <div
+              style={{
+                width: '100%',
+                display: 'flex',
+                justifyContent: 'space-between',
+                fontFamily: C.mono,
+                fontSize: '0.68rem',
+                color: '#64748b',
+                marginBottom: '0.8rem',
+                padding: '0 0.25rem',
+              }}
+            >
+              <span>[TARGET_LOCK: OK]</span>
+              <span style={{ color: scanState === 'scanning' ? '#f59e0b' : '#38bdf8' }}>
+                {scanState === 'scanning' ? `[SCANNING ${scanProgress}%]` : '[MATCH: 100%]'}
+              </span>
+              <span>[FPS: 60]</span>
+            </div>
+
+            {/* Viewfinder Target Reticle with QR and Laser Beam */}
+            <div
+              className="cyber-scanner-grid"
+              style={{
+                position: 'relative',
+                width: '100%',
+                maxWidth: 260,
+                aspectRatio: '1/1',
+                background: 'rgba(3, 7, 18, 0.92)',
+                border: '1px dashed rgba(6, 182, 212, 0.4)',
+                borderRadius: 16,
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                padding: '1.25rem',
+                overflow: 'hidden',
+              }}
+            >
+              {/* 4 Cyber Corner Brackets */}
+              <div style={{ position: 'absolute', top: 6, left: 6, width: 18, height: 18, borderTop: '3px solid #06b6d4', borderLeft: '3px solid #06b6d4', borderTopLeftRadius: 6 }} />
+              <div style={{ position: 'absolute', top: 6, right: 6, width: 18, height: 18, borderTop: '3px solid #06b6d4', borderRight: '3px solid #06b6d4', borderTopRightRadius: 6 }} />
+              <div style={{ position: 'absolute', bottom: 6, left: 6, width: 18, height: 18, borderBottom: '3px solid #06b6d4', borderLeft: '3px solid #06b6d4', borderBottomLeftRadius: 6 }} />
+              <div style={{ position: 'absolute', bottom: 6, right: 6, width: 18, height: 18, borderBottom: '3px solid #06b6d4', borderRight: '3px solid #06b6d4', borderBottomRightRadius: 6 }} />
+
+              {/* Target Crosshairs */}
+              <div style={{ position: 'absolute', top: '50%', left: 10, right: 10, height: 1, background: 'rgba(6, 182, 212, 0.15)', pointerEvents: 'none' }} />
+              <div style={{ position: 'absolute', left: '50%', top: 10, bottom: 10, width: 1, background: 'rgba(6, 182, 212, 0.15)', pointerEvents: 'none' }} />
+
+              {/* QR Image */}
+              <div
+                style={{
+                  position: 'relative',
+                  width: '88%',
+                  height: '88%',
+                  background: '#ffffff',
+                  borderRadius: 12,
+                  padding: 8,
+                  boxShadow: '0 8px 24px rgba(0,0,0,0.6), 0 0 20px rgba(6, 182, 212, 0.3)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                }}
+              >
+                <img
+                  src={cert.qrImage}
+                  alt={`QR Code verification for ${cert.title}`}
+                  style={{
+                    width: '100%',
+                    height: '100%',
+                    objectFit: 'contain',
+                    imageRendering: 'pixelated',
+                  }}
+                />
+
+                {/* Animated Laser Scanning Beam */}
+                <div className="cyber-laser-beam">
+                  <div className="cyber-laser-trail" />
+                </div>
+              </div>
+            </div>
+
+            {/* Viewfinder Bottom Tip */}
+            <div
+              style={{
+                marginTop: '1rem',
+                textAlign: 'center',
+                fontFamily: C.body,
+                fontSize: '0.76rem',
+                color: '#94a3b8',
+                lineHeight: 1.5,
+              }}
+            >
+              <span style={{ color: '#38bdf8', fontWeight: 600 }}>💡 Mẹo quét thực tế:</span> Bạn có thể dùng camera điện thoại hoặc Zalo để quét trực tiếp mã QR trên màn hình.
+            </div>
+          </div>
+
+          {/* Decoded Data & Verification Result Panel */}
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+            {/* Status Verified Banner */}
+            <div
+              style={{
+                background: scanState === 'scanning' ? 'rgba(245, 158, 11, 0.12)' : 'rgba(16, 185, 129, 0.12)',
+                border: `1px solid ${scanState === 'scanning' ? 'rgba(245, 158, 11, 0.4)' : 'rgba(16, 185, 129, 0.4)'}`,
+                borderRadius: 14,
+                padding: '0.9rem 1.1rem',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '0.85rem',
+              }}
+            >
+              <div
+                style={{
+                  width: 38,
+                  height: 38,
+                  borderRadius: '50%',
+                  background: scanState === 'scanning' ? 'rgba(245, 158, 11, 0.2)' : 'rgba(16, 185, 129, 0.2)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  fontSize: '1.2rem',
+                  flexShrink: 0,
+                  boxShadow: scanState === 'scanning' ? '0 0 16px rgba(245, 158, 11, 0.4)' : '0 0 16px rgba(16, 185, 129, 0.4)',
+                }}
+              >
+                {scanState === 'scanning' ? '⏳' : '🛡️'}
+              </div>
+              <div>
+                <div
+                  style={{
+                    fontFamily: C.mono,
+                    fontSize: '0.72rem',
+                    letterSpacing: '0.08em',
+                    color: scanState === 'scanning' ? '#fbbf24' : '#34d399',
+                    fontWeight: 700,
+                  }}
+                >
+                  {scanState === 'scanning' ? 'ĐANG GIẢI MÃ DỮ LIỆU...' : 'CHỨNG NHẬN ĐÃ ĐƯỢC XÁC THỰC (OFFICIAL)'}
+                </div>
+                <div style={{ fontFamily: C.body, fontSize: '0.84rem', color: '#e2e8f0', marginTop: '0.15rem' }}>
+                  {scanState === 'scanning'
+                    ? 'Đang đối chiếu thông tin với hệ thống Cisco NetAcad...'
+                    : 'Mã QR khớp 100% với dữ liệu chứng chỉ chính thức của Cisco.'}
+                </div>
+              </div>
+            </div>
+
+            {/* Certificate Details Table / Card */}
+            <div
+              style={{
+                background: 'rgba(15, 23, 42, 0.65)',
+                border: `1px solid ${C.border}`,
+                borderRadius: 16,
+                padding: '1rem 1.15rem',
+                display: 'flex',
+                flexDirection: 'column',
+                gap: '0.75rem',
+              }}
+            >
+              <div style={{ display: 'flex', justifyContent: 'space-between', borderBottom: `1px solid ${C.border}`, paddingBottom: '0.5rem', flexWrap: 'wrap', gap: '0.25rem' }}>
+                <span style={{ fontFamily: C.mono, color: C.muted, fontSize: '0.75rem' }}>Họ và tên người nhận:</span>
+                <span style={{ fontFamily: C.display, color: '#38bdf8', fontWeight: 700, fontSize: '0.92rem' }}>{cert.recipient}</span>
+              </div>
+
+              <div style={{ display: 'flex', justifyContent: 'space-between', borderBottom: `1px solid ${C.border}`, paddingBottom: '0.5rem', flexWrap: 'wrap', gap: '0.25rem' }}>
+                <span style={{ fontFamily: C.mono, color: C.muted, fontSize: '0.75rem' }}>Chứng chỉ hoàn thành:</span>
+                <span style={{ fontFamily: C.body, color: '#f8fafc', fontWeight: 600, fontSize: '0.88rem' }}>{cert.title}</span>
+              </div>
+
+              <div style={{ display: 'flex', justifyContent: 'space-between', borderBottom: `1px solid ${C.border}`, paddingBottom: '0.5rem', flexWrap: 'wrap', gap: '0.25rem' }}>
+                <span style={{ fontFamily: C.mono, color: C.muted, fontSize: '0.75rem' }}>Tổ chức cấp:</span>
+                <span style={{ fontFamily: C.body, color: '#cbd5e1', fontSize: '0.82rem', textAlign: 'right' }}>{cert.issuer}</span>
+              </div>
+
+              <div style={{ display: 'flex', justifyContent: 'space-between', borderBottom: `1px solid ${C.border}`, paddingBottom: '0.5rem', flexWrap: 'wrap', gap: '0.25rem' }}>
+                <span style={{ fontFamily: C.mono, color: C.muted, fontSize: '0.75rem' }}>Ngày cấp (Issue Date):</span>
+                <span style={{ fontFamily: C.mono, color: '#fbbf24', fontWeight: 600, fontSize: '0.82rem' }}>{cert.issueDate} ({cert.issueDateVN})</span>
+              </div>
+
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '0.35rem', paddingTop: '0.2rem' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                  <span style={{ fontFamily: C.mono, color: C.muted, fontSize: '0.75rem' }}>Mã định danh (Cert ID):</span>
+                  <button
+                    onClick={handleCopyId}
+                    style={{
+                      background: copied ? 'rgba(16, 185, 129, 0.2)' : 'rgba(255, 255, 255, 0.07)',
+                      border: `1px solid ${copied ? '#10b981' : C.border}`,
+                      color: copied ? '#34d399' : '#94a3b8',
+                      borderRadius: 6,
+                      padding: '0.2rem 0.55rem',
+                      fontSize: '0.7rem',
+                      fontFamily: C.mono,
+                      cursor: 'pointer',
+                      transition: 'all 0.2s',
+                    }}
+                  >
+                    {copied ? '✓ Đã sao chép!' : '📋 Sao chép mã'}
+                  </button>
+                </div>
+                <div
+                  style={{
+                    background: 'rgba(0, 0, 0, 0.35)',
+                    border: '1px solid rgba(6, 182, 212, 0.25)',
+                    borderRadius: 8,
+                    padding: '0.45rem 0.75rem',
+                    fontFamily: C.mono,
+                    fontSize: '0.75rem',
+                    color: '#38bdf8',
+                    wordBreak: 'break-all',
+                    letterSpacing: '0.04em',
+                  }}
+                >
+                  {cert.certId}
+                </div>
+              </div>
+            </div>
+
+            {/* Action Buttons Toolbar inside Modal */}
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.65rem', marginTop: '0.25rem' }}>
+              <a
+                href={cert.verifyUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  gap: '0.55rem',
+                  background: 'linear-gradient(135deg, #06b6d4 0%, #3b82f6 50%, #6366f1 100%)',
+                  color: '#ffffff',
+                  borderRadius: 12,
+                  padding: '0.8rem 1.4rem',
+                  fontFamily: C.body,
+                  fontWeight: 700,
+                  fontSize: '0.88rem',
+                  textDecoration: 'none',
+                  boxShadow: '0 8px 24px rgba(6, 182, 212, 0.35)',
+                  transition: 'all 0.25s',
+                  textAlign: 'center',
+                }}
+              >
+                <span>Mở trang xác thực chính thức trên Cisco NetAcad</span>
+                <span style={{ fontSize: '1.05rem' }}>↗</span>
+              </a>
+
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.6rem' }}>
+                <button
+                  onClick={() => {
+                    onClose()
+                    onOpenFullCert()
+                  }}
+                  style={{
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    gap: '0.4rem',
+                    background: 'rgba(255, 255, 255, 0.05)',
+                    border: `1px solid ${C.border}`,
+                    color: '#e2e8f0',
+                    borderRadius: 10,
+                    padding: '0.65rem 0.9rem',
+                    fontSize: '0.8rem',
+                    fontFamily: C.body,
+                    fontWeight: 600,
+                    cursor: 'pointer',
+                    transition: 'all 0.2s',
+                  }}
+                >
+                  📜 Xem bản gốc
+                </button>
+
+                <a
+                  href={cert.pdfUrl}
+                  download
+                  style={{
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    gap: '0.4rem',
+                    background: 'rgba(255, 255, 255, 0.05)',
+                    border: `1px solid ${C.border}`,
+                    color: '#e2e8f0',
+                    borderRadius: 10,
+                    padding: '0.65rem 0.9rem',
+                    fontSize: '0.8rem',
+                    fontFamily: C.body,
+                    fontWeight: 600,
+                    textDecoration: 'none',
+                    transition: 'all 0.2s',
+                  }}
+                >
+                  📥 Tải file PDF
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+/* ─── Full Certificate Viewer Modal ──────────────────────────────────────── */
+function CertificateModal({
+  isOpen,
+  onClose,
+  cert,
+  onOpenScanner,
+}: {
+  isOpen: boolean
+  onClose: () => void
+  cert: (typeof CERTIFICATES)[0]
+  onOpenScanner: () => void
+}) {
+  useEffect(() => {
+    if (!isOpen) return
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') onClose()
+    }
+    window.addEventListener('keydown', handleKeyDown)
+    document.body.style.overflow = 'hidden'
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown)
+      document.body.style.overflow = ''
+    }
+  }, [isOpen, onClose])
+
+  if (!isOpen) return null
+
+  return (
+    <div
+      style={{
+        position: 'fixed',
+        inset: 0,
+        zIndex: 9999,
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        padding: 'clamp(0.5rem, 2vw, 1.5rem)',
+        background: 'rgba(3, 7, 18, 0.92)',
+        backdropFilter: 'blur(20px) saturate(180%)',
+        WebkitBackdropFilter: 'blur(20px) saturate(180%)',
+        animation: 'fadeInBackdrop 0.25s ease-out',
+      }}
+      onClick={onClose}
+    >
+      <div
+        style={{
+          position: 'relative',
+          width: '100%',
+          maxWidth: 1050,
+          maxHeight: '94vh',
+          overflowY: 'auto',
+          background: 'rgba(15, 23, 42, 0.98)',
+          border: '1px solid rgba(255, 255, 255, 0.12)',
+          borderRadius: 22,
+          boxShadow: '0 25px 70px rgba(0,0,0,0.8), 0 0 40px rgba(99, 102, 241, 0.2)',
+          padding: 'clamp(1rem, 2.5vw, 1.6rem)',
+          animation: 'chatAppear 0.3s cubic-bezier(0.16, 1, 0.3, 1)',
+        }}
+        onClick={(e) => e.stopPropagation()}
+      >
+        {/* Header Bar */}
+        <div
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            borderBottom: `1px solid ${C.border}`,
+            paddingBottom: '0.85rem',
+            marginBottom: '1.2rem',
+            flexWrap: 'wrap',
+            gap: '0.75rem',
+          }}
+        >
+          <div>
+            <div style={{ fontFamily: C.mono, fontSize: '0.72rem', color: '#38bdf8', letterSpacing: '0.12em', fontWeight: 700 }}>
+              // OFFICIAL CREDENTIAL · {cert.issuer}
+            </div>
+            <div style={{ fontFamily: C.display, fontSize: '1.2rem', fontWeight: 800, color: '#ffffff' }}>
+              {cert.title} — {cert.recipient}
+            </div>
+          </div>
+
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.55rem', flexWrap: 'wrap' }}>
+            <button
+              onClick={() => {
+                onClose()
+                onOpenScanner()
+              }}
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '0.4rem',
+                background: 'rgba(6, 182, 212, 0.14)',
+                border: '1px solid rgba(6, 182, 212, 0.4)',
+                color: '#38bdf8',
+                borderRadius: 8,
+                padding: '0.45rem 0.85rem',
+                fontSize: '0.78rem',
+                fontFamily: C.body,
+                fontWeight: 600,
+                cursor: 'pointer',
+              }}
+            >
+              🔍 Mở khung quét QR
+            </button>
+
+            <a
+              href={cert.pdfUrl}
+              download
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '0.4rem',
+                background: 'rgba(255, 255, 255, 0.08)',
+                border: `1px solid ${C.border}`,
+                color: '#e2e8f0',
+                borderRadius: 8,
+                padding: '0.45rem 0.85rem',
+                fontSize: '0.78rem',
+                fontFamily: C.body,
+                fontWeight: 600,
+                textDecoration: 'none',
+              }}
+            >
+              📥 Tải PDF
+            </a>
+
+            <button
+              onClick={onClose}
+              aria-label="Đóng"
+              style={{
+                width: 36,
+                height: 36,
+                borderRadius: 10,
+                background: 'rgba(255, 255, 255, 0.06)',
+                border: `1px solid ${C.border}`,
+                color: '#94a3b8',
+                fontSize: '1.1rem',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                cursor: 'pointer',
+              }}
+            >
+              ✕
+            </button>
+          </div>
+        </div>
+
+        {/* Certificate Image Viewer */}
+        <div
+          style={{
+            position: 'relative',
+            borderRadius: 14,
+            overflow: 'hidden',
+            border: '1px solid rgba(255, 255, 255, 0.1)',
+            boxShadow: '0 12px 36px rgba(0,0,0,0.5)',
+            background: '#ffffff',
+          }}
+        >
+          <img
+            src={cert.image}
+            alt={`${cert.title} Certificate`}
+            style={{
+              width: '100%',
+              height: 'auto',
+              display: 'block',
+            }}
+          />
+        </div>
+
+        {/* Footer info & verify link */}
+        <div
+          style={{
+            marginTop: '1.1rem',
+            paddingTop: '0.85rem',
+            borderTop: `1px solid ${C.border}`,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            flexWrap: 'wrap',
+            gap: '0.75rem',
+          }}
+        >
+          <div style={{ fontFamily: C.mono, fontSize: '0.75rem', color: C.muted }}>
+            Cert ID: <span style={{ color: '#38bdf8' }}>{cert.certId}</span> · Issue Date: <span style={{ color: '#fbbf24' }}>{cert.issueDate}</span>
+          </div>
+
+          <a
+            href={cert.verifyUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '0.4rem',
+              color: '#38bdf8',
+              fontFamily: C.body,
+              fontSize: '0.8rem',
+              fontWeight: 600,
+              textDecoration: 'none',
+            }}
+          >
+            <span>Xác thực trực tuyến tại Cisco NetAcad</span>
+            <span>↗</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  )
+}
+
 /* ─── Certificates Section ───────────────────────────────────────────────── */
 function Certificates() {
+  const [activeCert, setActiveCert] = useState<(typeof CERTIFICATES)[0] | null>(null)
+  const [scannerOpen, setScannerOpen] = useState(false)
+  const [certViewerOpen, setCertViewerOpen] = useState(false)
+  const [copiedId, setCopiedId] = useState<string | null>(null)
+
+  const handleOpenScanner = (cert: (typeof CERTIFICATES)[0]) => {
+    setActiveCert(cert)
+    setScannerOpen(true)
+  }
+
+  const handleOpenCertViewer = (cert: (typeof CERTIFICATES)[0]) => {
+    setActiveCert(cert)
+    setCertViewerOpen(true)
+  }
+
+  const handleCopy = (id: string) => {
+    navigator.clipboard.writeText(id)
+    setCopiedId(id)
+    setTimeout(() => setCopiedId(null), 2000)
+  }
+
   return (
     <section id="certificates" style={{ padding: 'clamp(4rem, 8vw, 6rem) 0', borderTop: `1px solid ${C.border}`, position: 'relative' }}>
       <div className="responsive-container" style={{ position: 'relative', zIndex: 1 }}>
-        <SectionHeader label="// CERTIFICATES" title="Chứng chỉ" sub="Các chứng nhận & chứng chỉ chuyên môn quốc tế." />
+        <SectionHeader
+          label="// CERTIFICATES & VERIFICATION"
+          title="Chứng chỉ & Xác thực"
+          sub="Các chứng nhận & chứng chỉ chuyên môn quốc tế được xác thực trực tuyến qua mã QR và cổng Cisco NetAcad."
+        />
 
-        <div className="reveal delay-1 glass-card" style={{
-          border: `1px dashed ${C.border}`,
-          borderRadius: 18,
-          padding: 'clamp(2.2rem, 5vw, 3.2rem) clamp(1.2rem, 4vw, 2rem)',
-          textAlign: 'center',
-          maxWidth: 620,
-          margin: '0 auto',
-        }}>
-          <div style={{
-            width: 52, height: 52, borderRadius: '50%',
-            background: 'rgba(255,255,255,0.05)',
-            border: `1px solid ${C.borderAccent}`,
-            display: 'flex', alignItems: 'center', justifyContent: 'center',
-            margin: '0 auto 1.25rem',
-            fontSize: '1.4rem',
-            boxShadow: '0 0 20px rgba(99,102,241,0.2)'
-          }}>
-            📜
-          </div>
-          <div style={{ fontFamily: C.mono, fontSize: '1.2rem', fontWeight: 700, color: '#dce4f0', marginBottom: '0.4rem' }}>
-            None
-          </div>
-          <p style={{ fontFamily: C.body, color: C.muted, fontSize: '0.86rem', lineHeight: 1.6 }}>
-            Chưa cập nhật chứng chỉ — Đang trong lộ trình học tập và chuẩn bị.
-          </p>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem', maxWidth: 1100, margin: '0 auto' }}>
+          {CERTIFICATES.map((cert) => (
+            <div
+              key={cert.id}
+              className="reveal delay-1 glow-card-container"
+              style={{
+                borderRadius: 24,
+              }}
+            >
+              <div
+                className="glow-card-inner"
+                style={{
+                  padding: 'clamp(1.2rem, 3vw, 2rem)',
+                }}
+              >
+                <div
+                  style={{
+                    display: 'grid',
+                    gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))',
+                    gap: 'clamp(1.5rem, 3.5vw, 2.5rem)',
+                    alignItems: 'center',
+                  }}
+                >
+                  {/* Left Column: Visual Showcase & Mini Cyber QR Scanner Viewport */}
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+                    {/* Certificate Thumbnail Preview with Hover Overlay */}
+                    <div
+                      onClick={() => handleOpenCertViewer(cert)}
+                      style={{
+                        position: 'relative',
+                        borderRadius: 16,
+                        overflow: 'hidden',
+                        cursor: 'pointer',
+                        border: '1px solid rgba(255, 255, 255, 0.12)',
+                        boxShadow: '0 16px 36px rgba(0, 0, 0, 0.5)',
+                        aspectRatio: '16 / 10.8',
+                        background: '#ffffff',
+                      }}
+                      className="group"
+                    >
+                      <img
+                        src={cert.image}
+                        alt={`${cert.title} Preview`}
+                        style={{
+                          width: '100%',
+                          height: '100%',
+                          objectFit: 'cover',
+                          display: 'block',
+                          transition: 'transform 0.4s cubic-bezier(0.16, 1, 0.3, 1)',
+                        }}
+                      />
+                      {/* Hover Overlay */}
+                      <div
+                        style={{
+                          position: 'absolute',
+                          inset: 0,
+                          background: 'rgba(3, 7, 18, 0.55)',
+                          backdropFilter: 'blur(3px)',
+                          opacity: 0,
+                          transition: 'opacity 0.25s ease',
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          gap: '0.6rem',
+                        }}
+                        onMouseEnter={(e) => (e.currentTarget.style.opacity = '1')}
+                        onMouseLeave={(e) => (e.currentTarget.style.opacity = '0')}
+                      >
+                        <span
+                          style={{
+                            background: 'linear-gradient(135deg, #06b6d4, #6366f1)',
+                            color: '#ffffff',
+                            padding: '0.55rem 1.1rem',
+                            borderRadius: 10,
+                            fontFamily: C.body,
+                            fontWeight: 700,
+                            fontSize: '0.82rem',
+                            boxShadow: '0 8px 20px rgba(0,0,0,0.4)',
+                          }}
+                        >
+                          👁 Phóng to chứng chỉ
+                        </span>
+                      </div>
+                    </div>
+
+                    {/* Mini Cyber QR HUD Card below Certificate Image */}
+                    <div
+                      onClick={() => handleOpenScanner(cert)}
+                      style={{
+                        background: 'rgba(5, 10, 20, 0.82)',
+                        border: '1px solid rgba(6, 182, 212, 0.35)',
+                        borderRadius: 14,
+                        padding: '0.85rem 1rem',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'space-between',
+                        gap: '1rem',
+                        cursor: 'pointer',
+                        transition: 'all 0.25s',
+                        boxShadow: '0 8px 24px rgba(0, 0, 0, 0.35)',
+                      }}
+                      onMouseEnter={(e) => {
+                        e.currentTarget.style.borderColor = 'rgba(6, 182, 212, 0.7)'
+                        e.currentTarget.style.transform = 'translateY(-2px)'
+                      }}
+                      onMouseLeave={(e) => {
+                        e.currentTarget.style.borderColor = 'rgba(6, 182, 212, 0.35)'
+                        e.currentTarget.style.transform = 'translateY(0)'
+                      }}
+                    >
+                      {/* Mini QR thumbnail with laser scan */}
+                      <div
+                        style={{
+                          position: 'relative',
+                          width: 54,
+                          height: 54,
+                          borderRadius: 8,
+                          background: '#ffffff',
+                          padding: 4,
+                          flexShrink: 0,
+                          overflow: 'hidden',
+                          boxShadow: '0 0 14px rgba(6, 182, 212, 0.4)',
+                        }}
+                      >
+                        <img
+                          src={cert.qrImage}
+                          alt="Mini QR"
+                          style={{ width: '100%', height: '100%', objectFit: 'contain' }}
+                        />
+                        <div className="cyber-laser-beam" style={{ height: 2 }} />
+                      </div>
+
+                      {/* Text callout */}
+                      <div style={{ flex: 1 }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+                          <span style={{ width: 6, height: 6, borderRadius: '50%', background: '#10b981', boxShadow: '0 0 8px #10b981' }} />
+                          <span style={{ fontFamily: C.mono, fontSize: '0.68rem', color: '#06b6d4', fontWeight: 700, letterSpacing: '0.06em' }}>
+                            CYBER QR SCANNER
+                          </span>
+                        </div>
+                        <div style={{ fontFamily: C.display, fontSize: '0.88rem', fontWeight: 700, color: '#f8fafc', marginTop: '0.1rem' }}>
+                          Khung quét QR để check
+                        </div>
+                        <div style={{ fontFamily: C.body, fontSize: '0.72rem', color: C.muted }}>
+                          Bấm để mở HUD quét laser & xem kết quả
+                        </div>
+                      </div>
+
+                      {/* Action Arrow Icon */}
+                      <div
+                        style={{
+                          width: 32,
+                          height: 32,
+                          borderRadius: 8,
+                          background: 'rgba(6, 182, 212, 0.15)',
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          color: '#38bdf8',
+                          fontSize: '0.9rem',
+                          flexShrink: 0,
+                        }}
+                      >
+                        🔍
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Right Column: Certificate Details, Badges & Action Buttons */}
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '1.1rem' }}>
+                    {/* Issuer & Status Chips */}
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', flexWrap: 'wrap' }}>
+                      <span
+                        style={{
+                          fontFamily: C.mono,
+                          fontSize: '0.7rem',
+                          fontWeight: 700,
+                          color: '#38bdf8',
+                          background: 'rgba(56, 189, 248, 0.12)',
+                          border: '1px solid rgba(56, 189, 248, 0.3)',
+                          borderRadius: 999,
+                          padding: '0.25rem 0.75rem',
+                          letterSpacing: '0.04em',
+                        }}
+                      >
+                        {cert.badge}
+                      </span>
+
+                      <span
+                        style={{
+                          fontFamily: C.mono,
+                          fontSize: '0.7rem',
+                          fontWeight: 700,
+                          color: '#34d399',
+                          background: 'rgba(16, 185, 129, 0.12)',
+                          border: '1px solid rgba(16, 185, 129, 0.3)',
+                          borderRadius: 999,
+                          padding: '0.25rem 0.75rem',
+                          display: 'inline-flex',
+                          alignItems: 'center',
+                          gap: '0.35rem',
+                        }}
+                      >
+                        <span style={{ width: 5, height: 5, borderRadius: '50%', background: '#34d399', boxShadow: '0 0 6px #34d399' }} />
+                        {cert.statusText}
+                      </span>
+
+                      <span
+                        style={{
+                          fontFamily: C.mono,
+                          fontSize: '0.7rem',
+                          color: '#fbbf24',
+                          background: 'rgba(245, 158, 11, 0.1)',
+                          border: '1px solid rgba(245, 158, 11, 0.25)',
+                          borderRadius: 999,
+                          padding: '0.25rem 0.75rem',
+                        }}
+                      >
+                        📅 {cert.issueDate}
+                      </span>
+                    </div>
+
+                    {/* Certificate Main Title & Organization */}
+                    <div>
+                      <h3
+                        style={{
+                          fontFamily: C.display,
+                          fontSize: 'clamp(1.5rem, 3.5vw, 2.1rem)',
+                          fontWeight: 900,
+                          lineHeight: 1.15,
+                          background: 'linear-gradient(135deg, #ffffff 30%, #38bdf8 75%, #818cf8 100%)',
+                          WebkitBackgroundClip: 'text',
+                          WebkitTextFillColor: 'transparent',
+                          letterSpacing: '-0.02em',
+                        }}
+                      >
+                        {cert.title}
+                      </h3>
+                      <div
+                        style={{
+                          fontFamily: C.mono,
+                          fontSize: '0.82rem',
+                          color: '#94a3b8',
+                          marginTop: '0.35rem',
+                          display: 'flex',
+                          alignItems: 'center',
+                          gap: '0.4rem',
+                          flexWrap: 'wrap',
+                        }}
+                      >
+                        <span>Cấp bởi:</span>
+                        <strong style={{ color: '#e2e8f0' }}>{cert.issuer}</strong>
+                        <span>·</span>
+                        <span style={{ color: '#06b6d4' }}>{cert.issuerSub}</span>
+                      </div>
+                    </div>
+
+                    {/* Recipient & Cert ID Bar */}
+                    <div
+                      style={{
+                        background: 'rgba(15, 23, 42, 0.65)',
+                        border: `1px solid ${C.border}`,
+                        borderRadius: 12,
+                        padding: '0.75rem 1rem',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'space-between',
+                        flexWrap: 'wrap',
+                        gap: '0.6rem',
+                      }}
+                    >
+                      <div>
+                        <div style={{ fontFamily: C.mono, fontSize: '0.68rem', color: C.muted }}>NGƯỜI NHẬN</div>
+                        <div style={{ fontFamily: C.display, fontSize: '0.92rem', fontWeight: 700, color: '#f8fafc' }}>
+                          {cert.recipient}
+                        </div>
+                      </div>
+
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                        <div>
+                          <div style={{ fontFamily: C.mono, fontSize: '0.68rem', color: C.muted, textAlign: 'right' }}>CERT ID</div>
+                          <div style={{ fontFamily: C.mono, fontSize: '0.75rem', color: '#38bdf8', fontWeight: 600 }}>
+                            {cert.certId.slice(0, 16)}...
+                          </div>
+                        </div>
+                        <button
+                          onClick={() => handleCopy(cert.certId)}
+                          title="Sao chép toàn bộ mã Cert ID"
+                          style={{
+                            background: copiedId === cert.certId ? 'rgba(16, 185, 129, 0.2)' : 'rgba(255, 255, 255, 0.08)',
+                            border: `1px solid ${copiedId === cert.certId ? '#10b981' : C.border}`,
+                            color: copiedId === cert.certId ? '#34d399' : '#cbd5e1',
+                            borderRadius: 8,
+                            padding: '0.35rem 0.6rem',
+                            fontSize: '0.72rem',
+                            fontFamily: C.mono,
+                            cursor: 'pointer',
+                            transition: 'all 0.2s',
+                          }}
+                        >
+                          {copiedId === cert.certId ? '✓ Đã chép' : '📋 Copy'}
+                        </button>
+                      </div>
+                    </div>
+
+                    {/* Description */}
+                    <p style={{ fontFamily: C.body, color: '#94a3b8', fontSize: '0.86rem', lineHeight: 1.65 }}>
+                      {cert.desc}
+                    </p>
+
+                    {/* Skills Tags */}
+                    <div>
+                      <div style={{ fontFamily: C.mono, fontSize: '0.7rem', color: C.muted, marginBottom: '0.45rem', letterSpacing: '0.06em' }}>
+                        KỸ NĂNG & KIẾN THỨC ĐẠT ĐƯỢC:
+                      </div>
+                      <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.4rem' }}>
+                        {cert.skills.map((skill) => (
+                          <span
+                            key={skill}
+                            style={{
+                              fontFamily: C.mono,
+                              fontSize: '0.72rem',
+                              color: '#cbd5e1',
+                              background: 'rgba(255, 255, 255, 0.05)',
+                              border: `1px solid ${C.border}`,
+                              borderRadius: 8,
+                              padding: '0.22rem 0.6rem',
+                            }}
+                          >
+                            {skill}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+
+                    {/* Action Buttons Toolbar */}
+                    <div
+                      style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '0.65rem',
+                        flexWrap: 'wrap',
+                        paddingTop: '0.4rem',
+                        borderTop: `1px solid ${C.border}`,
+                      }}
+                    >
+                      {/* Button 1: Open Cyber QR Scanner Modal */}
+                      <button
+                        onClick={() => handleOpenScanner(cert)}
+                        style={{
+                          display: 'inline-flex',
+                          alignItems: 'center',
+                          gap: '0.5rem',
+                          background: 'linear-gradient(135deg, #06b6d4 0%, #3b82f6 50%, #6366f1 100%)',
+                          color: '#ffffff',
+                          borderRadius: 12,
+                          padding: '0.7rem 1.25rem',
+                          fontFamily: C.body,
+                          fontWeight: 700,
+                          fontSize: '0.84rem',
+                          border: 'none',
+                          cursor: 'pointer',
+                          boxShadow: '0 8px 20px rgba(6, 182, 212, 0.35)',
+                          transition: 'all 0.25s',
+                        }}
+                      >
+                        <span>🔍 Khung quét QR để check</span>
+                      </button>
+
+                      {/* Button 2: View Full Certificate */}
+                      <button
+                        onClick={() => handleOpenCertViewer(cert)}
+                        style={{
+                          display: 'inline-flex',
+                          alignItems: 'center',
+                          gap: '0.45rem',
+                          background: 'rgba(255, 255, 255, 0.07)',
+                          border: `1px solid ${C.border}`,
+                          color: '#e2e8f0',
+                          borderRadius: 12,
+                          padding: '0.7rem 1.1rem',
+                          fontFamily: C.body,
+                          fontWeight: 600,
+                          fontSize: '0.84rem',
+                          cursor: 'pointer',
+                          transition: 'all 0.2s',
+                        }}
+                      >
+                        <span>📜 Xem bản gốc</span>
+                      </button>
+
+                      {/* Button 3: Direct Official Cisco Link */}
+                      <a
+                        href={cert.verifyUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        style={{
+                          display: 'inline-flex',
+                          alignItems: 'center',
+                          gap: '0.35rem',
+                          background: 'transparent',
+                          border: '1px solid rgba(6, 182, 212, 0.3)',
+                          color: '#38bdf8',
+                          borderRadius: 12,
+                          padding: '0.7rem 1rem',
+                          fontFamily: C.body,
+                          fontWeight: 600,
+                          fontSize: '0.84rem',
+                          textDecoration: 'none',
+                          transition: 'all 0.2s',
+                        }}
+                      >
+                        <span>Xác thực Cisco</span>
+                        <span>↗</span>
+                      </a>
+
+                      {/* Button 4: Download PDF */}
+                      <a
+                        href={cert.pdfUrl}
+                        download
+                        style={{
+                          display: 'inline-flex',
+                          alignItems: 'center',
+                          gap: '0.35rem',
+                          background: 'rgba(255, 255, 255, 0.04)',
+                          border: `1px solid ${C.border}`,
+                          color: '#94a3b8',
+                          borderRadius: 12,
+                          padding: '0.7rem 0.95rem',
+                          fontFamily: C.body,
+                          fontWeight: 500,
+                          fontSize: '0.84rem',
+                          textDecoration: 'none',
+                          transition: 'all 0.2s',
+                        }}
+                      >
+                        <span>📥 PDF</span>
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          ))}
         </div>
       </div>
+
+      {/* QR Scanner Cyber HUD Modal */}
+      {activeCert && (
+        <QRScannerModal
+          isOpen={scannerOpen}
+          onClose={() => setScannerOpen(false)}
+          cert={activeCert}
+          onOpenFullCert={() => setCertViewerOpen(true)}
+        />
+      )}
+
+      {/* Full Certificate Lightbox Modal */}
+      {activeCert && (
+        <CertificateModal
+          isOpen={certViewerOpen}
+          onClose={() => setCertViewerOpen(false)}
+          cert={activeCert}
+          onOpenScanner={() => setScannerOpen(true)}
+        />
+      )}
     </section>
   )
 }
+
 
 /* ─── Contact Section ────────────────────────────────────────────────────── */
 function Contact() {
@@ -1640,7 +2864,7 @@ function Contact() {
             {/* Modal Title */}
             <h3
               style={{
-                fontFamily: C.heading,
+                fontFamily: C.display,
                 fontSize: 'clamp(1.2rem, 3.5vw, 1.45rem)',
                 fontWeight: 800,
                 color: '#ffffff',

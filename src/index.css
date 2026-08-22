@@ -248,6 +248,82 @@ body {
   100% { opacity: 1; }
 }
 
+/* ─── Cyber QR Scanner & HUD Viewfinder Styles ─── */
+@keyframes qrLaserScan {
+  0% {
+    top: 6%;
+    opacity: 0.85;
+  }
+  50% {
+    top: 92%;
+    opacity: 1;
+  }
+  100% {
+    top: 6%;
+    opacity: 0.85;
+  }
+}
+
+@keyframes cyberLaserGlow {
+  0%, 100% {
+    box-shadow: 0 0 15px rgba(6, 182, 212, 0.9), 0 0 30px rgba(56, 189, 248, 0.6), 0 0 50px rgba(99, 102, 241, 0.4);
+  }
+  50% {
+    box-shadow: 0 0 25px rgba(6, 182, 212, 1), 0 0 45px rgba(56, 189, 248, 0.9), 0 0 70px rgba(99, 102, 241, 0.7);
+  }
+}
+
+@keyframes hudReticlePulse {
+  0%, 100% {
+    opacity: 0.6;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.02);
+  }
+}
+
+@keyframes cyberGridScroll {
+  0% {
+    background-position: 0 0;
+  }
+  100% {
+    background-position: 24px 24px;
+  }
+}
+
+.cyber-scanner-grid {
+  background-image: 
+    linear-gradient(to right, rgba(6, 182, 212, 0.08) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(6, 182, 212, 0.08) 1px, transparent 1px);
+  background-size: 20px 20px;
+  animation: cyberGridScroll 20s linear infinite;
+}
+
+.cyber-laser-beam {
+  position: absolute;
+  left: 4%;
+  right: 4%;
+  height: 3px;
+  background: linear-gradient(90deg, transparent 0%, #06b6d4 15%, #38bdf8 50%, #818cf8 85%, transparent 100%);
+  border-radius: 999px;
+  animation: qrLaserScan 2.4s ease-in-out infinite, cyberLaserGlow 2s ease-in-out infinite alternate;
+  pointer-events: none;
+  z-index: 10;
+}
+
+.cyber-laser-trail {
+  position: absolute;
+  left: 4%;
+  right: 4%;
+  height: 24px;
+  background: linear-gradient(180deg, rgba(6, 182, 212, 0.35) 0%, transparent 100%);
+  transform: translateY(-100%);
+  pointer-events: none;
+  border-radius: 4px 4px 0 0;
+}
+
 /* ─── Responsive & Safe Area Utilities ─── */
 :root {
   --sat: env(safe-area-inset-top, 0px);
@@ -281,4 +357,6 @@ body {
   min-height: 44px;
   min-width: 44px;
 }
+
+
 

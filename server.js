@@ -31,7 +31,8 @@ Thông tin chính xác về Lê Võ Đăng Khoa:
 - Dự án tiêu biểu (Projects):
   1. "Hành Trang Của Mẹ & Góc Nhỏ Của Ba" (App URL: https://khoalevodang-bavame.vercel.app/) — Nền tảng cẩm nang gia đình, chia sẻ mẹo hay cuộc sống & kinh nghiệm nuôi dạy con, xây dựng bằng React, TypeScript, Tailwind CSS, tối ưu PWA trên Vercel. Trạng thái: Đang phát triển (Ngày bắt đầu: 21/08/2026).
   2. Các dự án AI/ML, C++ DSA Engine và Database Schema đang tiếp tục được phát triển và public trên GitHub.
-- Chứng chỉ (Certificates): Đang trong lộ trình học tập & chuẩn bị thi chứng chỉ chuyên ngành.
+- Chứng chỉ (Certificates):
+  1. "C++ Essentials 1" — Cấp bởi Cisco Networking Academy & C++ Institute (Open Education & Development Group) ngày 22/08/2026. Cert ID: 5af2e763-9146-4b4a-a909-b236739c7c4c (xác thực trực tuyến chính thức qua cổng Cisco NetAcad).
 - Địa điểm: TP. Hồ Chí Minh, Việt Nam.
 - Email liên hệ: khoalevodang301007@gmail.com
 - GitHub: https://github.com/khoalvd839764-netizen
