@@ -81,6 +81,13 @@ export interface LeetCodeProblem {
 const LEETCODE_PROFILE_URL = 'https://leetcode.com/u/khoalvd839764-netizen/'
 
 // ─────────────────────────────────────────────────────────────────────────────
+// TRẠNG THÁI HIỂN THỊ KHU VỰC LEETCODE:
+// 👉 true: Hiển thị giao diện "Coming Soon / Đang cập nhật" (tạm thời)
+// 👉 false: Bật hiển thị danh sách bài nộp và bộ lọc khi bạn sẵn sàng
+// ─────────────────────────────────────────────────────────────────────────────
+const LEETCODE_COMING_SOON = true
+
+// ─────────────────────────────────────────────────────────────────────────────
 // KHU VỰC DANH SÁCH BÀI ĐÃ NỘP TRÊN LEETCODE (LEETCODE SUBMISSION TRACKER)
 // 👉 Bạn làm xong bài nào trên LeetCode thì chỉ cần dán link vào đây để người khác check!
 //    Không cần viết code hay giải thích dài dòng gì cả.
@@ -1932,13 +1939,234 @@ function LeetCode() {
 
       <div className="responsive-container" style={{ position: 'relative', zIndex: 1 }}>
         <SectionHeader
-          label="// LEETCODE & DSA SUBMISSIONS"
+          label="// LEETCODE & PROBLEM SOLVING"
           title="LeetCode & Thuật toán"
-          sub="Danh mục các bài toán LeetCode đã hoàn thành và nộp bài thành công (Accepted). Nhấp vào bài bất kỳ để kiểm tra bài nộp và kết quả chấm trực tiếp trên hệ thống LeetCode."
+          sub={
+            LEETCODE_COMING_SOON
+              ? 'Khu vực theo dõi và kiểm tra các bài giải thuật toán LeetCode đang được chuẩn bị và sẽ sớm ra mắt.'
+              : 'Danh mục các bài toán LeetCode đã hoàn thành và nộp bài thành công (Accepted). Nhấp vào bài bất kỳ để kiểm tra bài nộp và kết quả chấm trực tiếp trên hệ thống LeetCode.'
+          }
           accent="#fb923c"
         />
 
-        {/* ─── Status Banner & Dataset Switcher ─── */}
+        {LEETCODE_COMING_SOON ? (
+          /* ─── Coming Soon Display ─── */
+          <div
+            className="reveal glass-card"
+            style={{
+              position: 'relative',
+              borderRadius: 24,
+              padding: 'clamp(2.5rem, 5vw, 4rem) clamp(1.2rem, 4vw, 2.5rem)',
+              textAlign: 'center',
+              border: '1px solid rgba(251, 146, 60, 0.32)',
+              background: 'linear-gradient(180deg, rgba(251, 146, 60, 0.07) 0%, rgba(11, 17, 32, 0.88) 100%)',
+              boxShadow: '0 20px 50px rgba(0,0,0,0.5), 0 0 35px rgba(251, 146, 60, 0.12)',
+              overflow: 'hidden',
+              maxWidth: 860,
+              margin: '0 auto',
+            }}
+          >
+            {/* Ambient Glow Orb */}
+            <div
+              style={{
+                position: 'absolute',
+                top: '-25%',
+                left: '50%',
+                transform: 'translateX(-50%)',
+                width: 340,
+                height: 220,
+                background: 'radial-gradient(circle, rgba(251, 146, 60, 0.22) 0%, transparent 70%)',
+                pointerEvents: 'none',
+              }}
+            />
+
+            {/* Badge: COMING SOON */}
+            <div style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem', marginBottom: '1.25rem' }}>
+              <span
+                style={{
+                  fontFamily: C.mono,
+                  fontSize: '0.75rem',
+                  fontWeight: 700,
+                  letterSpacing: '0.12em',
+                  textTransform: 'uppercase',
+                  color: '#fb923c',
+                  background: 'rgba(251, 146, 60, 0.15)',
+                  border: '1px solid rgba(251, 146, 60, 0.45)',
+                  padding: '0.35rem 0.95rem',
+                  borderRadius: 999,
+                  boxShadow: '0 0 16px rgba(251, 146, 60, 0.25)',
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '0.45rem',
+                }}
+              >
+                <span
+                  className="beacon-pulse"
+                  style={{
+                    width: 7,
+                    height: 7,
+                    borderRadius: '50%',
+                    background: '#fb923c',
+                    boxShadow: '0 0 8px #fb923c',
+                  }}
+                />
+                COMING SOON · ĐANG CẬP NHẬT
+              </span>
+            </div>
+
+            {/* Icon Graphic */}
+            <div
+              style={{
+                width: 76,
+                height: 76,
+                margin: '0 auto 1.25rem',
+                borderRadius: 22,
+                background: 'linear-gradient(135deg, rgba(251, 146, 60, 0.22) 0%, rgba(234, 88, 12, 0.1) 100%)',
+                border: '1px solid rgba(251, 146, 60, 0.45)',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                fontSize: '2.3rem',
+                boxShadow: '0 0 25px rgba(251, 146, 60, 0.28)',
+              }}
+            >
+              ⚡
+            </div>
+
+            {/* Main Title */}
+            <h3
+              style={{
+                fontFamily: C.display,
+                fontSize: 'clamp(1.4rem, 3.2vw, 1.95rem)',
+                fontWeight: 800,
+                color: '#ffffff',
+                letterSpacing: '-0.02em',
+                marginBottom: '0.85rem',
+                lineHeight: 1.3,
+              }}
+            >
+              Hệ Thống LeetCode Submission Tracker Sắp Ra Mắt
+            </h3>
+
+            {/* Subtitle Description */}
+            <p
+              style={{
+                fontFamily: C.body,
+                color: '#94a3b8',
+                fontSize: 'clamp(0.9rem, 1.8vw, 1rem)',
+                lineHeight: 1.7,
+                maxWidth: 620,
+                margin: '0 auto 2rem',
+              }}
+            >
+              Danh sách bài toán, tiến độ giải thuật (DSA) và liên kết nộp bài xác thực trên LeetCode đang được chuẩn bị để cập nhật. Trong thời gian này, bạn có thể ghé thăm trực tiếp hồ sơ LeetCode chính thức của tôi.
+            </p>
+
+            {/* Teaser 3 Highlights */}
+            <div
+              style={{
+                display: 'grid',
+                gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 200px), 1fr))',
+                gap: '1rem',
+                marginBottom: '2.25rem',
+              }}
+            >
+              <div
+                style={{
+                  background: 'rgba(255, 255, 255, 0.03)',
+                  border: '1px solid rgba(255, 255, 255, 0.07)',
+                  borderRadius: 14,
+                  padding: '1.1rem 1rem',
+                }}
+              >
+                <div style={{ fontFamily: C.mono, fontSize: '0.7rem', color: '#10b981', fontWeight: 600, letterSpacing: '0.06em' }}>
+                  🟢 NGÔN NGỮ CHỦ ĐẠO
+                </div>
+                <div style={{ fontFamily: C.display, fontSize: '1.05rem', fontWeight: 700, color: '#f1f5f9', marginTop: '0.35rem' }}>
+                  C++ & Python
+                </div>
+                <div style={{ fontFamily: C.body, fontSize: '0.78rem', color: '#64748b', marginTop: '0.15rem' }}>
+                  Tối ưu bộ nhớ & thời gian
+                </div>
+              </div>
+
+              <div
+                style={{
+                  background: 'rgba(255, 255, 255, 0.03)',
+                  border: '1px solid rgba(255, 255, 255, 0.07)',
+                  borderRadius: 14,
+                  padding: '1.1rem 1rem',
+                }}
+              >
+                <div style={{ fontFamily: C.mono, fontSize: '0.7rem', color: '#f59e0b', fontWeight: 600, letterSpacing: '0.06em' }}>
+                  🟡 PHÂN LOẠI ĐỘ KHÓ
+                </div>
+                <div style={{ fontFamily: C.display, fontSize: '1.05rem', fontWeight: 700, color: '#f1f5f9', marginTop: '0.35rem' }}>
+                  Easy · Medium · Hard
+                </div>
+                <div style={{ fontFamily: C.body, fontSize: '0.78rem', color: '#64748b', marginTop: '0.15rem' }}>
+                  Đầy đủ cấp độ thuật toán
+                </div>
+              </div>
+
+              <div
+                style={{
+                  background: 'rgba(255, 255, 255, 0.03)',
+                  border: '1px solid rgba(255, 255, 255, 0.07)',
+                  borderRadius: 14,
+                  padding: '1.1rem 1rem',
+                }}
+              >
+                <div style={{ fontFamily: C.mono, fontSize: '0.7rem', color: '#38bdf8', fontWeight: 600, letterSpacing: '0.06em' }}>
+                  🔵 XÁC THỰC BÀI NỘP
+                </div>
+                <div style={{ fontFamily: C.display, fontSize: '1.05rem', fontWeight: 700, color: '#f1f5f9', marginTop: '0.35rem' }}>
+                  Direct Link Tracker
+                </div>
+                <div style={{ fontFamily: C.body, fontSize: '0.78rem', color: '#64748b', marginTop: '0.15rem' }}>
+                  Kiểm tra trực tiếp trên LeetCode
+                </div>
+              </div>
+            </div>
+
+            {/* Primary CTA Button: Visit LeetCode Profile */}
+            <a
+              href={LEETCODE_PROFILE_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="touch-target"
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '0.55rem',
+                fontFamily: C.body,
+                fontSize: '0.92rem',
+                fontWeight: 700,
+                color: '#ffffff',
+                background: 'linear-gradient(135deg, #fb923c 0%, #ea580c 100%)',
+                border: '1px solid rgba(255, 255, 255, 0.25)',
+                padding: '0.75rem 1.75rem',
+                borderRadius: 12,
+                textDecoration: 'none',
+                boxShadow: '0 4px 20px rgba(251, 146, 60, 0.4), 0 0 12px rgba(251, 146, 60, 0.25)',
+                transition: 'all 0.25s cubic-bezier(0.16, 1, 0.3, 1)',
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.transform = 'translate3d(0, -2px, 0)'
+                e.currentTarget.style.boxShadow = '0 6px 28px rgba(251, 146, 60, 0.6), 0 0 20px rgba(251, 146, 60, 0.4)'
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.transform = 'translate3d(0, 0, 0)'
+                e.currentTarget.style.boxShadow = '0 4px 20px rgba(251, 146, 60, 0.4), 0 0 12px rgba(251, 146, 60, 0.25)'
+              }}
+            >
+              <span>Ghé thăm Hồ sơ LeetCode chính thức</span>
+              <span>↗</span>
+            </a>
+          </div>
+        ) : (
+          <>
+            {/* ─── Status Banner & Dataset Switcher ─── */}
         <div
           className="reveal glass-card"
           style={{
@@ -2504,6 +2732,8 @@ function LeetCode() {
               />
             ))}
           </div>
+        )}
+          </>
         )}
       </div>
     </section>
