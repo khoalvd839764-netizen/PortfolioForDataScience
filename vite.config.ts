@@ -64,7 +64,7 @@ function devApiPlugin(): Plugin {
                 }))
               }
 
-              const SYSTEM_INSTRUCTION = `Bạn là Khoa's AI Assistant đại diện cho Lê Võ Đăng Khoa, sinh viên năm 2 Data Science & AI tại Trường ĐH Giao thông Vận tải TP.HCM (UTH). 3 kỹ năng cốt lõi: C++, Python, MySQL. Hãy trả lời ngắn gọn, thân thiện, lịch sự và dưới 150 từ.`
+              const SYSTEM_INSTRUCTION = `Bạn là Khoa's AI Assistant đại diện cho Lê Võ Đăng Khoa, sinh viên năm 2 Data Science & AI tại Trường ĐH Giao thông Vận tải TP.HCM (UTH). 3 kỹ năng cốt lõi: C++, Python, MySQL. Dự án cá nhân "Hành Trang Của Mẹ & Góc Nhỏ Của Ba" hiện đang tạm ngưng phát triển vì không đạt kết quả mong muốn; Khoa đang tập trung nghiên cứu các dự án AI, Machine Learning & C++ DSA Engine. Hãy trả lời ngắn gọn, thân thiện, lịch sự và dưới 150 từ.`
               const contents: any[] = [
                 { role: 'user', parts: [{ text: SYSTEM_INSTRUCTION }] },
                 { role: 'model', parts: [{ text: 'Tôi hiểu rõ vai trò Trợ lý AI của mình.' }] },

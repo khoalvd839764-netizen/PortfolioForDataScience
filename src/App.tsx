@@ -6,6 +6,7 @@ import ChatWidget from './components/ChatWidget'
 const NAV = [
   { label: 'About', href: '#about' },
   { label: 'Projects', href: '#projects' },
+  { label: 'LeetCode', href: '#leetcode' },
   { label: 'Education', href: '#education' },
   { label: 'Certificates', href: '#certificates' },
   { label: 'Contact', href: '#contact' },
@@ -46,18 +47,79 @@ const PROJECTS = [
     desc: 'Nền tảng chia sẻ mẹo hay cuộc sống, cẩm nang gia đình, kinh nghiệm nuôi dạy con và lưu giữ những lời dạy yêu thương. Được thiết kế hiện đại, tối ưu PWA trên cả di động và máy tính.',
     tags: ['React', 'TypeScript', 'Tailwind CSS', 'PWA', 'Vercel'],
     link: 'https://khoalevodang-bavame.vercel.app/',
-    featured: true,
-    status: 'Đang phát triển',
+    featured: false,
+    status: 'Tạm ngưng phát triển',
+    pauseReason: 'Không đạt kết quả mong muốn',
     startDate: '21/08/2026',
-    badge: 'ĐANG PHÁT TRIỂN',
+    badge: 'TẠM NGƯNG PHÁT TRIỂN',
     icon: '🏡',
     grad: ['#f59e0b', '#ec4899', '#6366f1'],
     stats: [
       { label: 'Ngày bắt đầu', value: '21/08/2026' },
       { label: 'Nền tảng', value: 'Web & PWA' },
-      { label: 'Trạng thái', value: 'Đang phát triển' },
+      { label: 'Trạng thái', value: 'Tạm ngưng phát triển' },
     ],
   },
+]
+
+export interface LeetCodeProblem {
+  id?: number | string
+  title: string
+  difficulty: 'Easy' | 'Medium' | 'Hard'
+  category?: string
+  leetcodeUrl?: string
+  summary?: string
+  approach?: string
+  timeComplexity?: string
+  spaceComplexity?: string
+  language?: string
+  code?: string
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// LINK TRANG CÁ NHÂN LEETCODE (Bạn có thể thay username của bạn vào đây)
+// ─────────────────────────────────────────────────────────────────────────────
+const LEETCODE_PROFILE_URL = 'https://leetcode.com/u/khoalvd839764-netizen/'
+
+// ─────────────────────────────────────────────────────────────────────────────
+// KHU VỰC BÀI GIẢI LEETCODE & THUẬT TOÁN (DSA)
+// 👉 CÁCH 1 (SIÊU NHANH - KHÔNG CẦN VIẾT GÌ CẢ): Chỉ cần Tên bài, Độ khó & Link!
+//    Khi người xem bấm vào bài sẽ tự động mở thẳng bài đó trên LeetCode.
+//    Ví dụ:
+//      {
+//        id: 1,
+//        title: 'Two Sum',
+//        difficulty: 'Easy',
+//        leetcodeUrl: 'https://leetcode.com/problems/two-sum/',
+//      }
+//
+// 👉 CÁCH 2 (ĐẦY ĐỦ): Viết thêm lời giải, phân tích độ phức tạp & code nếu muốn!
+// ─────────────────────────────────────────────────────────────────────────────
+const LEETCODE_SOLUTIONS: LeetCodeProblem[] = [
+  /*
+  // Mẫu cách 1: Chỉ cần link, bấm vào là tự động mở trên LeetCode!
+  {
+    id: 1,
+    title: 'Two Sum',
+    difficulty: 'Easy',
+    leetcodeUrl: 'https://leetcode.com/problems/two-sum/',
+    category: 'Array · Hash Table',
+  },
+  {
+    id: 3,
+    title: 'Longest Substring Without Repeating Characters',
+    difficulty: 'Medium',
+    leetcodeUrl: 'https://leetcode.com/problems/longest-substring-without-repeating-characters/',
+    category: 'Sliding Window',
+  },
+  {
+    id: 42,
+    title: 'Trapping Rain Water',
+    difficulty: 'Hard',
+    leetcodeUrl: 'https://leetcode.com/problems/trapping-rain-water/',
+    category: 'Two Pointers',
+  },
+  */
 ]
 
 const EDUCATION = [
@@ -127,23 +189,23 @@ const C = {
 function ScrollProgressBar({ progress }: { progress: number }) {
   return (
     <div style={{
-      position: 'fixed', top: 0, left: 0, right: 0, height: '3.5px',
+      position: 'fixed', top: 0, left: 0, right: 0, height: '3px',
       zIndex: 200, pointerEvents: 'none', background: 'rgba(255,255,255,0.03)'
     }}>
       <div style={{
         height: '100%',
         width: `${progress}%`,
-        background: 'linear-gradient(90deg, #38bdf8 0%, #6366f1 40%, #a78bfa 75%, #f43f5e 100%)',
-        boxShadow: '0 0 14px rgba(99,102,241,0.8), 0 0 22px rgba(56,189,248,0.5)',
-        transition: 'width 0.12s linear',
+        background: 'linear-gradient(90deg, #38bdf8 0%, #6366f1 35%, #a855f7 70%, #f43f5e 100%)',
+        boxShadow: '0 0 16px rgba(99,102,241,0.9), 0 0 28px rgba(56,189,248,0.6)',
+        transition: 'width 0.1s linear',
         position: 'relative',
       }}>
         {progress > 0 && (
           <div style={{
-            position: 'absolute', top: -3, right: -4,
-            width: 9, height: 9, borderRadius: '50%',
+            position: 'absolute', top: -3.5, right: -5,
+            width: 10, height: 10, borderRadius: '50%',
             background: '#ffffff',
-            boxShadow: '0 0 10px #38bdf8, 0 0 18px #6366f1',
+            boxShadow: '0 0 10px #38bdf8, 0 0 20px #6366f1, 0 0 30px #a855f7',
           }} />
         )}
       </div>
@@ -213,7 +275,7 @@ function ScrollToTopButton({ show }: { show: boolean }) {
 }
 
 
-/* ─── Neural Network & Deep Space Canvas Background ─────────────────────── */
+/* ─── Neural Network, Comet & Deep Space Canvas Background ───────────────── */
 function NeuralSpaceBackground() {
   const canvasRef = React.useRef<HTMLCanvasElement | null>(null)
 
@@ -224,18 +286,25 @@ function NeuralSpaceBackground() {
     if (!ctx) return
 
     let animationFrameId: number
-    let width = (canvas.width = window.innerWidth)
-    let height = (canvas.height = window.innerHeight)
+    let dpr = Math.min(window.devicePixelRatio || 1, 2)
+    let width = window.innerWidth
+    let height = window.innerHeight
 
     const handleResize = () => {
       if (!canvas) return
-      width = canvas.width = window.innerWidth
-      height = canvas.height = window.innerHeight
+      dpr = Math.min(window.devicePixelRatio || 1, 2)
+      width = window.innerWidth
+      height = window.innerHeight
+      canvas.width = width * dpr
+      canvas.height = height * dpr
+      ctx.scale(dpr, dpr)
     }
+
+    handleResize()
     window.addEventListener('resize', handleResize, { passive: true })
 
     // Mouse / Touch coordinates for interactive connection
-    const mouse = { x: -1000, y: -1000, radius: width < 640 ? 100 : 140 }
+    const mouse = { x: -1000, y: -1000, radius: width < 640 ? 110 : 150 }
     const handleMouseMove = (e: MouseEvent) => {
       mouse.x = e.clientX
       mouse.y = e.clientY
@@ -259,29 +328,38 @@ function NeuralSpaceBackground() {
 
     window.addEventListener('mousemove', handleMouseMove, { passive: true })
     window.addEventListener('mouseleave', handleMouseLeave, { passive: true })
-    window.addEventListener('touchstart', handleTouchMove, { passive: true })
-    window.addEventListener('touchmove', handleTouchMove, { passive: true })
-    window.addEventListener('touchend', handleTouchEnd, { passive: true })
 
-    // Generate Stars (Adaptive density: fewer on mobile for optimal 60fps & battery)
+    // Scroll parallax tracking
+    let currentScrollY = window.scrollY
+    let targetScrollY = window.scrollY
+    const handleScroll = () => {
+      targetScrollY = window.scrollY
+    }
+    window.addEventListener('scroll', handleScroll, { passive: true })
+
+    // Generate Stars (Layered depth with parallax - tuned for performance)
     const isMobile = width < 640
-    const starCount = isMobile ? Math.floor(Math.min(width, height) / 20) : Math.floor(Math.min(width, height) / 12)
-    const stars: { x: number; y: number; size: number; alpha: number; speed: number }[] = []
+    const starCount = isMobile ? 30 : 55
+    const stars: { x: number; y: number; baseY: number; size: number; alpha: number; speed: number; layer: number }[] = []
     for (let i = 0; i < starCount; i++) {
+      const y = Math.random() * height
       stars.push({
         x: Math.random() * width,
-        y: Math.random() * height,
-        size: Math.random() * 1.4 + 0.4,
-        alpha: Math.random() * 0.7 + 0.2,
-        speed: Math.random() * 0.02 + 0.005,
+        y,
+        baseY: y,
+        size: Math.random() * 1.3 + 0.35,
+        alpha: Math.random() * 0.6 + 0.2,
+        speed: Math.random() * 0.02 + 0.006,
+        layer: Math.random() * 0.12 + 0.04,
       })
     }
 
     // Generate Neural Nodes (Adaptive density)
-    const nodeCount = isMobile ? 18 : Math.floor(Math.min(width, 1200) / 22)
+    const nodeCount = isMobile ? 12 : 18
     const nodes: {
       x: number
       y: number
+      baseY: number
       vx: number
       vy: number
       radius: number
@@ -291,34 +369,102 @@ function NeuralSpaceBackground() {
     const colors = ['#6366f1', '#a78bfa', '#38bdf8', '#818cf8']
 
     for (let i = 0; i < nodeCount; i++) {
+      const y = Math.random() * height
       nodes.push({
         x: Math.random() * width,
-        y: Math.random() * height,
-        vx: (Math.random() - 0.5) * (isMobile ? 0.3 : 0.45),
-        vy: (Math.random() - 0.5) * (isMobile ? 0.3 : 0.45),
-        radius: Math.random() * 1.8 + 1.1,
+        y,
+        baseY: y,
+        vx: (Math.random() - 0.5) * (isMobile ? 0.25 : 0.35),
+        vy: (Math.random() - 0.5) * (isMobile ? 0.25 : 0.35),
+        radius: Math.random() * 1.6 + 1.0,
         color: colors[Math.floor(Math.random() * colors.length)],
       })
     }
 
+    // Cosmic Comet (Shooting star effect)
+    const comet = {
+      x: 0,
+      y: 0,
+      length: 0,
+      speed: 0,
+      angle: 0,
+      alpha: 0,
+      active: false,
+    }
+    let lastCometTime = 0
+
+    const maybeSpawnComet = (now: number) => {
+      if (!comet.active && now - lastCometTime > (isMobile ? 8000 : 5500)) {
+        if (Math.random() < 0.45) {
+          comet.active = true
+          comet.x = Math.random() * (width * 0.8)
+          comet.y = Math.random() * (height * 0.35)
+          comet.length = Math.random() * 70 + 50
+          comet.speed = Math.random() * 7 + 9
+          comet.angle = Math.PI / 4 + (Math.random() - 0.5) * 0.2
+          comet.alpha = 1
+          lastCometTime = now
+        }
+      }
+    }
+
     let tick = 0
 
-    const render = () => {
+    const render = (time: number) => {
       tick++
+      // Smooth interpolation for scroll parallax
+      currentScrollY += (targetScrollY - currentScrollY) * 0.08
       ctx.clearRect(0, 0, width, height)
 
-      // 1. Draw Twinkling Stars
+      // 1. Draw Twinkling Stars with subtle scroll parallax
       for (let i = 0; i < stars.length; i++) {
         const star = stars[i]
-        const currentAlpha = star.alpha + Math.sin(tick * star.speed) * 0.3
+        const currentAlpha = star.alpha + Math.sin(tick * star.speed) * 0.25
+        const parallaxY = (star.baseY - currentScrollY * star.layer) % height
+        const drawY = parallaxY < 0 ? parallaxY + height : parallaxY
+
         ctx.beginPath()
-        ctx.arc(star.x, star.y, star.size, 0, Math.PI * 2)
-        ctx.fillStyle = `rgba(255, 255, 255, ${Math.max(0.1, Math.min(1, currentAlpha))})`
+        ctx.arc(star.x, drawY, star.size, 0, Math.PI * 2)
+        ctx.fillStyle = `rgba(255, 255, 255, ${Math.max(0.12, Math.min(0.9, currentAlpha))})`
         ctx.fill()
       }
 
-      // 2. Update & Draw Neural Nodes
-      const maxConnectDist = isMobile ? 90 : 120
+      // 2. Cosmic Comet / Shooting Star
+      maybeSpawnComet(time)
+      if (comet.active) {
+        const tailX = comet.x - Math.cos(comet.angle) * comet.length
+        const tailY = comet.y - Math.sin(comet.angle) * comet.length
+        const grad = ctx.createLinearGradient(tailX, tailY, comet.x, comet.y)
+        grad.addColorStop(0, 'rgba(56, 189, 248, 0)')
+        grad.addColorStop(0.6, `rgba(99, 102, 241, ${comet.alpha * 0.5})`)
+        grad.addColorStop(1, `rgba(255, 255, 255, ${comet.alpha})`)
+
+        ctx.beginPath()
+        ctx.moveTo(tailX, tailY)
+        ctx.lineTo(comet.x, comet.y)
+        ctx.strokeStyle = grad
+        ctx.lineWidth = 1.4
+        ctx.stroke()
+
+        // Comet head (clean, 0 blur overhead)
+        ctx.beginPath()
+        ctx.arc(comet.x, comet.y, 2, 0, Math.PI * 2)
+        ctx.fillStyle = `rgba(255, 255, 255, ${comet.alpha})`
+        ctx.fill()
+
+        comet.x += Math.cos(comet.angle) * comet.speed
+        comet.y += Math.sin(comet.angle) * comet.speed
+        comet.alpha -= 0.015
+        if (comet.alpha <= 0 || comet.x > width + 100 || comet.y > height + 100) {
+          comet.active = false
+        }
+      }
+
+      // 3. Update & Draw Neural Nodes & Synapses (Optimized distance calculation)
+      const maxConnectDist = isMobile ? 80 : 110
+      const maxConnectDistSq = maxConnectDist * maxConnectDist
+      const mouseRadiusSq = mouse.radius * mouse.radius
+
       for (let i = 0; i < nodes.length; i++) {
         const node = nodes[i]
 
@@ -331,20 +477,18 @@ function NeuralSpaceBackground() {
         ctx.beginPath()
         ctx.arc(node.x, node.y, node.radius, 0, Math.PI * 2)
         ctx.fillStyle = node.color
-        ctx.shadowColor = node.color
-        ctx.shadowBlur = 6
         ctx.fill()
-        ctx.shadowBlur = 0
 
         // Connect neighboring nodes (Neural Network Synapses)
         for (let j = i + 1; j < nodes.length; j++) {
           const other = nodes[j]
           const dx = node.x - other.x
           const dy = node.y - other.y
-          const dist = Math.sqrt(dx * dx + dy * dy)
+          const distSq = dx * dx + dy * dy
 
-          if (dist < maxConnectDist) {
-            const alpha = (1 - dist / maxConnectDist) * 0.22
+          if (distSq < maxConnectDistSq) {
+            const dist = Math.sqrt(distSq)
+            const alpha = (1 - dist / maxConnectDist) * 0.2
             ctx.beginPath()
             ctx.moveTo(node.x, node.y)
             ctx.lineTo(other.x, other.y)
@@ -354,17 +498,18 @@ function NeuralSpaceBackground() {
           }
         }
 
-        // Connect node to Pointer / Touch Cursor
+        // Connect node to Mouse Cursor
         const mdx = node.x - mouse.x
         const mdy = node.y - mouse.y
-        const mdist = Math.sqrt(mdx * mdx + mdy * mdy)
-        if (mdist < mouse.radius) {
-          const mAlpha = (1 - mdist / mouse.radius) * 0.45
+        const mdistSq = mdx * mdx + mdy * mdy
+        if (mdistSq < mouseRadiusSq) {
+          const mdist = Math.sqrt(mdistSq)
+          const mAlpha = (1 - mdist / mouse.radius) * 0.4
           ctx.beginPath()
           ctx.moveTo(node.x, node.y)
           ctx.lineTo(mouse.x, mouse.y)
           ctx.strokeStyle = `rgba(56, 189, 248, ${mAlpha})`
-          ctx.lineWidth = 1.1
+          ctx.lineWidth = 1.0
           ctx.stroke()
         }
       }
@@ -372,38 +517,45 @@ function NeuralSpaceBackground() {
       animationFrameId = requestAnimationFrame(render)
     }
 
-    render()
+    animationFrameId = requestAnimationFrame(render)
 
     return () => {
       cancelAnimationFrame(animationFrameId)
       window.removeEventListener('resize', handleResize)
       window.removeEventListener('mousemove', handleMouseMove)
       window.removeEventListener('mouseleave', handleMouseLeave)
-      window.removeEventListener('touchstart', handleTouchMove)
-      window.removeEventListener('touchmove', handleTouchMove)
-      window.removeEventListener('touchend', handleTouchEnd)
+      window.removeEventListener('scroll', handleScroll)
     }
   }, [])
 
   return (
     <div style={{ position: 'fixed', inset: 0, zIndex: 0, pointerEvents: 'none', overflow: 'hidden' }}>
-      {/* Deep Space / Cosmic Ambient Backdrops */}
-      <div style={{
-        position: 'absolute', top: '-10%', left: '50%', transform: 'translateX(-50%)',
-        width: 'min(100vw, 1000px)', height: '600px',
-        background: 'radial-gradient(ellipse 60% 50% at 50% 30%, rgba(99,102,241,0.14) 0%, rgba(167,139,250,0.07) 45%, transparent 70%)',
-        borderRadius: '50%',
-        pointerEvents: 'none',
-      }} />
-      <div style={{
-        position: 'absolute', bottom: '10%', right: '5%',
-        width: 'min(90vw, 600px)', height: 'min(90vw, 600px)',
-        background: 'radial-gradient(circle, rgba(56,189,248,0.06) 0%, transparent 65%)',
+      {/* Deep Space / Cosmic Ambient Backdrops with Parallax & Aurora Pulsing */}
+      <div className="aurora-glow-top" style={{
+        position: 'absolute', top: '-12%', left: '50%', transform: 'translateX(-50%)',
+        width: 'min(100vw, 1100px)', height: '650px',
+        background: 'radial-gradient(ellipse 65% 55% at 50% 30%, rgba(99,102,241,0.18) 0%, rgba(167,139,250,0.08) 45%, transparent 70%)',
         borderRadius: '50%',
         pointerEvents: 'none',
       }} />
 
-      {/* Dynamic Starfield & Neural Network Canvas */}
+      <div className="aurora-glow-middle" style={{
+        position: 'absolute', top: '45%', right: '3%',
+        width: 'min(90vw, 680px)', height: 'min(90vw, 680px)',
+        background: 'radial-gradient(circle, rgba(56,189,248,0.09) 0%, rgba(6,182,212,0.04) 40%, transparent 68%)',
+        borderRadius: '50%',
+        pointerEvents: 'none',
+      }} />
+
+      <div style={{
+        position: 'absolute', bottom: '5%', left: '2%',
+        width: 'min(85vw, 550px)', height: 'min(85vw, 550px)',
+        background: 'radial-gradient(circle, rgba(139,92,246,0.09) 0%, transparent 65%)',
+        borderRadius: '50%',
+        pointerEvents: 'none',
+      }} />
+
+      {/* Dynamic Starfield, Comets & Neural Network Canvas */}
       <canvas
         ref={canvasRef}
         style={{
@@ -526,26 +678,157 @@ function SkillChip({ skill }: { skill: typeof SKILLS[0] }) {
   )
 }
 
-function SectionHeader({ label, title, sub }: { label: string; title: string; sub?: string }) {
+/* ─── 3D Interactive Parallax Card Tilt & Holographic Glare (Zero Re-render) ─── */
+function TiltCard({
+  children,
+  className = '',
+  style = {},
+  maxTilt = 6,
+  glare = true,
+  borderRadius = 22,
+}: {
+  children: ReactNode
+  className?: string
+  style?: React.CSSProperties
+  maxTilt?: number
+  glare?: boolean
+  borderRadius?: number | string
+}) {
+  const cardRef = React.useRef<HTMLDivElement>(null)
+  const glareRef = React.useRef<HTMLDivElement>(null)
+  const rafId = React.useRef<number | null>(null)
+
+  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (!cardRef.current) return
+    const rect = cardRef.current.getBoundingClientRect()
+    const x = e.clientX - rect.left
+    const y = e.clientY - rect.top
+
+    if (rafId.current) cancelAnimationFrame(rafId.current)
+    rafId.current = requestAnimationFrame(() => {
+      if (!cardRef.current) return
+      const centerX = rect.width / 2
+      const centerY = rect.height / 2
+      const rotateX = ((y - centerY) / centerY) * -maxTilt
+      const rotateY = ((x - centerX) / centerX) * maxTilt
+
+      cardRef.current.style.transform = `perspective(1000px) rotateX(${rotateX.toFixed(2)}deg) rotateY(${rotateY.toFixed(2)}deg) scale3d(1.012, 1.012, 1.012)`
+      cardRef.current.style.transition = 'transform 0.08s ease-out'
+
+      if (glare && glareRef.current) {
+        const glareX = (x / rect.width) * 100
+        const glareY = (y / rect.height) * 100
+        glareRef.current.style.opacity = '1'
+        glareRef.current.style.background = `
+          radial-gradient(circle 260px at ${glareX}% ${glareY}%, rgba(255, 255, 255, 0.22) 0%, rgba(255, 255, 255, 0.02) 40%, transparent 70%),
+          radial-gradient(circle 380px at ${glareX}% ${glareY}%, rgba(56, 189, 248, 0.22) 0%, rgba(168, 85, 247, 0.16) 35%, rgba(245, 158, 11, 0.1) 65%, transparent 80%)
+        `
+      }
+    })
+  }
+
+  const handleMouseLeave = () => {
+    if (rafId.current) cancelAnimationFrame(rafId.current)
+    if (cardRef.current) {
+      cardRef.current.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)'
+      cardRef.current.style.transition = 'transform 0.4s cubic-bezier(0.16, 1, 0.3, 1)'
+    }
+    if (glareRef.current) {
+      glareRef.current.style.opacity = '0'
+    }
+  }
+
   return (
-    <div style={{ marginBottom: 'clamp(2rem, 4vw, 3rem)' }}>
-      <div className="reveal" style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', marginBottom: '0.65rem' }}>
-        <span style={{ fontFamily: C.mono, color: C.accent, fontSize: '0.72rem', letterSpacing: '0.14em' }}>{label}</span>
-        <div style={{ height: 1, width: 42, background: C.accent, opacity: 0.4 }} />
+    <div
+      ref={cardRef}
+      onMouseMove={handleMouseMove}
+      onMouseLeave={handleMouseLeave}
+      className={className}
+      style={{
+        ...style,
+        position: 'relative',
+        borderRadius,
+        transformStyle: 'preserve-3d',
+        transform: 'perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)',
+        willChange: 'transform',
+      }}
+    >
+      {children}
+
+      {/* Holographic Multi-Spectrum Specular Glare (0 React re-renders) */}
+      {glare && (
+        <div
+          ref={glareRef}
+          style={{
+            position: 'absolute',
+            inset: 0,
+            borderRadius,
+            pointerEvents: 'none',
+            zIndex: 15,
+            opacity: 0,
+            transition: 'opacity 0.25s ease',
+            mixBlendMode: 'screen',
+          }}
+        />
+      )}
+    </div>
+  )
+}
+
+function SectionHeader({
+  label,
+  title,
+  sub,
+  accent = '#38bdf8',
+}: {
+  label: string
+  title: string
+  sub?: string
+  accent?: string
+}) {
+  return (
+    <div style={{ marginBottom: 'clamp(2.2rem, 4.5vw, 3.2rem)' }}>
+      <div className="reveal" style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '0.75rem' }}>
+        <span style={{
+          fontFamily: C.mono,
+          color: accent,
+          fontSize: '0.72rem',
+          letterSpacing: '0.14em',
+          textTransform: 'uppercase',
+          padding: '0.25rem 0.75rem',
+          borderRadius: '999px',
+          background: `${accent}18`,
+          border: `1px solid ${accent}40`,
+          boxShadow: `0 0 16px ${accent}25`,
+          display: 'inline-flex',
+          alignItems: 'center',
+          gap: '0.45rem',
+        }}>
+          <span style={{ width: 6, height: 6, borderRadius: '50%', background: accent, boxShadow: `0 0 8px ${accent}` }} />
+          {label}
+        </span>
+        <div style={{
+          height: 2,
+          flex: '0 0 54px',
+          background: `linear-gradient(90deg, ${accent} 0%, rgba(99,102,241,0.5) 70%, transparent 100%)`,
+          borderRadius: 2,
+          boxShadow: `0 0 8px ${accent}55`,
+        }} />
       </div>
       <h2 className="reveal delay-1" style={{
         fontFamily: C.display, fontWeight: 800,
-        fontSize: 'clamp(1.75rem, 4.5vw, 2.6rem)',
-        letterSpacing: '-0.03em', color: C.text, lineHeight: 1.15,
-        marginBottom: sub ? '0.65rem' : 0
+        fontSize: 'clamp(1.85rem, 4.8vw, 2.75rem)',
+        letterSpacing: '-0.03em', color: '#ffffff', lineHeight: 1.15,
+        marginBottom: sub ? '0.75rem' : 0,
+        textShadow: '0 2px 24px rgba(0,0,0,0.6)',
       }}>
         {title}
       </h2>
       {sub && (
         <p className="reveal delay-2" style={{
-          fontFamily: C.body, color: C.muted,
-          fontSize: 'clamp(0.88rem, 1.6vw, 0.98rem)',
-          maxWidth: '540px', lineHeight: 1.7
+          fontFamily: C.body, color: '#94a3b8',
+          fontSize: 'clamp(0.88rem, 1.6vw, 1rem)',
+          maxWidth: '560px', lineHeight: 1.7
         }}>
           {sub}
         </p>
@@ -627,11 +910,11 @@ function NavBar({ activeSection }: { activeSection: string }) {
             textDecoration: 'none',
             display: 'flex', alignItems: 'center',
           }}>
-            nva<span style={{ color: C.muted, fontWeight: 400 }}>.ai</span>
+            khoadang<span style={{ color: C.muted, fontWeight: 400 }}>.site</span>
           </a>
 
           {/* Nav links — hidden on mobile */}
-          <nav className="nav-pills" style={{ display: 'flex', gap: '0.15rem' }}>
+          <nav className="nav-pills" style={{ display: 'flex', gap: '0.2rem' }}>
             {NAV.map((l) => {
               const isActive = activeSection === l.href.substring(1)
               return (
@@ -639,13 +922,15 @@ function NavBar({ activeSection }: { activeSection: string }) {
                   key={l.href}
                   href={l.href}
                   style={{
-                    fontFamily: C.body, fontSize: '0.8rem', fontWeight: 500,
-                    color: isActive ? '#fff' : C.muted,
-                    textDecoration: 'none', padding: '0.42rem 0.85rem',
+                    fontFamily: C.body, fontSize: '0.8rem',
+                    fontWeight: isActive ? 600 : 500,
+                    color: isActive ? '#ffffff' : C.muted,
+                    textDecoration: 'none', padding: '0.42rem 0.9rem',
                     borderRadius: '999px',
-                    background: isActive ? 'rgba(99,102,241,0.2)' : 'transparent',
-                    border: `1px solid ${isActive ? 'rgba(99,102,241,0.35)' : 'transparent'}`,
-                    transition: 'all 0.2s',
+                    background: isActive ? 'linear-gradient(135deg, rgba(99,102,241,0.38) 0%, rgba(56,189,248,0.28) 100%)' : 'transparent',
+                    border: `1px solid ${isActive ? 'rgba(56,189,248,0.65)' : 'transparent'}`,
+                    boxShadow: isActive ? '0 0 16px rgba(99,102,241,0.55), 0 0 8px rgba(56,189,248,0.45)' : 'none',
+                    transition: 'all 0.25s cubic-bezier(0.16, 1, 0.3, 1)',
                   }}
                   onMouseEnter={e => {
                     if (!isActive) {
@@ -666,25 +951,50 @@ function NavBar({ activeSection }: { activeSection: string }) {
             })}
           </nav>
 
-          {/* CTA */}
-          <a href="#contact" className="nav-cta" style={{
-            fontFamily: C.body, fontSize: '0.78rem', fontWeight: 600,
-            background: C.accent, color: '#fff',
-            padding: '0.42rem 1.05rem', borderRadius: '999px', textDecoration: 'none',
-            marginLeft: '0.4rem',
-            transition: 'all 0.2s',
-            boxShadow: '0 0 16px rgba(99,102,241,0.4)',
-          }}
+          {/* CTA: Ultra-Modern Glowing Beacon Pill */}
+          <a
+            href="#contact"
+            className="nav-cta hire-me-btn"
+            style={{
+              fontFamily: C.body,
+              fontSize: '0.8rem',
+              fontWeight: 600,
+              background: 'linear-gradient(135deg, #6366f1 0%, #4f46e5 45%, #06b6d4 100%)',
+              color: '#ffffff',
+              padding: '0.42rem 1.1rem',
+              borderRadius: '999px',
+              textDecoration: 'none',
+              marginLeft: '0.4rem',
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '0.45rem',
+              border: '1px solid rgba(255, 255, 255, 0.22)',
+              boxShadow: '0 0 16px rgba(99, 102, 241, 0.45), 0 0 6px rgba(6, 182, 212, 0.3)',
+              transition: 'transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s cubic-bezier(0.16, 1, 0.3, 1)',
+              letterSpacing: '0.01em',
+            }}
             onMouseEnter={e => {
-              e.currentTarget.style.opacity = '0.9'
-              e.currentTarget.style.transform = 'scale(0.97)'
+              e.currentTarget.style.transform = 'translate3d(0, -1.5px, 0) scale(1.03)'
+              e.currentTarget.style.boxShadow = '0 0 24px rgba(99, 102, 241, 0.7), 0 0 12px rgba(6, 182, 212, 0.5)'
             }}
             onMouseLeave={e => {
-              e.currentTarget.style.opacity = '1'
-              e.currentTarget.style.transform = 'none'
+              e.currentTarget.style.transform = 'translate3d(0, 0, 0) scale(1)'
+              e.currentTarget.style.boxShadow = '0 0 16px rgba(99, 102, 241, 0.45), 0 0 6px rgba(6, 182, 212, 0.3)'
             }}
           >
-            Hire me
+            <span
+              className="beacon-pulse"
+              style={{
+                width: 7,
+                height: 7,
+                borderRadius: '50%',
+                background: '#4ade80',
+                display: 'inline-block',
+                flexShrink: 0,
+              }}
+            />
+            <span>Hire me</span>
+            <span style={{ fontSize: '0.75rem', opacity: 0.9 }}>✨</span>
           </a>
 
           {/* Mobile burger button with touch-friendly 44px hit area */}
@@ -755,44 +1065,76 @@ function NavBar({ activeSection }: { activeSection: string }) {
                       justifyContent: 'space-between',
                       padding: '0.9rem 1.4rem',
                       fontFamily: C.body,
-                      color: isActive ? '#fff' : C.text,
-                      background: isActive ? 'rgba(99,102,241,0.15)' : 'transparent',
-                      borderLeft: `3px solid ${isActive ? C.accent : 'transparent'}`,
+                      color: isActive ? '#38bdf8' : C.text,
+                      background: isActive ? 'linear-gradient(90deg, rgba(56,189,248,0.16) 0%, rgba(99,102,241,0.08) 100%)' : 'transparent',
+                      borderLeft: `3px solid ${isActive ? '#38bdf8' : 'transparent'}`,
                       fontSize: '0.95rem',
                       fontWeight: isActive ? 600 : 400,
                       textDecoration: 'none',
-                      transition: 'background 0.2s',
+                      transition: 'all 0.2s',
                     }}
                   >
                     <span>{l.label}</span>
                     {isActive && (
-                      <span style={{ fontSize: '0.75rem', color: C.accent, fontFamily: C.mono }}>ACTIVE</span>
+                      <span style={{
+                        fontSize: '0.68rem',
+                        color: '#38bdf8',
+                        fontFamily: C.mono,
+                        fontWeight: 700,
+                        background: 'rgba(56,189,248,0.18)',
+                        padding: '0.2rem 0.6rem',
+                        borderRadius: 999,
+                        border: '1px solid rgba(56,189,248,0.38)',
+                        boxShadow: '0 0 10px rgba(56,189,248,0.25)',
+                      }}>ACTIVE</span>
                     )}
                   </a>
                 )
               })}
             </div>
 
-            <div style={{ padding: '0.75rem 1.25rem 1.25rem', borderTop: `1px solid ${C.border}` }}>
+            <div style={{ padding: '0.85rem 1.25rem 1.25rem', borderTop: `1px solid ${C.border}` }}>
               <a
                 href="#contact"
                 onClick={() => setOpen(false)}
+                className="hire-me-btn"
                 style={{
                   display: 'flex',
                   alignItems: 'center',
-                  justifyContent: 'center',
-                  padding: '0.85rem',
-                  background: 'linear-gradient(135deg, #6366f1 0%, #4f46e5 100%)',
-                  color: '#fff',
-                  borderRadius: '12px',
+                  justifyContent: 'space-between',
+                  padding: '0.85rem 1.15rem',
+                  background: 'linear-gradient(135deg, #6366f1 0%, #4f46e5 50%, #06b6d4 100%)',
+                  border: '1px solid rgba(255, 255, 255, 0.22)',
+                  color: '#ffffff',
+                  borderRadius: '14px',
                   fontFamily: C.body,
-                  fontSize: '0.92rem',
-                  fontWeight: 600,
                   textDecoration: 'none',
-                  boxShadow: '0 4px 16px rgba(99,102,241,0.4)',
+                  boxShadow: '0 8px 24px rgba(99,102,241,0.45)',
+                  transition: 'transform 0.2s ease',
                 }}
               >
-                Hire me 🚀
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                  <span
+                    className="beacon-pulse"
+                    style={{
+                      width: 9,
+                      height: 9,
+                      borderRadius: '50%',
+                      background: '#4ade80',
+                      display: 'inline-block',
+                      flexShrink: 0,
+                    }}
+                  />
+                  <div style={{ display: 'flex', flexDirection: 'column', textAlign: 'left' }}>
+                    <span style={{ fontSize: '0.92rem', fontWeight: 700, letterSpacing: '0.01em', color: '#fff' }}>
+                      Hire Me · Hợp tác dự án
+                    </span>
+                    <span style={{ fontSize: '0.72rem', color: 'rgba(255, 255, 255, 0.82)', fontFamily: C.mono }}>
+                      Sẵn sàng nhận dự án Data Science & AI
+                    </span>
+                  </div>
+                </div>
+                <span style={{ fontSize: '1.1rem', fontWeight: 'bold', color: '#fff' }}>➔</span>
               </a>
             </div>
           </div>
@@ -827,6 +1169,14 @@ function Hero() {
       position: 'relative',
       overflow: 'hidden'
     }}>
+      {/* Atmospheric Stage Spotlight - Deep Indigo & Royal Blue for Hero */}
+      <div style={{
+        position: 'absolute', top: 0, left: '50%', transform: 'translateX(-50%)',
+        width: 'min(1100px, 98vw)', height: '480px',
+        background: 'radial-gradient(ellipse 80% 65% at 50% 0%, rgba(99, 102, 241, 0.22) 0%, rgba(56, 189, 248, 0.12) 45%, transparent 80%)',
+        pointerEvents: 'none', zIndex: 0
+      }} />
+
       {/* Subtle grid background */}
       <div style={{
         position: 'absolute', inset: 0, pointerEvents: 'none',
@@ -966,8 +1316,13 @@ function Hero() {
             </div>
           </div>
 
-          {/* Skill card column with animated glowing border */}
-          <div className="reveal-right glow-card-container" style={{ width: '100%' }}>
+          {/* Skill card column with animated glowing border and 3D Holographic Tilt */}
+          <TiltCard
+            className="reveal-right glow-card-container"
+            borderRadius={22}
+            maxTilt={7}
+            style={{ width: '100%' }}
+          >
             <div className="glow-card-inner" style={{ padding: 'clamp(1.1rem, 3vw, 1.6rem)' }}>
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1.15rem', flexWrap: 'wrap', gap: '0.5rem' }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '0.55rem' }}>
@@ -989,7 +1344,7 @@ function Hero() {
                 ))}
               </div>
             </div>
-          </div>
+          </TiltCard>
         </div>
       </div>
 
@@ -1015,10 +1370,18 @@ function Hero() {
 
 /* ─── Projects Section ───────────────────────────────────────────────────── */
 function Projects() {
-  const [featuredHov, setFeaturedHov] = useState(false)
+  const [isPausedHovered, setIsPausedHovered] = useState(false)
 
   return (
-    <section id="projects" style={{ padding: 'clamp(4rem, 8vw, 6rem) 0', borderTop: `1px solid ${C.border}`, position: 'relative', overflow: 'hidden' }}>
+    <section id="projects" className="section-glow-divider section-glow-projects" style={{ padding: 'clamp(4rem, 8vw, 6rem) 0', borderTop: `1px solid ${C.border}`, position: 'relative', overflow: 'hidden' }}>
+      {/* Atmospheric Stage Spotlight - Warm Amber & Indigo for Projects */}
+      <div style={{
+        position: 'absolute', top: 0, left: '50%', transform: 'translateX(-50%)',
+        width: 'min(1000px, 98vw)', height: '420px',
+        background: 'radial-gradient(ellipse 75% 65% at 50% 0%, rgba(245, 158, 11, 0.16) 0%, rgba(99, 102, 241, 0.09) 45%, transparent 80%)',
+        pointerEvents: 'none', zIndex: 0
+      }} />
+
       {/* Ambient background glows */}
       <div className="ambient-glow-1" style={{
         position: 'absolute', top: '35%', left: '50%', transform: 'translate(-50%, -50%)',
@@ -1028,192 +1391,198 @@ function Projects() {
 
       <div className="responsive-container" style={{ position: 'relative', zIndex: 1 }}>
         <SectionHeader
-          label="// FEATURED PROJECTS"
+          label="// PERSONAL PROJECTS"
           title="Dự án của tôi"
           sub="Các sản phẩm, ứng dụng thực tế và dự án học thuật được xây dựng & triển khai trực tiếp."
+          accent="#f59e0b"
         />
 
-        {/* 1. Featured Project: Hành Trang Của Mẹ & Góc Nhỏ Của Ba */}
-        <div className="reveal delay-1 glow-card-container" style={{ maxWidth: 960, margin: '0 auto 3rem' }}>
-          <div className="glow-card-inner" style={{
-            padding: 'clamp(1.5rem, 4vw, 2.5rem)',
-            position: 'relative',
-          }}>
-            {/* Header: Status Pills & Active Development Badge */}
+        {/* Khu vực dự án cá nhân: Thu nhỏ Hành Trang Của Mẹ ở 1 góc với hiệu ứng làm mờ thể hiện tạm ngưng */}
+        <div style={{ maxWidth: 960, margin: '0 auto 3rem' }}>
+          <div
+            className="reveal delay-1 glass-card"
+            onMouseEnter={() => setIsPausedHovered(true)}
+            onMouseLeave={() => setIsPausedHovered(false)}
+            style={{
+              maxWidth: 580,
+              margin: '0',
+              borderRadius: 20,
+              padding: 'clamp(1.4rem, 3vw, 2rem)',
+              position: 'relative',
+              overflow: 'hidden',
+              border: isPausedHovered ? '1px dashed rgba(245, 158, 11, 0.65)' : '1px dashed rgba(245, 158, 11, 0.38)',
+              background: 'linear-gradient(165deg, rgba(245, 158, 11, 0.04) 0%, rgba(15, 23, 42, 0.8) 100%)',
+              backdropFilter: 'blur(16px)',
+              // Hiệu ứng làm mờ thể hiện dự án tạm ngưng phát triển
+              opacity: isPausedHovered ? 0.98 : 0.76,
+              filter: isPausedHovered ? 'none' : 'grayscale(35%)',
+              transform: isPausedHovered ? 'translateY(-3px)' : 'none',
+              transition: 'all 0.35s cubic-bezier(0.16, 1, 0.3, 1)',
+              boxShadow: isPausedHovered ? '0 12px 30px rgba(0,0,0,0.4), 0 0 20px rgba(245, 158, 11, 0.15)' : '0 8px 24px rgba(0,0,0,0.3)',
+            }}
+          >
+            {/* Watermark dán chéo "PAUSED" chìm ở góc card */}
+            <div style={{
+              position: 'absolute',
+              top: 14,
+              right: -34,
+              transform: 'rotate(22deg)',
+              background: 'rgba(245, 158, 11, 0.16)',
+              border: '1px solid rgba(245, 158, 11, 0.38)',
+              color: '#fbbf24',
+              fontFamily: C.mono,
+              fontSize: '0.62rem',
+              fontWeight: 800,
+              letterSpacing: '0.12em',
+              padding: '0.2rem 2.4rem',
+              pointerEvents: 'none',
+              zIndex: 2,
+              userSelect: 'none',
+            }}>
+              PAUSED
+            </div>
+
+            {/* Header: Badge trạng thái tạm ngưng & Loại hình */}
             <div style={{
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'space-between',
-              marginBottom: '1.5rem',
+              marginBottom: '1.15rem',
               flexWrap: 'wrap',
-              gap: '0.75rem',
+              gap: '0.6rem',
+              paddingRight: '3.5rem',
             }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', flexWrap: 'wrap' }}>
-                <span style={{
-                  fontFamily: C.mono, fontSize: '0.7rem', fontWeight: 700,
-                  color: '#fbbf24',
-                  background: 'rgba(245, 158, 11, 0.14)',
-                  border: '1px solid rgba(245, 158, 11, 0.35)',
-                  padding: '0.25rem 0.75rem', borderRadius: '6px',
-                  letterSpacing: '0.06em',
-                }}>
-                  ✦ DỰ ÁN ĐANG PHÁT TRIỂN
-                </span>
-                <span style={{
-                  fontFamily: C.mono, fontSize: '0.7rem',
-                  color: '#94a3b8',
-                  background: 'rgba(255, 255, 255, 0.04)',
-                  border: `1px solid ${C.border}`,
-                  padding: '0.25rem 0.65rem', borderRadius: '6px',
-                }}>
-                  Life & Family Hub
-                </span>
-              </div>
-
-              {/* In Development Status indicator */}
-              <div style={{
-                display: 'inline-flex', alignItems: 'center', gap: '0.5rem',
-                background: 'rgba(34, 197, 94, 0.12)',
-                border: '1px solid rgba(34, 197, 94, 0.35)',
-                borderRadius: '999px',
-                padding: '0.3rem 0.85rem',
+              <span style={{
+                fontFamily: C.mono, fontSize: '0.7rem', fontWeight: 700,
+                color: '#fbbf24',
+                background: 'rgba(245, 158, 11, 0.14)',
+                border: '1px solid rgba(245, 158, 11, 0.4)',
+                padding: '0.25rem 0.75rem', borderRadius: '6px',
+                letterSpacing: '0.05em',
+                display: 'inline-flex', alignItems: 'center', gap: '0.4rem',
               }}>
-                <span style={{
-                  width: 8, height: 8, borderRadius: '50%',
-                  background: '#22c55e',
-                  boxShadow: '0 0 10px #22c55e',
-                  display: 'inline-block',
-                }} />
-                <span style={{ fontFamily: C.mono, fontSize: '0.72rem', color: '#4ade80', fontWeight: 600, letterSpacing: '0.04em' }}>
-                  Đang phát triển · Bắt đầu: 21/08/2026
-                </span>
+                <span>⏸</span> TẠM NGƯNG PHÁT TRIỂN
+              </span>
+
+              <span style={{
+                fontFamily: C.mono, fontSize: '0.7rem',
+                color: '#94a3b8',
+                background: 'rgba(255, 255, 255, 0.04)',
+                border: `1px solid ${C.border}`,
+                padding: '0.25rem 0.65rem', borderRadius: '6px',
+              }}>
+                Web & PWA
+              </span>
+            </div>
+
+            {/* Title & Icon */}
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '0.65rem' }}>
+              <div style={{
+                width: 42, height: 42, borderRadius: 12,
+                background: 'rgba(245, 158, 11, 0.15)',
+                border: '1px solid rgba(245, 158, 11, 0.35)',
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                fontSize: '1.35rem', flexShrink: 0,
+              }}>
+                🏡
+              </div>
+              <div>
+                <h3 style={{
+                  fontFamily: C.display, fontWeight: 700,
+                  fontSize: 'clamp(1.15rem, 2.5vw, 1.45rem)',
+                  color: '#fff', lineHeight: 1.25,
+                }}>
+                  Hành Trang Của Mẹ & Góc Nhỏ Của Ba
+                </h3>
+                <div style={{ fontFamily: C.mono, fontSize: '0.75rem', color: '#a78bfa', marginTop: '0.15rem' }}>
+                  Family Knowledge & Life Hub Platform
+                </div>
               </div>
             </div>
 
-            {/* Project Content Body */}
+            {/* Notice Box (Thông báo tạm ngưng phát triển) */}
             <div style={{
-              display: 'grid',
-              gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 360px), 1fr))',
-              gap: 'clamp(1.5rem, 3.5vw, 2.5rem)',
-              alignItems: 'center',
-              marginBottom: '1.75rem',
+              background: 'rgba(245, 158, 11, 0.09)',
+              border: '1px solid rgba(245, 158, 11, 0.3)',
+              borderRadius: '10px',
+              padding: '0.85rem 1rem',
+              margin: '1rem 0',
             }}>
-              <div>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '0.65rem' }}>
-                  <div style={{
-                    width: 44, height: 44, borderRadius: 12,
-                    background: 'linear-gradient(135deg, rgba(245,158,11,0.2) 0%, rgba(236,72,153,0.25) 100%)',
-                    border: '1px solid rgba(245,158,11,0.4)',
-                    display: 'flex', alignItems: 'center', justifyContent: 'center',
-                    fontSize: '1.4rem', flexShrink: 0,
-                  }}>
-                    🏡
-                  </div>
-                  <div>
-                    <h3 style={{
-                      fontFamily: C.display, fontWeight: 800,
-                      fontSize: 'clamp(1.35rem, 3vw, 1.85rem)',
-                      lineHeight: 1.2, color: '#fff',
-                      letterSpacing: '-0.02em',
-                    }}>
-                      Hành Trang Của Mẹ & Góc Nhỏ Của Ba
-                    </h3>
-                  </div>
-                </div>
-
-                <div style={{
-                  fontFamily: C.mono, fontSize: '0.8rem',
-                  color: '#a78bfa', marginBottom: '0.9rem', fontWeight: 500,
-                }}>
-                  Family Knowledge & Life Hub Platform
-                </div>
-
-                <p style={{
-                  fontFamily: C.body, color: '#94a3b8',
-                  fontSize: 'clamp(0.88rem, 1.5vw, 0.95rem)',
-                  lineHeight: 1.75, marginBottom: '1.25rem',
-                }}>
-                  Nền tảng chia sẻ mẹo hay cuộc sống, cẩm nang gia đình, kinh nghiệm nuôi dạy con và lưu giữ những lời dạy yêu thương. Được thiết kế hiện đại, tối ưu PWA trên cả di động và máy tính.
-                </p>
-
-                {/* Tech Badges */}
-                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.4rem', marginBottom: '1.5rem' }}>
-                  {['React', 'TypeScript', 'Tailwind CSS', 'PWA', 'Vercel'].map((t) => (
-                    <span key={t} style={{
-                      fontFamily: C.mono, fontSize: '0.7rem', color: '#cbd5e1',
-                      background: 'rgba(255,255,255,0.05)', border: `1px solid ${C.borderAccent}`,
-                      padding: '0.25rem 0.65rem', borderRadius: 6,
-                    }}>
-                      {t}
-                    </span>
-                  ))}
-                </div>
-
-                {/* Direct Action Link Button */}
-                <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
-                  <a
-                    href="https://khoalevodang-bavame.vercel.app/"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="touch-target"
-                    onMouseEnter={() => setFeaturedHov(true)}
-                    onMouseLeave={() => setFeaturedHov(false)}
-                    style={{
-                      display: 'inline-flex',
-                      alignItems: 'center',
-                      gap: '0.55rem',
-                      fontFamily: C.body,
-                      fontWeight: 700,
-                      fontSize: '0.9rem',
-                      background: 'linear-gradient(135deg, #6366f1 0%, #a855f7 50%, #ec4899 100%)',
-                      color: '#fff',
-                      padding: '0.75rem 1.4rem',
-                      borderRadius: '10px',
-                      textDecoration: 'none',
-                      boxShadow: featuredHov ? '0 8px 24px rgba(236,72,153,0.5)' : '0 4px 16px rgba(99,102,241,0.4)',
-                      transform: featuredHov ? 'translate3d(0,-2px,0)' : 'translate3d(0,0,0)',
-                      transition: 'all 0.25s cubic-bezier(0.16,1,0.3,1)',
-                    }}
-                  >
-                    <span>Truy cập ứng dụng (Đang phát triển)</span>
-                    <span style={{ fontSize: '1.1rem' }}>↗</span>
-                  </a>
-                </div>
-              </div>
-
-              {/* Highlights & Metrics Subcard */}
               <div style={{
-                background: 'rgba(17, 28, 48, 0.55)',
-                border: `1px solid ${C.border}`,
-                borderRadius: 16,
-                padding: 'clamp(1.1rem, 2.5vw, 1.5rem)',
-                display: 'flex',
-                flexDirection: 'column',
-                gap: '1rem',
+                display: 'flex', alignItems: 'center', gap: '0.45rem',
+                color: '#fbbf24', fontFamily: C.mono, fontSize: '0.72rem', fontWeight: 700,
+                marginBottom: '0.3rem', letterSpacing: '0.04em'
               }}>
-                <div style={{ fontFamily: C.mono, fontSize: '0.72rem', color: '#818cf8', fontWeight: 600, letterSpacing: '0.08em' }}>
-                  THÔNG TIN DỰ ÁN & CÔNG NGHỆ
-                </div>
-
-                {[
-                  { icon: '🗓️', title: 'Ngày bắt đầu dự án', desc: '21/08/2026 (Đang tích cực phát triển & hoàn thiện)' },
-                  { icon: '📱', title: 'Progressive Web App (PWA)', desc: 'Cài đặt trực tiếp trên iOS/Android như app gốc' },
-                  { icon: '⚡', title: 'Vercel Edge Deployment', desc: 'Cập nhật trực tiếp và phản hồi tức thì với CDN' },
-                  { icon: '💖', title: 'Gìn giữ yêu thương & lời dạy', desc: 'Chia sẻ kinh nghiệm nuôi dạy và cẩm nang gia đình' },
-                ].map((item) => (
-                  <div key={item.title} style={{ display: 'flex', gap: '0.75rem', alignItems: 'flex-start' }}>
-                    <span style={{ fontSize: '1.1rem', flexShrink: 0, marginTop: '0.1rem' }}>{item.icon}</span>
-                    <div>
-                      <div style={{ fontFamily: C.body, fontWeight: 600, fontSize: '0.85rem', color: C.text }}>
-                        {item.title}
-                      </div>
-                      <div style={{ fontFamily: C.body, fontSize: '0.75rem', color: C.muted, marginTop: '0.15rem' }}>
-                        {item.desc}
-                      </div>
-                    </div>
-                  </div>
-                ))}
+                <span>⚠️</span> THÔNG BÁO TẠM DỪNG
               </div>
+              <div style={{ fontFamily: C.body, fontSize: '0.8rem', color: '#f1f5f9', fontWeight: 600, lineHeight: 1.45 }}>
+                Dự án tạm ngưng phát triển.
+              </div>
+              <div style={{ fontFamily: C.body, fontSize: '0.76rem', color: '#94a3b8', marginTop: '0.2rem', lineHeight: 1.45 }}>
+                Lý do: Không đạt kết quả mong muốn trong quá trình triển khai & đánh giá thực tế.
+              </div>
+            </div>
+
+            {/* Description */}
+            <p style={{
+              fontFamily: C.body, color: '#94a3b8',
+              fontSize: '0.85rem', lineHeight: 1.65, marginBottom: '1rem',
+            }}>
+              Nền tảng chia sẻ mẹo hay cuộc sống, cẩm nang gia đình và lưu giữ những lời dạy yêu thương. Được thiết kế tối ưu PWA trên React, TypeScript và Tailwind CSS.
+            </p>
+
+            {/* Tech Badges */}
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.4rem', marginBottom: '1.25rem' }}>
+              {['React', 'TypeScript', 'Tailwind CSS', 'PWA', 'Vercel'].map((t) => (
+                <span key={t} style={{
+                  fontFamily: C.mono, fontSize: '0.68rem', color: '#cbd5e1',
+                  background: 'rgba(255, 255, 255, 0.04)', border: `1px solid ${C.border}`,
+                  padding: '0.2rem 0.55rem', borderRadius: 4,
+                }}>
+                  {t}
+                </span>
+              ))}
+            </div>
+
+            {/* Footer with Metadata & Active Link to the Web */}
+            <div style={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              paddingTop: '0.9rem',
+              borderTop: `1px solid ${C.border}`,
+              flexWrap: 'wrap',
+              gap: '0.65rem',
+            }}>
+              <span style={{ fontFamily: C.mono, fontSize: '0.72rem', color: '#64748b' }}>
+                Bắt đầu: 21/08/2026 · Trạng thái: Tạm dừng
+              </span>
+
+              {/* Vẫn giữ link dẫn đến web hành trang */}
+              <a
+                href="https://khoalevodang-bavame.vercel.app/"
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '0.45rem',
+                  fontFamily: C.body,
+                  fontSize: '0.82rem',
+                  fontWeight: 600,
+                  color: isPausedHovered ? '#fbbf24' : '#cbd5e1',
+                  background: isPausedHovered ? 'rgba(245, 158, 11, 0.18)' : 'rgba(255, 255, 255, 0.05)',
+                  border: isPausedHovered ? '1px solid rgba(245, 158, 11, 0.45)' : `1px solid ${C.border}`,
+                  padding: '0.45rem 0.95rem',
+                  borderRadius: 8,
+                  textDecoration: 'none',
+                  transition: 'all 0.25s ease',
+                  boxShadow: isPausedHovered ? '0 4px 12px rgba(245, 158, 11, 0.2)' : 'none',
+                }}
+              >
+                <span>Truy cập website</span>
+                <span style={{ fontSize: '0.95rem' }}>↗</span>
+              </a>
             </div>
           </div>
         </div>
@@ -1232,7 +1601,7 @@ function Projects() {
           }}>
             <span style={{ width: 7, height: 7, borderRadius: '50%', background: '#38bdf8', boxShadow: '0 0 8px #38bdf8' }} />
             <span style={{ fontFamily: C.mono, fontSize: '0.7rem', color: '#818cf8', fontWeight: 600, letterSpacing: '0.1em' }}>
-              UPCOMING AI & DATA SCIENCE PROJECTS
+              UPCOMING PROJECTS & ROADMAP
             </span>
           </div>
 
@@ -1241,7 +1610,7 @@ function Projects() {
             fontSize: 'clamp(1.5rem, 3.5vw, 2.2rem)',
             color: '#fff', marginBottom: '0.65rem',
           }}>
-            Dự án AI & Khoa học Dữ liệu tiếp theo
+            Dự án tiếp theo đang nghiên cứu
           </h4>
 
           <p style={{
@@ -1249,11 +1618,11 @@ function Projects() {
             fontSize: 'clamp(0.88rem, 1.5vw, 0.95rem)',
             maxWidth: 560, margin: '0 auto 1.5rem', lineHeight: 1.7,
           }}>
-            Các dự án chuyên sâu về Machine Learning, C++ DSA Engine và MySQL Database Optimization đang trong lộ trình phát triển và sẽ sớm được công bố.
+            Các dự án chuyên sâu về Machine Learning, C++ Engine và MySQL Database Optimization đang trong quá trình phát triển và sẽ sớm được công bố trên GitHub.
           </p>
 
           <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: '0.45rem' }}>
-            {['C++ Engine', 'Python Machine Learning', 'Computer Vision', 'Database Query Optimizer', 'LLM Agent'].map((t) => (
+            {['C++ DSA Engine', 'Python Machine Learning', 'Computer Vision', 'Database Query Optimizer', 'LLM Agent'].map((t) => (
               <span key={t} style={{
                 fontFamily: C.mono, fontSize: '0.7rem', color: '#cbd5e1',
                 background: 'rgba(255,255,255,0.04)', border: `1px solid ${C.border}`,
@@ -1269,13 +1638,1552 @@ function Projects() {
   )
 }
 
+/* ─── Sample LeetCode Problems for Preview & Reference ──────────────────── */
+const SAMPLE_LEETCODE_PROBLEMS: LeetCodeProblem[] = [
+  {
+    id: 1,
+    title: 'Two Sum',
+    difficulty: 'Easy',
+    category: 'Array · Hash Table',
+    leetcodeUrl: 'https://leetcode.com/problems/two-sum/',
+    summary: 'Tìm hai phần tử trong mảng nums có tổng bằng giá trị target và trả về chỉ số (indices) của chúng.',
+    approach: 'Sử dụng cấu trúc bảng băm (unordered_map trong C++) để lưu trữ giá trị phần tử và chỉ số tương ứng. Với mỗi phần tử nums[i], tính phần bù complement = target - nums[i]. Nếu complement đã có trong bảng băm, lập tức trả về {seen[complement], i}. Ngược lại, thêm nums[i] vào bảng. Thuật toán duyệt qua mảng đúng 1 lần với độ phức tạp thời gian tối ưu O(n).',
+    timeComplexity: 'O(n)',
+    spaceComplexity: 'O(n)',
+    language: 'C++',
+    code: `class Solution {
+public:
+    vector<int> twoSum(vector<int>& nums, int target) {
+        unordered_map<int, int> seen;
+        for (int i = 0; i < (int)nums.size(); ++i) {
+            int complement = target - nums[i];
+            if (seen.find(complement) != seen.end()) {
+                return {seen[complement], i};
+            }
+            seen[nums[i]] = i;
+        }
+        return {};
+    }
+};`,
+  },
+  {
+    id: 20,
+    title: 'Valid Parentheses',
+    difficulty: 'Easy',
+    category: 'String · Stack',
+    leetcodeUrl: 'https://leetcode.com/problems/valid-parentheses/',
+    summary: 'Kiểm tra chuỗi chứa các ký tự ngoặc (), {}, [] có đóng mở hợp lệ theo đúng thứ tự lồng nhau hay không.',
+    approach: 'Sử dụng cấu trúc dữ liệu Ngăn xếp (Stack). Khởi tạo bảng ánh xạ ngoặc đóng sang ngoặc mở tương ứng. Duyệt từng ký tự: nếu là ngoặc đóng, lấy phần tử đỉnh stack ra so sánh xem có khớp không; nếu là ngoặc mở, đẩy vào stack. Sau khi duyệt hết chuỗi, nếu stack rỗng thì chuỗi ngoặc là hợp lệ.',
+    timeComplexity: 'O(n)',
+    spaceComplexity: 'O(n)',
+    language: 'Python',
+    code: `class Solution:
+    def isValid(self, s: str) -> bool:
+        bracket_map = {')': '(', '}': '{', ']': '['}
+        stack = []
+        
+        for char in s:
+            if char in bracket_map:
+                top_element = stack.pop() if stack else '#'
+                if bracket_map[char] != top_element:
+                    return False
+            else:
+                stack.append(char)
+                
+        return not stack`,
+  },
+  {
+    id: 3,
+    title: 'Longest Substring Without Repeating Characters',
+    difficulty: 'Medium',
+    category: 'String · Sliding Window · Hash Set',
+    leetcodeUrl: 'https://leetcode.com/problems/longest-substring-without-repeating-characters/',
+    summary: 'Tìm độ dài của chuỗi con dài nhất không chứa bất kỳ ký tự nào bị lặp lại trong chuỗi s.',
+    approach: 'Áp dụng kỹ thuật Cửa sổ trượt (Sliding Window) kết hợp mảng lưu vị trí xuất hiện gần nhất của ký tự. Duy trì 2 con trỏ left và right. Khi con trỏ right duyệt qua chuỗi, nếu ký tự s[right] đã xuất hiện và vị trí trước đó >= left, ta dịch chuyển con trỏ left sang vị trí lastPos[s[right]] + 1. Ở mỗi bước lặp, độ dài cực đại được cập nhật: maxLen = max(maxLen, right - left + 1).',
+    timeComplexity: 'O(n)',
+    spaceComplexity: 'O(min(n, m))',
+    language: 'C++',
+    code: `class Solution {
+public:
+    int lengthOfLongestSubstring(string s) {
+        vector<int> lastPos(256, -1);
+        int maxLen = 0, left = 0;
+        
+        for (int right = 0; right < (int)s.length(); ++right) {
+            if (lastPos[s[right]] >= left) {
+                left = lastPos[s[right]] + 1;
+            }
+            lastPos[s[right]] = right;
+            maxLen = max(maxLen, right - left + 1);
+        }
+        return maxLen;
+    }
+};`,
+  },
+  {
+    id: 42,
+    title: 'Trapping Rain Water',
+    difficulty: 'Hard',
+    category: 'Array · Two Pointers · Dynamic Programming',
+    leetcodeUrl: 'https://leetcode.com/problems/trapping-rain-water/',
+    summary: 'Cho mảng n số nguyên không âm biểu diễn bản đồ độ cao địa hình, tính tổng lượng nước mưa có thể giữ lại sau cơn mưa.',
+    approach: 'Kỹ thuật Hai con trỏ (Two Pointers) từ 2 đầu mảng (left = 0, right = n - 1). Duy trì hai mốc rào chắn left_max và right_max. Tại mỗi bước, lượng nước đọng luôn bị giới hạn bởi rào chắn thấp hơn giữa hai bên: nếu height[left] < height[right], ta cập nhật left_max và cộng thêm lượng nước (left_max - height[left]), sau đó tăng left++; ngược lại cập nhật right_max, cộng nước và giảm right--. Tiết kiệm bộ nhớ tối đa với không gian phụ O(1).',
+    timeComplexity: 'O(n)',
+    spaceComplexity: 'O(1)',
+    language: 'C++',
+    code: `class Solution {
+public:
+    int trap(vector<int>& height) {
+        int left = 0, right = (int)height.size() - 1;
+        int left_max = 0, right_max = 0;
+        int total_water = 0;
+
+        while (left < right) {
+            if (height[left] < height[right]) {
+                if (height[left] >= left_max) {
+                    left_max = height[left];
+                } else {
+                    total_water += left_max - height[left];
+                }
+                left++;
+            } else {
+                if (height[right] >= right_max) {
+                    right_max = height[right];
+                } else {
+                    total_water += right_max - height[right];
+                }
+                right--;
+            }
+        }
+        return total_water;
+    }
+};`,
+  },
+]
+
+const getDifficultyColor = (diff: 'Easy' | 'Medium' | 'Hard') => {
+  switch (diff) {
+    case 'Easy':
+      return '#10b981'
+    case 'Medium':
+      return '#f59e0b'
+    case 'Hard':
+      return '#ef4444'
+    default:
+      return '#38bdf8'
+  }
+}
+
+/* ─── Interactive LeetCode Detail Cyber Modal ────────────────────────────── */
+function LeetCodeDetailModal({
+  problem,
+  onClose,
+  onSelectProblem,
+  allProblems,
+}: {
+  problem: LeetCodeProblem | null
+  onClose: () => void
+  onSelectProblem: (p: LeetCodeProblem) => void
+  allProblems: LeetCodeProblem[]
+}) {
+  const [copied, setCopied] = useState(false)
+
+  useEffect(() => {
+    if (problem) {
+      document.body.style.overflow = 'hidden'
+    } else {
+      document.body.style.overflow = ''
+    }
+    return () => {
+      document.body.style.overflow = ''
+    }
+  }, [problem])
+
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') onClose()
+    }
+    window.addEventListener('keydown', handleKeyDown)
+    return () => window.removeEventListener('keydown', handleKeyDown)
+  }, [onClose])
+
+  if (!problem) return null
+
+  const diffColor = getDifficultyColor(problem.difficulty)
+  const currentIndex = allProblems.findIndex((p) => p.id === problem.id)
+  const hasPrev = currentIndex > 0
+  const hasNext = currentIndex >= 0 && currentIndex < allProblems.length - 1
+
+  const handleCopy = () => {
+    navigator.clipboard.writeText(problem.code)
+    setCopied(true)
+    setTimeout(() => setCopied(false), 2200)
+  }
+
+  return (
+    <div
+      style={{
+        position: 'fixed',
+        inset: 0,
+        zIndex: 9999,
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        padding: 'clamp(0.75rem, 3vw, 1.5rem)',
+        background: 'rgba(3, 7, 18, 0.88)',
+        backdropFilter: 'blur(20px) saturate(180%)',
+        WebkitBackdropFilter: 'blur(20px) saturate(180%)',
+        animation: 'fadeInBackdrop 0.25s ease-out',
+      }}
+      onClick={onClose}
+    >
+      <div
+        style={{
+          position: 'relative',
+          width: '100%',
+          maxWidth: 920,
+          maxHeight: '92vh',
+          overflowY: 'auto',
+          background: 'linear-gradient(180deg, rgba(15, 23, 42, 0.98) 0%, rgba(10, 15, 30, 0.99) 100%)',
+          border: `1px solid ${diffColor}55`,
+          borderRadius: 24,
+          boxShadow: `0 25px 60px rgba(0,0,0,0.8), 0 0 45px ${diffColor}25`,
+          padding: 'clamp(1.2rem, 3.5vw, 2.25rem)',
+          animation: 'chatAppear 0.3s cubic-bezier(0.16, 1, 0.3, 1)',
+        }}
+        onClick={(e) => e.stopPropagation()}
+      >
+        {/* Top Header Bar */}
+        <div
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            borderBottom: '1px solid rgba(255, 255, 255, 0.08)',
+            paddingBottom: '1rem',
+            marginBottom: '1.25rem',
+            flexWrap: 'wrap',
+            gap: '0.75rem',
+          }}
+        >
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.65rem' }}>
+            <span
+              className="beacon-pulse"
+              style={{
+                width: 9,
+                height: 9,
+                borderRadius: '50%',
+                background: diffColor,
+                display: 'inline-block',
+                boxShadow: `0 0 10px ${diffColor}`,
+              }}
+            />
+            <div>
+              <div
+                style={{
+                  fontFamily: C.mono,
+                  fontSize: '0.7rem',
+                  letterSpacing: '0.12em',
+                  color: diffColor,
+                  fontWeight: 700,
+                  textTransform: 'uppercase',
+                }}
+              >
+                // LEETCODE SOLUTION DETAILS
+              </div>
+              <h2
+                style={{
+                  fontFamily: C.display,
+                  fontSize: 'clamp(1.2rem, 3vw, 1.55rem)',
+                  fontWeight: 800,
+                  color: '#ffffff',
+                  letterSpacing: '-0.02em',
+                  margin: '0.15rem 0 0',
+                }}
+              >
+                #{problem.id}. {problem.title}
+              </h2>
+            </div>
+          </div>
+
+          {/* Action Links & Close */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+            {problem.leetcodeUrl && (
+              <a
+                href={problem.leetcodeUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="touch-target"
+                style={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '0.35rem',
+                  background: 'rgba(251, 146, 60, 0.12)',
+                  border: '1px solid rgba(251, 146, 60, 0.35)',
+                  color: '#fb923c',
+                  borderRadius: 10,
+                  padding: '0.45rem 0.85rem',
+                  fontSize: '0.78rem',
+                  fontFamily: C.mono,
+                  fontWeight: 600,
+                  textDecoration: 'none',
+                  transition: 'all 0.2s',
+                }}
+              >
+                <span>Mở trên LeetCode</span>
+                <span>↗</span>
+              </a>
+            )}
+
+            <button
+              onClick={onClose}
+              aria-label="Đóng chi tiết"
+              style={{
+                width: 36,
+                height: 36,
+                borderRadius: 10,
+                background: 'rgba(255, 255, 255, 0.06)',
+                border: `1px solid ${C.border}`,
+                color: '#94a3b8',
+                fontSize: '1.1rem',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                cursor: 'pointer',
+                transition: 'all 0.2s',
+              }}
+            >
+              ✕
+            </button>
+          </div>
+        </div>
+
+        {/* Badges Strip */}
+        <div
+          style={{
+            display: 'flex',
+            flexWrap: 'wrap',
+            gap: '0.5rem',
+            alignItems: 'center',
+            marginBottom: '1.25rem',
+          }}
+        >
+          {/* Difficulty badge */}
+          <span
+            style={{
+              fontFamily: C.mono,
+              fontSize: '0.74rem',
+              fontWeight: 700,
+              padding: '0.25rem 0.75rem',
+              borderRadius: 999,
+              color: diffColor,
+              background: `${diffColor}18`,
+              border: `1px solid ${diffColor}45`,
+              boxShadow: `0 0 12px ${diffColor}22`,
+            }}
+          >
+            ● {problem.difficulty}
+          </span>
+
+          {/* Category */}
+          <span
+            style={{
+              fontFamily: C.mono,
+              fontSize: '0.74rem',
+              color: '#cbd5e1',
+              background: 'rgba(255, 255, 255, 0.05)',
+              border: `1px solid ${C.border}`,
+              padding: '0.25rem 0.75rem',
+              borderRadius: 999,
+            }}
+          >
+            🗂️ {problem.category}
+          </span>
+
+          {/* Language */}
+          <span
+            style={{
+              fontFamily: C.mono,
+              fontSize: '0.74rem',
+              color: '#38bdf8',
+              background: 'rgba(56, 189, 248, 0.1)',
+              border: '1px solid rgba(56, 189, 248, 0.3)',
+              padding: '0.25rem 0.75rem',
+              borderRadius: 999,
+            }}
+          >
+            ⚡ {problem.language}
+          </span>
+
+          {/* Time Complexity */}
+          {problem.timeComplexity && (
+            <span
+              style={{
+                fontFamily: C.mono,
+                fontSize: '0.74rem',
+                color: '#4ade80',
+                background: 'rgba(74, 222, 128, 0.08)',
+                border: '1px solid rgba(74, 222, 128, 0.25)',
+                padding: '0.25rem 0.75rem',
+                borderRadius: 999,
+              }}
+            >
+              ⏱️ Time: {problem.timeComplexity}
+            </span>
+          )}
+
+          {/* Space Complexity */}
+          {problem.spaceComplexity && (
+            <span
+              style={{
+                fontFamily: C.mono,
+                fontSize: '0.74rem',
+                color: '#c084fc',
+                background: 'rgba(192, 132, 252, 0.08)',
+                border: '1px solid rgba(192, 132, 252, 0.25)',
+                padding: '0.25rem 0.75rem',
+                borderRadius: 999,
+              }}
+            >
+              💾 Space: {problem.spaceComplexity}
+            </span>
+          )}
+        </div>
+
+        {/* Summary Description Box */}
+        {problem.summary && (
+          <div
+            style={{
+              background: 'rgba(255, 255, 255, 0.025)',
+              border: '1px solid rgba(255, 255, 255, 0.06)',
+              borderRadius: 14,
+              padding: '0.9rem 1.25rem',
+              marginBottom: '1rem',
+            }}
+          >
+            <div
+              style={{
+                fontFamily: C.mono,
+                fontSize: '0.7rem',
+                fontWeight: 700,
+                color: '#94a3b8',
+                letterSpacing: '0.08em',
+                marginBottom: '0.35rem',
+                textTransform: 'uppercase',
+              }}
+            >
+              📌 Đề bài tóm tắt:
+            </div>
+            <p
+              style={{
+                fontFamily: C.body,
+                color: '#e2e8f0',
+                fontSize: '0.9rem',
+                lineHeight: 1.65,
+                margin: 0,
+              }}
+            >
+              {problem.summary}
+            </p>
+          </div>
+        )}
+
+        {/* Approach / Solution Thought Process */}
+        <div
+          style={{
+            background: 'linear-gradient(165deg, rgba(251, 146, 60, 0.05) 0%, rgba(15, 23, 42, 0.7) 100%)',
+            border: '1px solid rgba(251, 146, 60, 0.25)',
+            borderRadius: 14,
+            padding: '1.1rem 1.35rem',
+            marginBottom: '1.25rem',
+          }}
+        >
+          <div
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '0.5rem',
+              fontFamily: C.mono,
+              fontSize: '0.74rem',
+              fontWeight: 700,
+              color: '#fbbf24',
+              letterSpacing: '0.06em',
+              marginBottom: '0.5rem',
+            }}
+          >
+            <span>💡</span>
+            <span>Ý TƯỞNG & PHƯƠNG PHÁP GIẢI QUYẾT:</span>
+          </div>
+          <p
+            style={{
+              fontFamily: C.body,
+              color: '#d1d5db',
+              fontSize: '0.9rem',
+              lineHeight: 1.7,
+              margin: 0,
+            }}
+          >
+            {problem.approach}
+          </p>
+        </div>
+
+        {/* Source Code Container */}
+        <div
+          style={{
+            borderRadius: 14,
+            border: '1px solid rgba(99, 102, 241, 0.35)',
+            background: 'rgba(5, 8, 15, 0.95)',
+            overflow: 'hidden',
+            marginBottom: '1.4rem',
+          }}
+        >
+          {/* Code Window Header */}
+          <div
+            style={{
+              display: 'flex',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+              padding: '0.65rem 1rem',
+              background: 'rgba(255, 255, 255, 0.04)',
+              borderBottom: '1px solid rgba(255, 255, 255, 0.08)',
+            }}
+          >
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+              <span style={{ width: 9, height: 9, borderRadius: '50%', background: '#ef4444' }} />
+              <span style={{ width: 9, height: 9, borderRadius: '50%', background: '#f59e0b' }} />
+              <span style={{ width: 9, height: 9, borderRadius: '50%', background: '#10b981' }} />
+              <span
+                style={{
+                  fontFamily: C.mono,
+                  fontSize: '0.74rem',
+                  color: '#94a3b8',
+                  marginLeft: '0.45rem',
+                }}
+              >
+                solution.{problem.language === 'Python' ? 'py' : 'cpp'}
+              </span>
+            </div>
+
+            <button
+              onClick={handleCopy}
+              className="touch-target"
+              style={{
+                fontFamily: C.mono,
+                fontSize: '0.74rem',
+                fontWeight: 600,
+                background: copied ? 'rgba(34, 197, 94, 0.22)' : 'rgba(255, 255, 255, 0.06)',
+                border: `1px solid ${copied ? 'rgba(34, 197, 94, 0.55)' : 'rgba(255, 255, 255, 0.12)'}`,
+                color: copied ? '#4ade80' : '#cbd5e1',
+                padding: '0.3rem 0.75rem',
+                borderRadius: 8,
+                cursor: 'pointer',
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '0.35rem',
+                transition: 'all 0.2s',
+              }}
+            >
+              <span>{copied ? '✓ Đã sao chép' : '📋 Sao chép code'}</span>
+            </button>
+          </div>
+
+          {/* Code Body */}
+          <pre
+            style={{
+              margin: 0,
+              padding: '1.25rem',
+              overflowX: 'auto',
+              fontFamily: C.mono,
+              fontSize: '0.84rem',
+              lineHeight: 1.65,
+              color: '#e2e8f0',
+              maxHeight: '380px',
+            }}
+          >
+            <code>{problem.code}</code>
+          </pre>
+        </div>
+
+        {/* Modal Bottom Navigation */}
+        <div
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            borderTop: '1px solid rgba(255, 255, 255, 0.08)',
+            paddingTop: '1rem',
+            flexWrap: 'wrap',
+            gap: '0.75rem',
+          }}
+        >
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+            <button
+              disabled={!hasPrev}
+              onClick={() => hasPrev && onSelectProblem(allProblems[currentIndex - 1])}
+              style={{
+                fontFamily: C.mono,
+                fontSize: '0.78rem',
+                padding: '0.4rem 0.85rem',
+                borderRadius: 8,
+                background: hasPrev ? 'rgba(255, 255, 255, 0.05)' : 'transparent',
+                border: `1px solid ${hasPrev ? 'rgba(255, 255, 255, 0.15)' : 'rgba(255, 255, 255, 0.05)'}`,
+                color: hasPrev ? '#cbd5e1' : '#475569',
+                cursor: hasPrev ? 'pointer' : 'not-allowed',
+                transition: 'all 0.2s',
+              }}
+            >
+              ‹ Bài trước
+            </button>
+
+            <span style={{ fontFamily: C.mono, fontSize: '0.74rem', color: '#64748b' }}>
+              {currentIndex + 1} / {allProblems.length}
+            </span>
+
+            <button
+              disabled={!hasNext}
+              onClick={() => hasNext && onSelectProblem(allProblems[currentIndex + 1])}
+              style={{
+                fontFamily: C.mono,
+                fontSize: '0.78rem',
+                padding: '0.4rem 0.85rem',
+                borderRadius: 8,
+                background: hasNext ? 'rgba(255, 255, 255, 0.05)' : 'transparent',
+                border: `1px solid ${hasNext ? 'rgba(255, 255, 255, 0.15)' : 'rgba(255, 255, 255, 0.05)'}`,
+                color: hasNext ? '#cbd5e1' : '#475569',
+                cursor: hasNext ? 'pointer' : 'not-allowed',
+                transition: 'all 0.2s',
+              }}
+            >
+              Bài tiếp theo ›
+            </button>
+          </div>
+
+          <button
+            onClick={onClose}
+            className="touch-target"
+            style={{
+              fontFamily: C.body,
+              fontSize: '0.85rem',
+              fontWeight: 600,
+              padding: '0.45rem 1.25rem',
+              borderRadius: 10,
+              background: 'rgba(255, 255, 255, 0.06)',
+              border: `1px solid ${C.border}`,
+              color: '#cbd5e1',
+              cursor: 'pointer',
+              transition: 'all 0.2s',
+            }}
+          >
+            Đóng cửa sổ
+          </button>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+/* ─── Compact LeetCode Problem List Row ──────────────────────────────────── */
+function LeetCodeProblemListItem({
+  problem,
+  onClick,
+}: {
+  problem: LeetCodeProblem
+  onClick: () => void
+}) {
+  const diffColor = getDifficultyColor(problem.difficulty)
+  const hasDetailedSolution = Boolean(problem.code || problem.approach)
+
+  const handleRowClick = () => {
+    if (hasDetailedSolution) {
+      onClick()
+    } else if (problem.leetcodeUrl) {
+      window.open(problem.leetcodeUrl, '_blank', 'noopener,noreferrer')
+    }
+  }
+
+  return (
+    <div
+      onClick={handleRowClick}
+      className="glass-card"
+      style={{
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        padding: '0.9rem clamp(0.9rem, 2.5vw, 1.35rem)',
+        borderRadius: 14,
+        borderLeft: `4px solid ${diffColor}`,
+        cursor: 'pointer',
+        transition: 'all 0.25s cubic-bezier(0.16, 1, 0.3, 1)',
+        gap: '0.9rem',
+        flexWrap: 'wrap',
+      }}
+      onMouseEnter={(e) => {
+        e.currentTarget.style.transform = 'translate3d(4px, 0, 0)'
+        e.currentTarget.style.borderColor = `${diffColor}66`
+        e.currentTarget.style.background = 'rgba(17, 28, 48, 0.9)'
+      }}
+      onMouseLeave={(e) => {
+        e.currentTarget.style.transform = 'translate3d(0, 0, 0)'
+        e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.08)'
+        e.currentTarget.style.background = 'rgba(11, 17, 32, 0.72)'
+      }}
+    >
+      {/* Left: ID & Title & Topic */}
+      <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', minWidth: 0, flex: '1 1 280px' }}>
+        {problem.id !== undefined && (
+          <span
+            style={{
+              fontFamily: C.mono,
+              fontWeight: 800,
+              fontSize: '0.85rem',
+              color: '#38bdf8',
+              background: 'rgba(56, 189, 248, 0.1)',
+              border: '1px solid rgba(56, 189, 248, 0.25)',
+              padding: '0.2rem 0.55rem',
+              borderRadius: 6,
+              flexShrink: 0,
+            }}
+          >
+            #{problem.id}
+          </span>
+        )}
+
+        <div style={{ minWidth: 0 }}>
+          <div
+            style={{
+              fontFamily: C.display,
+              fontWeight: 700,
+              fontSize: 'clamp(0.92rem, 2vw, 1.05rem)',
+              color: '#ffffff',
+              letterSpacing: '-0.01em',
+              lineHeight: 1.3,
+            }}
+          >
+            {problem.title}
+          </div>
+          {problem.category && (
+            <div
+              style={{
+                fontFamily: C.mono,
+                fontSize: '0.72rem',
+                color: '#94a3b8',
+                marginTop: '0.15rem',
+                overflow: 'hidden',
+                textOverflow: 'ellipsis',
+                whiteSpace: 'nowrap',
+              }}
+            >
+              {problem.category}
+            </div>
+          )}
+        </div>
+      </div>
+
+      {/* Right: Badges & Action */}
+      <div
+        style={{
+          display: 'flex',
+          alignItems: 'center',
+          gap: '0.65rem',
+          flexWrap: 'wrap',
+          justifyContent: 'flex-end',
+        }}
+      >
+        {/* Difficulty Pill */}
+        <span
+          style={{
+            fontFamily: C.mono,
+            fontSize: '0.72rem',
+            fontWeight: 700,
+            color: diffColor,
+            background: `${diffColor}18`,
+            border: `1px solid ${diffColor}40`,
+            padding: '0.22rem 0.65rem',
+            borderRadius: 999,
+            whiteSpace: 'nowrap',
+          }}
+        >
+          ● {problem.difficulty}
+        </span>
+
+        {/* Language Badge (if provided) */}
+        {problem.language && (
+          <span
+            style={{
+              fontFamily: C.mono,
+              fontSize: '0.72rem',
+              color: '#cbd5e1',
+              background: 'rgba(255, 255, 255, 0.05)',
+              border: `1px solid ${C.border}`,
+              padding: '0.22rem 0.6rem',
+              borderRadius: 8,
+              whiteSpace: 'nowrap',
+            }}
+          >
+            {problem.language}
+          </span>
+        )}
+
+        {/* Complexity Summary (if provided) */}
+        {problem.timeComplexity && (
+          <span
+            style={{
+              fontFamily: C.mono,
+              fontSize: '0.7rem',
+              color: '#94a3b8',
+              background: 'rgba(255, 255, 255, 0.03)',
+              padding: '0.2rem 0.5rem',
+              borderRadius: 6,
+              whiteSpace: 'nowrap',
+            }}
+          >
+            ⏱️ {problem.timeComplexity}
+          </span>
+        )}
+
+        {/* CTA Button: View Detail or Open Directly on LeetCode */}
+        {hasDetailedSolution ? (
+          <div
+            style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '0.35rem',
+              fontFamily: C.mono,
+              fontSize: '0.76rem',
+              fontWeight: 600,
+              color: '#38bdf8',
+              background: 'rgba(56, 189, 248, 0.1)',
+              border: '1px solid rgba(56, 189, 248, 0.28)',
+              padding: '0.35rem 0.8rem',
+              borderRadius: 8,
+              marginLeft: '0.2rem',
+            }}
+          >
+            <span>Xem lời giải</span>
+            <span>›</span>
+          </div>
+        ) : problem.leetcodeUrl ? (
+          <a
+            href={problem.leetcodeUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            onClick={(e) => e.stopPropagation()}
+            style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '0.35rem',
+              fontFamily: C.mono,
+              fontSize: '0.76rem',
+              fontWeight: 600,
+              color: '#fb923c',
+              background: 'rgba(251, 146, 60, 0.12)',
+              border: '1px solid rgba(251, 146, 60, 0.35)',
+              padding: '0.35rem 0.8rem',
+              borderRadius: 8,
+              textDecoration: 'none',
+              marginLeft: '0.2rem',
+              transition: 'all 0.2s',
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.background = 'rgba(251, 146, 60, 0.22)'
+              e.currentTarget.style.borderColor = 'rgba(251, 146, 60, 0.6)'
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.background = 'rgba(251, 146, 60, 0.12)'
+              e.currentTarget.style.borderColor = 'rgba(251, 146, 60, 0.35)'
+            }}
+          >
+            <span>Mở trên LeetCode</span>
+            <span>↗</span>
+          </a>
+        ) : null}
+      </div>
+    </div>
+  )
+}
+
+/* ─── LeetCode Section ───────────────────────────────────────────────────── */
+function LeetCode() {
+  const [filter, setFilter] = useState<'All' | 'Easy' | 'Medium' | 'Hard'>('All')
+  const [search, setSearch] = useState('')
+  const [activeProblem, setActiveProblem] = useState<LeetCodeProblem | null>(null)
+
+  const hasCustomSolutions = LEETCODE_SOLUTIONS.length > 0
+  const [dataSource, setDataSource] = useState<'custom' | 'sample'>(hasCustomSolutions ? 'custom' : 'sample')
+
+  const currentDataset = dataSource === 'custom' && hasCustomSolutions ? LEETCODE_SOLUTIONS : SAMPLE_LEETCODE_PROBLEMS
+
+  // Metrics for current dataset
+  const stats = useMemo(() => {
+    const total = currentDataset.length
+    const easy = currentDataset.filter((p) => p.difficulty === 'Easy').length
+    const medium = currentDataset.filter((p) => p.difficulty === 'Medium').length
+    const hard = currentDataset.filter((p) => p.difficulty === 'Hard').length
+    return { total, easy, medium, hard }
+  }, [currentDataset])
+
+  // Filter and search
+  const filteredProblems = useMemo(() => {
+    return currentDataset.filter((p) => {
+      const matchDiff = filter === 'All' || p.difficulty === filter
+      const q = search.trim().toLowerCase()
+      const matchSearch =
+        q === '' ||
+        p.title.toLowerCase().includes(q) ||
+        p.category.toLowerCase().includes(q) ||
+        p.language.toLowerCase().includes(q) ||
+        String(p.id).includes(q.replace('#', ''))
+      return matchDiff && matchSearch
+    })
+  }, [currentDataset, filter, search])
+
+  // Grouped for 'All' view when not searching
+  const easyGroup = useMemo(() => filteredProblems.filter((p) => p.difficulty === 'Easy'), [filteredProblems])
+  const mediumGroup = useMemo(() => filteredProblems.filter((p) => p.difficulty === 'Medium'), [filteredProblems])
+  const hardGroup = useMemo(() => filteredProblems.filter((p) => p.difficulty === 'Hard'), [filteredProblems])
+
+  const isGroupedView = filter === 'All' && search.trim() === ''
+
+  return (
+    <section
+      id="leetcode"
+      className="section-glow-divider section-glow-leetcode"
+      style={{
+        padding: 'clamp(4rem, 8vw, 6rem) 0',
+        borderTop: `1px solid ${C.border}`,
+        position: 'relative',
+        overflow: 'hidden',
+      }}
+    >
+      {/* Atmospheric Stage Spotlight - LeetCode Warm Orange & Amber */}
+      <div
+        style={{
+          position: 'absolute',
+          top: 0,
+          left: '50%',
+          transform: 'translateX(-50%)',
+          width: 'min(1000px, 98vw)',
+          height: '420px',
+          background: 'radial-gradient(ellipse 75% 65% at 50% 0%, rgba(251, 146, 60, 0.16) 0%, rgba(99, 102, 241, 0.08) 45%, transparent 80%)',
+          pointerEvents: 'none',
+          zIndex: 0,
+        }}
+      />
+
+      <div className="responsive-container" style={{ position: 'relative', zIndex: 1 }}>
+        <SectionHeader
+          label="// LEETCODE & PROBLEM SOLVING"
+          title="LeetCode & Thuật toán"
+          sub="Danh mục các bài toán thuật toán được phân loại theo độ khó (Easy · Medium · Hard). Nhấp vào từng bài để xem chi tiết cách giải, phân tích độ phức tạp và mã nguồn C++ / Python."
+          accent="#fb923c"
+        />
+
+        {/* ─── Status Banner & Dataset Switcher ─── */}
+        <div
+          className="reveal glass-card"
+          style={{
+            borderRadius: 18,
+            padding: '1rem 1.35rem',
+            marginBottom: '1.75rem',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            flexWrap: 'wrap',
+            gap: '1rem',
+            border: '1px solid rgba(251, 146, 60, 0.28)',
+            background: 'linear-gradient(135deg, rgba(251, 146, 60, 0.07) 0%, rgba(11, 17, 32, 0.85) 100%)',
+          }}
+        >
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.65rem' }}>
+            <span style={{ fontSize: '1.15rem' }}>💡</span>
+            <div>
+              <div style={{ fontFamily: C.body, fontSize: '0.86rem', color: '#f1f5f9', fontWeight: 600 }}>
+                {dataSource === 'sample'
+                  ? 'Đang xem danh mục mẫu tham khảo (Easy · Medium · Hard)'
+                  : `Đang xem danh mục của bạn (${LEETCODE_SOLUTIONS.length} bài giải)`}
+              </div>
+              <div style={{ fontFamily: C.mono, fontSize: '0.72rem', color: '#94a3b8', marginTop: '0.15rem' }}>
+                {dataSource === 'sample'
+                  ? 'Bạn có thể tự cập nhật các bài giải của mình vào mảng LEETCODE_SOLUTIONS trong file App.tsx bất kỳ lúc nào.'
+                  : 'Mã nguồn được đồng bộ từ mảng dữ liệu cá nhân của bạn.'}
+              </div>
+            </div>
+          </div>
+
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', flexWrap: 'wrap' }}>
+            <button
+              onClick={() => setDataSource('sample')}
+              style={{
+                fontFamily: C.mono,
+                fontSize: '0.72rem',
+                fontWeight: 600,
+                padding: '0.35rem 0.75rem',
+                borderRadius: 8,
+                background: dataSource === 'sample' ? 'rgba(251, 146, 60, 0.25)' : 'rgba(255, 255, 255, 0.05)',
+                border: `1px solid ${dataSource === 'sample' ? 'rgba(251, 146, 60, 0.6)' : C.border}`,
+                color: dataSource === 'sample' ? '#fb923c' : '#94a3b8',
+                cursor: 'pointer',
+                transition: 'all 0.2s',
+              }}
+            >
+              ✨ Bài mẫu ({SAMPLE_LEETCODE_PROBLEMS.length})
+            </button>
+
+            <button
+              onClick={() => setDataSource('custom')}
+              style={{
+                fontFamily: C.mono,
+                fontSize: '0.72rem',
+                fontWeight: 600,
+                padding: '0.35rem 0.75rem',
+                borderRadius: 8,
+                background: dataSource === 'custom' ? 'rgba(99, 102, 241, 0.25)' : 'rgba(255, 255, 255, 0.05)',
+                border: `1px solid ${dataSource === 'custom' ? 'rgba(99, 102, 241, 0.6)' : C.border}`,
+                color: dataSource === 'custom' ? '#818cf8' : '#94a3b8',
+                cursor: 'pointer',
+                transition: 'all 0.2s',
+              }}
+            >
+              📁 Danh sách của bạn ({LEETCODE_SOLUTIONS.length})
+            </button>
+
+            <a
+              href={LEETCODE_PROFILE_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="touch-target"
+              style={{
+                fontFamily: C.mono,
+                fontSize: '0.74rem',
+                fontWeight: 700,
+                padding: '0.35rem 0.85rem',
+                borderRadius: 8,
+                background: 'linear-gradient(135deg, rgba(251, 146, 60, 0.2) 0%, rgba(234, 88, 12, 0.25) 100%)',
+                border: '1px solid rgba(251, 146, 60, 0.45)',
+                color: '#fb923c',
+                textDecoration: 'none',
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '0.35rem',
+                boxShadow: '0 0 12px rgba(251, 146, 60, 0.2)',
+                transition: 'all 0.2s',
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.transform = 'translate3d(0, -1px, 0)'
+                e.currentTarget.style.boxShadow = '0 0 18px rgba(251, 146, 60, 0.4)'
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.transform = 'translate3d(0, 0, 0)'
+                e.currentTarget.style.boxShadow = '0 0 12px rgba(251, 146, 60, 0.2)'
+              }}
+            >
+              <span>Hồ sơ LeetCode</span>
+              <span>↗</span>
+            </a>
+          </div>
+        </div>
+
+        {/* ─── Stats Overview Summary Bar ─── */}
+        <div
+          className="reveal"
+          style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 180px), 1fr))',
+            gap: '1rem',
+            marginBottom: '1.75rem',
+          }}
+        >
+          {/* Total solved */}
+          <div
+            className="glass-card"
+            style={{
+              padding: '1rem 1.25rem',
+              borderRadius: 14,
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+            }}
+          >
+            <div>
+              <div style={{ fontFamily: C.mono, fontSize: '0.7rem', color: '#94a3b8', textTransform: 'uppercase' }}>TỔNG BÀI TOÁN</div>
+              <div style={{ fontFamily: C.display, fontSize: '1.5rem', fontWeight: 800, color: '#fff', marginTop: '0.15rem' }}>
+                {stats.total} <span style={{ fontSize: '0.8rem', color: '#64748b', fontWeight: 400 }}>bài</span>
+              </div>
+            </div>
+            <span style={{ fontSize: '1.4rem', opacity: 0.8 }}>📊</span>
+          </div>
+
+          {/* Easy */}
+          <div
+            className="glass-card"
+            style={{
+              padding: '1rem 1.25rem',
+              borderRadius: 14,
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              borderLeft: '3.5px solid #10b981',
+            }}
+          >
+            <div>
+              <div style={{ fontFamily: C.mono, fontSize: '0.7rem', color: '#10b981', fontWeight: 600 }}>EASY</div>
+              <div style={{ fontFamily: C.display, fontSize: '1.5rem', fontWeight: 800, color: '#4ade80', marginTop: '0.15rem' }}>
+                {stats.easy} <span style={{ fontSize: '0.8rem', color: '#64748b', fontWeight: 400 }}>bài</span>
+              </div>
+            </div>
+            <span style={{ fontFamily: C.mono, fontSize: '0.75rem', color: '#10b981', background: 'rgba(16,185,129,0.1)', padding: '0.2rem 0.5rem', borderRadius: 6 }}>
+              🟢 Dễ
+            </span>
+          </div>
+
+          {/* Medium */}
+          <div
+            className="glass-card"
+            style={{
+              padding: '1rem 1.25rem',
+              borderRadius: 14,
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              borderLeft: '3.5px solid #f59e0b',
+            }}
+          >
+            <div>
+              <div style={{ fontFamily: C.mono, fontSize: '0.7rem', color: '#f59e0b', fontWeight: 600 }}>MEDIUM</div>
+              <div style={{ fontFamily: C.display, fontSize: '1.5rem', fontWeight: 800, color: '#fbbf24', marginTop: '0.15rem' }}>
+                {stats.medium} <span style={{ fontSize: '0.8rem', color: '#64748b', fontWeight: 400 }}>bài</span>
+              </div>
+            </div>
+            <span style={{ fontFamily: C.mono, fontSize: '0.75rem', color: '#f59e0b', background: 'rgba(245,158,11,0.1)', padding: '0.2rem 0.5rem', borderRadius: 6 }}>
+              🟡 Trung bình
+            </span>
+          </div>
+
+          {/* Hard */}
+          <div
+            className="glass-card"
+            style={{
+              padding: '1rem 1.25rem',
+              borderRadius: 14,
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              borderLeft: '3.5px solid #ef4444',
+            }}
+          >
+            <div>
+              <div style={{ fontFamily: C.mono, fontSize: '0.7rem', color: '#ef4444', fontWeight: 600 }}>HARD</div>
+              <div style={{ fontFamily: C.display, fontSize: '1.5rem', fontWeight: 800, color: '#f87171', marginTop: '0.15rem' }}>
+                {stats.hard} <span style={{ fontSize: '0.8rem', color: '#64748b', fontWeight: 400 }}>bài</span>
+              </div>
+            </div>
+            <span style={{ fontFamily: C.mono, fontSize: '0.75rem', color: '#ef4444', background: 'rgba(239,68,68,0.1)', padding: '0.2rem 0.5rem', borderRadius: 6 }}>
+              🔴 Khó
+            </span>
+          </div>
+        </div>
+
+        {/* ─── Filter & Search Toolbar ─── */}
+        <div
+          className="reveal"
+          style={{
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            flexWrap: 'wrap',
+            gap: '1rem',
+            marginBottom: '1.5rem',
+          }}
+        >
+          {/* Segmented difficulty buttons */}
+          <div style={{ display: 'flex', gap: '0.45rem', flexWrap: 'wrap' }}>
+            {(
+              [
+                { key: 'All', label: 'Tất cả', count: stats.total, color: '#fb923c' },
+                { key: 'Easy', label: '🟢 Easy', count: stats.easy, color: '#10b981' },
+                { key: 'Medium', label: '🟡 Medium', count: stats.medium, color: '#f59e0b' },
+                { key: 'Hard', label: '🔴 Hard', count: stats.hard, color: '#ef4444' },
+              ] as const
+            ).map((item) => {
+              const isAct = filter === item.key
+              return (
+                <button
+                  key={item.key}
+                  onClick={() => setFilter(item.key)}
+                  className="touch-target"
+                  style={{
+                    fontFamily: C.mono,
+                    fontSize: '0.76rem',
+                    fontWeight: isAct ? 700 : 500,
+                    padding: '0.42rem 0.95rem',
+                    borderRadius: 999,
+                    background: isAct ? `${item.color}25` : 'rgba(255, 255, 255, 0.04)',
+                    border: `1px solid ${isAct ? item.color : C.border}`,
+                    color: isAct ? '#ffffff' : '#94a3b8',
+                    cursor: 'pointer',
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: '0.4rem',
+                    boxShadow: isAct ? `0 0 16px ${item.color}35` : 'none',
+                    transition: 'all 0.22s',
+                  }}
+                >
+                  <span>{item.label}</span>
+                  <span
+                    style={{
+                      fontSize: '0.68rem',
+                      opacity: 0.85,
+                      background: isAct ? `${item.color}40` : 'rgba(255,255,255,0.08)',
+                      padding: '0.1rem 0.4rem',
+                      borderRadius: 999,
+                    }}
+                  >
+                    {item.count}
+                  </span>
+                </button>
+              )
+            })}
+          </div>
+
+          {/* Search box */}
+          <div style={{ position: 'relative', minWidth: 'min(100%, 280px)' }}>
+            <span
+              style={{
+                position: 'absolute',
+                left: '0.85rem',
+                top: '50%',
+                transform: 'translateY(-50%)',
+                color: '#64748b',
+                fontSize: '0.9rem',
+                pointerEvents: 'none',
+              }}
+            >
+              🔍
+            </span>
+            <input
+              type="text"
+              placeholder="Tìm theo tên, #ID, chủ đề..."
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              style={{
+                width: '100%',
+                background: 'rgba(11, 17, 32, 0.7)',
+                border: `1px solid ${search ? '#fb923c' : C.border}`,
+                borderRadius: 12,
+                padding: '0.5rem 2.2rem 0.5rem 2.35rem',
+                color: '#ffffff',
+                fontFamily: C.body,
+                fontSize: '0.86rem',
+                outline: 'none',
+                boxShadow: search ? '0 0 16px rgba(251, 146, 60, 0.25)' : 'none',
+                transition: 'all 0.2s',
+              }}
+            />
+            {search && (
+              <button
+                onClick={() => setSearch('')}
+                style={{
+                  position: 'absolute',
+                  right: '0.75rem',
+                  top: '50%',
+                  transform: 'translateY(-50%)',
+                  background: 'none',
+                  border: 'none',
+                  color: '#94a3b8',
+                  cursor: 'pointer',
+                  fontSize: '0.85rem',
+                  padding: '0.2rem',
+                }}
+              >
+                ✕
+              </button>
+            )}
+          </div>
+        </div>
+
+        {/* ─── Main List Container ─── */}
+        {dataSource === 'custom' && LEETCODE_SOLUTIONS.length === 0 ? (
+          /* Empty state for personal solutions */
+          <div
+            className="reveal glass-card"
+            style={{
+              borderRadius: 20,
+              padding: '3rem 1.5rem',
+              textAlign: 'center',
+              border: '1px dashed rgba(99, 102, 241, 0.4)',
+            }}
+          >
+            <div style={{ fontSize: '2.5rem', marginBottom: '0.85rem' }}>📂</div>
+            <h3 style={{ fontFamily: C.display, fontSize: '1.25rem', fontWeight: 700, color: '#fff', marginBottom: '0.5rem' }}>
+              Danh sách cá nhân của bạn hiện đang để trống
+            </h3>
+            <p style={{ fontFamily: C.body, color: '#94a3b8', fontSize: '0.9rem', maxWidth: 500, margin: '0 auto 1.5rem', lineHeight: 1.6 }}>
+              Khu vực đã được thiết kế sẵn sàng. Bạn chỉ cần thêm các bài toán vào mảng <code>LEETCODE_SOLUTIONS</code> trong file <code>src/App.tsx</code> để hiển thị!
+            </p>
+            <button
+              onClick={() => setDataSource('sample')}
+              style={{
+                fontFamily: C.mono,
+                fontSize: '0.8rem',
+                fontWeight: 600,
+                padding: '0.55rem 1.25rem',
+                borderRadius: 10,
+                background: 'linear-gradient(135deg, #fb923c 0%, #ea580c 100%)',
+                color: '#fff',
+                border: 'none',
+                cursor: 'pointer',
+                boxShadow: '0 4px 16px rgba(251, 146, 60, 0.4)',
+              }}
+            >
+              Xem danh sách bài mẫu (4 bài giải) ➔
+            </button>
+          </div>
+        ) : filteredProblems.length === 0 ? (
+          /* No search results */
+          <div
+            className="reveal glass-card"
+            style={{
+              borderRadius: 18,
+              padding: '2.5rem 1.5rem',
+              textAlign: 'center',
+            }}
+          >
+            <div style={{ fontSize: '2rem', marginBottom: '0.5rem' }}>🔎</div>
+            <div style={{ fontFamily: C.body, color: '#e2e8f0', fontSize: '0.95rem', fontWeight: 600 }}>
+              Không tìm thấy bài giải nào phù hợp với bộ lọc hiện tại
+            </div>
+            <button
+              onClick={() => {
+                setFilter('All')
+                setSearch('')
+              }}
+              style={{
+                marginTop: '1rem',
+                fontFamily: C.mono,
+                fontSize: '0.78rem',
+                color: '#38bdf8',
+                background: 'rgba(56, 189, 248, 0.1)',
+                border: '1px solid rgba(56, 189, 248, 0.3)',
+                padding: '0.4rem 0.95rem',
+                borderRadius: 8,
+                cursor: 'pointer',
+              }}
+            >
+              Đặt lại bộ lọc & tìm kiếm
+            </button>
+          </div>
+        ) : isGroupedView ? (
+          /* Grouped View by Difficulty (Easy, Medium, Hard) */
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
+            {/* Group 1: Easy */}
+            {easyGroup.length > 0 && (
+              <div className="reveal">
+                <div
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '0.65rem',
+                    marginBottom: '0.85rem',
+                    paddingLeft: '0.25rem',
+                  }}
+                >
+                  <span
+                    style={{
+                      width: 8,
+                      height: 8,
+                      borderRadius: '50%',
+                      background: '#10b981',
+                      boxShadow: '0 0 8px #10b981',
+                    }}
+                  />
+                  <span
+                    style={{
+                      fontFamily: C.mono,
+                      fontSize: '0.78rem',
+                      fontWeight: 700,
+                      color: '#10b981',
+                      letterSpacing: '0.08em',
+                      textTransform: 'uppercase',
+                    }}
+                  >
+                    EASY PROBLEMS ({easyGroup.length} bài)
+                  </span>
+                  <div
+                    style={{
+                      flex: 1,
+                      height: 1,
+                      background: 'linear-gradient(90deg, rgba(16, 185, 129, 0.3) 0%, transparent 100%)',
+                    }}
+                  />
+                </div>
+
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.65rem' }}>
+                  {easyGroup.map((problem) => (
+                    <LeetCodeProblemListItem
+                      key={problem.id}
+                      problem={problem}
+                      onClick={() => setActiveProblem(problem)}
+                    />
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* Group 2: Medium */}
+            {mediumGroup.length > 0 && (
+              <div className="reveal">
+                <div
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '0.65rem',
+                    marginBottom: '0.85rem',
+                    paddingLeft: '0.25rem',
+                  }}
+                >
+                  <span
+                    style={{
+                      width: 8,
+                      height: 8,
+                      borderRadius: '50%',
+                      background: '#f59e0b',
+                      boxShadow: '0 0 8px #f59e0b',
+                    }}
+                  />
+                  <span
+                    style={{
+                      fontFamily: C.mono,
+                      fontSize: '0.78rem',
+                      fontWeight: 700,
+                      color: '#f59e0b',
+                      letterSpacing: '0.08em',
+                      textTransform: 'uppercase',
+                    }}
+                  >
+                    MEDIUM PROBLEMS ({mediumGroup.length} bài)
+                  </span>
+                  <div
+                    style={{
+                      flex: 1,
+                      height: 1,
+                      background: 'linear-gradient(90deg, rgba(245, 158, 11, 0.3) 0%, transparent 100%)',
+                    }}
+                  />
+                </div>
+
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.65rem' }}>
+                  {mediumGroup.map((problem) => (
+                    <LeetCodeProblemListItem
+                      key={problem.id}
+                      problem={problem}
+                      onClick={() => setActiveProblem(problem)}
+                    />
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* Group 3: Hard */}
+            {hardGroup.length > 0 && (
+              <div className="reveal">
+                <div
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '0.65rem',
+                    marginBottom: '0.85rem',
+                    paddingLeft: '0.25rem',
+                  }}
+                >
+                  <span
+                    style={{
+                      width: 8,
+                      height: 8,
+                      borderRadius: '50%',
+                      background: '#ef4444',
+                      boxShadow: '0 0 8px #ef4444',
+                    }}
+                  />
+                  <span
+                    style={{
+                      fontFamily: C.mono,
+                      fontSize: '0.78rem',
+                      fontWeight: 700,
+                      color: '#ef4444',
+                      letterSpacing: '0.08em',
+                      textTransform: 'uppercase',
+                    }}
+                  >
+                    HARD PROBLEMS ({hardGroup.length} bài)
+                  </span>
+                  <div
+                    style={{
+                      flex: 1,
+                      height: 1,
+                      background: 'linear-gradient(90deg, rgba(239, 68, 68, 0.3) 0%, transparent 100%)',
+                    }}
+                  />
+                </div>
+
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.65rem' }}>
+                  {hardGroup.map((problem) => (
+                    <LeetCodeProblemListItem
+                      key={problem.id}
+                      problem={problem}
+                      onClick={() => setActiveProblem(problem)}
+                    />
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
+        ) : (
+          /* Filtered or Searched Single Flat List */
+          <div className="reveal" style={{ display: 'flex', flexDirection: 'column', gap: '0.65rem' }}>
+            {filteredProblems.map((problem) => (
+              <LeetCodeProblemListItem
+                key={problem.id}
+                problem={problem}
+                onClick={() => setActiveProblem(problem)}
+              />
+            ))}
+          </div>
+        )}
+      </div>
+
+      {/* ─── Interactive Cyber Detail Modal ─── */}
+      {activeProblem && (
+        <LeetCodeDetailModal
+          problem={activeProblem}
+          onClose={() => setActiveProblem(null)}
+          onSelectProblem={(p) => setActiveProblem(p)}
+          allProblems={filteredProblems}
+        />
+      )}
+    </section>
+  )
+}
+
 
 /* ─── Education Section ──────────────────────────────────────────────────── */
 function Education() {
   return (
-    <section id="education" style={{ padding: 'clamp(4rem, 8vw, 6rem) 0', borderTop: `1px solid ${C.border}`, position: 'relative' }}>
+    <section id="education" className="section-glow-divider section-glow-education" style={{ padding: 'clamp(4rem, 8vw, 6rem) 0', borderTop: `1px solid ${C.border}`, position: 'relative', overflow: 'hidden' }}>
+      {/* Atmospheric Stage Spotlight - Emerald Teal & Cyan for Education */}
+      <div style={{
+        position: 'absolute', top: 0, left: '50%', transform: 'translateX(-50%)',
+        width: 'min(1000px, 98vw)', height: '420px',
+        background: 'radial-gradient(ellipse 75% 65% at 50% 0%, rgba(16, 185, 129, 0.16) 0%, rgba(6, 182, 212, 0.09) 45%, transparent 80%)',
+        pointerEvents: 'none', zIndex: 0
+      }} />
+
       <div className="responsive-container" style={{ position: 'relative', zIndex: 1 }}>
-        <SectionHeader label="// EDUCATION" title="Học vấn" sub="Quá trình đào tạo đại học chính quy tại Trường Đại học Giao thông Vận tải TP.HCM (UTH)." />
+        <SectionHeader
+          label="// EDUCATION"
+          title="Học vấn"
+          sub="Quá trình đào tạo đại học chính quy tại Trường Đại học Giao thông Vận tải TP.HCM (UTH)."
+          accent="#10b981"
+        />
 
         <div style={{
           display: 'grid',
@@ -1288,7 +3196,7 @@ function Education() {
             }}>
               <div style={{
                 position: 'absolute', top: 0, left: 0, right: 0, height: '2px',
-                background: 'linear-gradient(90deg, #6366f1, #38bdf8)',
+                background: 'linear-gradient(90deg, #10b981, #06b6d4, #6366f1)',
               }} />
 
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '1.25rem', flexWrap: 'wrap', gap: '0.65rem' }}>
@@ -2077,22 +3985,30 @@ function Certificates() {
   }
 
   return (
-    <section id="certificates" style={{ padding: 'clamp(4rem, 8vw, 6rem) 0', borderTop: `1px solid ${C.border}`, position: 'relative' }}>
+    <section id="certificates" className="section-glow-divider section-glow-certificates" style={{ padding: 'clamp(4rem, 8vw, 6rem) 0', borderTop: `1px solid ${C.border}`, position: 'relative', overflow: 'hidden' }}>
+      {/* Atmospheric Stage Spotlight - Cyber Cyan & Electric Indigo for Certificates */}
+      <div style={{
+        position: 'absolute', top: 0, left: '50%', transform: 'translateX(-50%)',
+        width: 'min(1000px, 98vw)', height: '440px',
+        background: 'radial-gradient(ellipse 75% 65% at 50% 0%, rgba(6, 182, 212, 0.20) 0%, rgba(99, 102, 241, 0.11) 45%, transparent 80%)',
+        pointerEvents: 'none', zIndex: 0
+      }} />
+
       <div className="responsive-container" style={{ position: 'relative', zIndex: 1 }}>
         <SectionHeader
           label="// CERTIFICATES & VERIFICATION"
           title="Chứng chỉ & Xác thực"
           sub="Các chứng nhận & chứng chỉ chuyên môn quốc tế được xác thực trực tuyến qua mã QR và cổng Cisco NetAcad."
+          accent="#06b6d4"
         />
 
         <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem', maxWidth: 1100, margin: '0 auto' }}>
           {CERTIFICATES.map((cert) => (
-            <div
+            <TiltCard
               key={cert.id}
               className="reveal delay-1 glow-card-container"
-              style={{
-                borderRadius: 24,
-              }}
+              borderRadius={24}
+              maxTilt={6}
             >
               <div
                 className="glow-card-inner"
@@ -2527,7 +4443,7 @@ function Certificates() {
                   </div>
                 </div>
               </div>
-            </div>
+            </TiltCard>
           ))}
         </div>
       </div>
@@ -2634,9 +4550,22 @@ function Contact() {
   })
 
   return (
-    <section id="contact" style={{ padding: 'clamp(4rem, 8vw, 6rem) 0', borderTop: `1px solid ${C.border}`, position: 'relative' }}>
+    <section id="contact" className="section-glow-divider section-glow-contact" style={{ padding: 'clamp(4rem, 8vw, 6rem) 0', borderTop: `1px solid ${C.border}`, position: 'relative', overflow: 'hidden' }}>
+      {/* Atmospheric Stage Spotlight - Neon Violet & Fuchsia for Contact */}
+      <div style={{
+        position: 'absolute', top: 0, left: '50%', transform: 'translateX(-50%)',
+        width: 'min(1000px, 98vw)', height: '420px',
+        background: 'radial-gradient(ellipse 75% 65% at 50% 0%, rgba(168, 85, 247, 0.18) 0%, rgba(244, 63, 94, 0.09) 45%, transparent 80%)',
+        pointerEvents: 'none', zIndex: 0
+      }} />
+
       <div className="responsive-container" style={{ position: 'relative', zIndex: 1 }}>
-        <SectionHeader label="// CONTACT" title="Liên hệ" sub="Có dự án thú vị? Hãy cùng trao đổi." />
+        <SectionHeader
+          label="// CONTACT"
+          title="Liên hệ"
+          sub="Có dự án thú vị? Hãy cùng trao đổi."
+          accent="#a855f7"
+        />
 
         <div style={{
           display: 'grid',
@@ -2989,34 +4918,398 @@ function Contact() {
 
 /* ─── Footer ─────────────────────────────────────────────────────────────── */
 function Footer() {
+  const currentYear = new Date().getFullYear()
+
+  const navLinks = [
+    { label: 'Về bản thân', href: '#about' },
+    { label: 'Dự án cá nhân', href: '#projects' },
+    { label: 'LeetCode & Thuật toán', href: '#leetcode' },
+    { label: 'Học vấn & Chuyên môn', href: '#education' },
+    { label: 'Chứng chỉ quốc tế', href: '#certificates' },
+    { label: 'Liên hệ hợp tác', href: '#contact' },
+  ]
+
+  const connectLinks = [
+    {
+      icon: '⌨',
+      name: 'GitHub',
+      handle: 'khoalvd839764-netizen',
+      href: 'https://github.com/khoalvd839764-netizen',
+      isExternal: true,
+      color: '#38bdf8',
+    },
+    {
+      icon: '✉',
+      name: 'Email Cá Nhân',
+      handle: 'khoalevodang301007@gmail.com',
+      href: 'mailto:khoalevodang301007@gmail.com',
+      isExternal: false,
+      color: '#a78bfa',
+    },
+    {
+      icon: '💼',
+      name: 'LinkedIn',
+      handle: 'Cập nhật hồ sơ sau',
+      badge: 'Soon',
+      color: '#60a5fa',
+    },
+    {
+      icon: '🎓',
+      name: 'Đại Học UTH',
+      handle: 'Data Science & AI',
+      color: '#34d399',
+    },
+  ]
+
   return (
-    <footer style={{
-      borderTop: `1px solid ${C.border}`,
-      padding: 'clamp(1.5rem, 3vw, 2.25rem) 0',
-      paddingBottom: 'calc(clamp(1.5rem, 3vw, 2.25rem) + var(--sab))',
-      background: 'rgba(5, 8, 15, 0.75)',
-      backdropFilter: 'blur(16px)',
-      WebkitBackdropFilter: 'blur(16px)',
-      position: 'relative',
-      zIndex: 10
-    }}>
-      <div className="responsive-container" style={{
-        display: 'flex',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        flexWrap: 'wrap',
-        gap: '1.25rem'
-      }}>
-        <div style={{ fontFamily: C.mono, fontSize: '0.75rem', color: C.muted }}>
-          © {new Date().getFullYear()} Lê Võ Đăng Khoa — Data Scientist & AI Engineer
+    <footer
+      style={{
+        position: 'relative',
+        zIndex: 10,
+        background: 'linear-gradient(180deg, rgba(3, 7, 18, 0.5) 0%, rgba(5, 8, 15, 0.98) 100%)',
+        backdropFilter: 'blur(20px)',
+        WebkitBackdropFilter: 'blur(20px)',
+      }}
+    >
+      {/* Top glowing laser line */}
+      <div
+        style={{
+          height: '1px',
+          width: '100%',
+          background: 'linear-gradient(90deg, transparent 0%, rgba(99,102,241,0.5) 20%, rgba(56,189,248,0.7) 50%, rgba(168,85,247,0.5) 80%, transparent 100%)',
+          boxShadow: '0 0 12px rgba(56,189,248,0.4)',
+        }}
+      />
+
+      <div
+        className="responsive-container"
+        style={{
+          paddingTop: 'clamp(2.5rem, 5vw, 4rem)',
+          paddingBottom: 'calc(clamp(1.5rem, 3vw, 2.5rem) + var(--sab))',
+        }}
+      >
+        {/* Main Footer Grid */}
+        <div
+          style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 280px), 1fr))',
+            gap: 'clamp(2rem, 4vw, 3.5rem)',
+            marginBottom: 'clamp(2.2rem, 4vw, 3.2rem)',
+            alignItems: 'start',
+          }}
+        >
+          {/* Column 1: Brand & Profile */}
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.85rem' }}>
+            <a
+              href="#about"
+              style={{
+                fontFamily: C.mono,
+                fontWeight: 800,
+                fontSize: '1.25rem',
+                letterSpacing: '-0.02em',
+                color: '#ffffff',
+                textDecoration: 'none',
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '0.2rem',
+                width: 'fit-content',
+              }}
+            >
+              <span>khoadang</span>
+              <span style={{ color: '#38bdf8' }}>.site</span>
+            </a>
+
+            {/* Live Availability Badge */}
+            <div
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '0.5rem',
+                padding: '0.3rem 0.8rem',
+                borderRadius: '999px',
+                background: 'rgba(34, 197, 94, 0.08)',
+                border: '1px solid rgba(34, 197, 94, 0.28)',
+                fontFamily: C.mono,
+                fontSize: '0.74rem',
+                color: '#4ade80',
+                width: 'fit-content',
+              }}
+            >
+              <span
+                className="beacon-pulse"
+                style={{
+                  width: 7,
+                  height: 7,
+                  borderRadius: '50%',
+                  background: '#22c55e',
+                  display: 'inline-block',
+                  flexShrink: 0,
+                }}
+              />
+              <span>Sẵn sàng cộng tác & tiếp nhận dự án</span>
+            </div>
+
+            <p
+              style={{
+                fontFamily: C.body,
+                fontSize: '0.86rem',
+                lineHeight: 1.7,
+                color: '#94a3b8',
+                maxWidth: '380px',
+                margin: 0,
+              }}
+            >
+              Lê Võ Đăng Khoa — Sinh viên ngành Khoa học Dữ liệu tại Trường Đại học Giao thông Vận tải TP.HCM (UTH).
+              Đam mê Machine Learning, Data Analytics & nghiên cứu các mô hình AI ứng dụng vào thực tế.
+            </p>
+
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginTop: '0.2rem' }}>
+              <span style={{ fontFamily: C.mono, fontSize: '0.72rem', color: '#64748b' }}>📍 TP. Hồ Chí Minh, Việt Nam</span>
+            </div>
+          </div>
+
+          {/* Column 2: Quick Navigation Sitemap */}
+          <div>
+            <div
+              style={{
+                fontFamily: C.mono,
+                fontSize: '0.72rem',
+                color: '#38bdf8',
+                letterSpacing: '0.14em',
+                textTransform: 'uppercase',
+                fontWeight: 700,
+                marginBottom: '1.1rem',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '0.45rem',
+              }}
+            >
+              <span style={{ width: 6, height: 6, borderRadius: '50%', background: '#38bdf8' }} />
+              <span>ĐIỀU HƯỚNG & DANH MỤC</span>
+            </div>
+
+            <div
+              style={{
+                display: 'grid',
+                gridTemplateColumns: 'repeat(auto-fit, minmax(130px, 1fr))',
+                gap: '0.75rem 1rem',
+              }}
+            >
+              {navLinks.map((item) => (
+                <a
+                  key={item.href}
+                  href={item.href}
+                  style={{
+                    fontFamily: C.body,
+                    fontSize: '0.85rem',
+                    color: '#94a3b8',
+                    textDecoration: 'none',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '0.4rem',
+                    transition: 'all 0.2s cubic-bezier(0.16, 1, 0.3, 1)',
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.color = '#38bdf8'
+                    e.currentTarget.style.transform = 'translate3d(4px, 0, 0)'
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.color = '#94a3b8'
+                    e.currentTarget.style.transform = 'translate3d(0, 0, 0)'
+                  }}
+                >
+                  <span style={{ color: '#475569', fontSize: '0.8rem' }}>›</span>
+                  <span>{item.label}</span>
+                </a>
+              ))}
+            </div>
+          </div>
+
+          {/* Column 3: Connect & Verified Profiles */}
+          <div>
+            <div
+              style={{
+                fontFamily: C.mono,
+                fontSize: '0.72rem',
+                color: '#a78bfa',
+                letterSpacing: '0.14em',
+                textTransform: 'uppercase',
+                fontWeight: 700,
+                marginBottom: '1.1rem',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '0.45rem',
+              }}
+            >
+              <span style={{ width: 6, height: 6, borderRadius: '50%', background: '#a78bfa' }} />
+              <span>HỒ SƠ & LIÊN KẾT TRỰC TUYẾN</span>
+            </div>
+
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.65rem' }}>
+              {connectLinks.map((item) => {
+                const isClickable = Boolean(item.href)
+                const cardContent = (
+                  <div
+                    style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'space-between',
+                      padding: '0.6rem 0.85rem',
+                      background: 'rgba(255, 255, 255, 0.03)',
+                      border: '1px solid rgba(255, 255, 255, 0.06)',
+                      borderRadius: '10px',
+                      transition: 'all 0.2s ease',
+                      textDecoration: 'none',
+                    }}
+                    onMouseEnter={(e) => {
+                      if (isClickable) {
+                        e.currentTarget.style.background = 'rgba(255, 255, 255, 0.06)'
+                        e.currentTarget.style.borderColor = `${item.color}50`
+                        e.currentTarget.style.transform = 'translate3d(0, -1px, 0)'
+                      }
+                    }}
+                    onMouseLeave={(e) => {
+                      if (isClickable) {
+                        e.currentTarget.style.background = 'rgba(255, 255, 255, 0.03)'
+                        e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.06)'
+                        e.currentTarget.style.transform = 'translate3d(0, 0, 0)'
+                      }
+                    }}
+                  >
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.65rem', minWidth: 0 }}>
+                      <span style={{ fontSize: '0.95rem', opacity: 0.9 }}>{item.icon}</span>
+                      <div style={{ minWidth: 0 }}>
+                        <div style={{ fontFamily: C.body, fontSize: '0.8rem', fontWeight: 600, color: '#e2e8f0', lineHeight: 1.2 }}>
+                          {item.name}
+                        </div>
+                        <div
+                          style={{
+                            fontFamily: C.mono,
+                            fontSize: '0.7rem',
+                            color: '#64748b',
+                            overflow: 'hidden',
+                            textOverflow: 'ellipsis',
+                            whiteSpace: 'nowrap',
+                            maxWidth: '180px',
+                          }}
+                        >
+                          {item.handle}
+                        </div>
+                      </div>
+                    </div>
+
+                    {item.badge ? (
+                      <span
+                        style={{
+                          fontFamily: C.mono,
+                          fontSize: '0.62rem',
+                          padding: '0.15rem 0.45rem',
+                          borderRadius: '4px',
+                          background: 'rgba(148, 163, 184, 0.12)',
+                          color: '#94a3b8',
+                          border: '1px solid rgba(148, 163, 184, 0.25)',
+                        }}
+                      >
+                        {item.badge}
+                      </span>
+                    ) : isClickable ? (
+                      <span style={{ fontSize: '0.85rem', color: item.color, opacity: 0.8 }}>↗</span>
+                    ) : null}
+                  </div>
+                )
+
+                return isClickable ? (
+                  <a
+                    key={item.name}
+                    href={item.href}
+                    target={item.isExternal ? '_blank' : undefined}
+                    rel={item.isExternal ? 'noopener noreferrer' : undefined}
+                    style={{ textDecoration: 'none' }}
+                  >
+                    {cardContent}
+                  </a>
+                ) : (
+                  <div key={item.name}>{cardContent}</div>
+                )
+              })}
+            </div>
+          </div>
         </div>
-        <div style={{ display: 'flex', gap: 'clamp(1rem, 3vw, 1.5rem)', flexWrap: 'wrap' }}>
-          {['GitHub', 'LinkedIn', 'Kaggle', 'HuggingFace'].map(s => (
-            <a key={s} href="#" style={{ fontFamily: C.body, fontSize: '0.8rem', color: C.muted, textDecoration: 'none', transition: 'color 0.2s' }}
-              onMouseEnter={e => (e.currentTarget.style.color = C.text)}
-              onMouseLeave={e => (e.currentTarget.style.color = C.muted)}
-            >{s}</a>
-          ))}
+
+        {/* Bottom Copyright & Tech Stack Bar */}
+        <div
+          style={{
+            borderTop: '1px solid rgba(255, 255, 255, 0.07)',
+            paddingTop: '1.5rem',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            flexWrap: 'wrap',
+            gap: '1.25rem',
+          }}
+        >
+          {/* Copyright text */}
+          <div>
+            <div style={{ fontFamily: C.mono, fontSize: '0.78rem', color: '#cbd5e1', fontWeight: 500 }}>
+              © {currentYear} Lê Võ Đăng Khoa · Bản quyền đã được bảo lưu (All Rights Reserved)
+            </div>
+            <div style={{ fontFamily: C.body, fontSize: '0.72rem', color: '#64748b', marginTop: '0.2rem' }}>
+              Portfolio Data Science & AI Engineer · Thiết kế tối ưu hiệu năng cao và trải nghiệm người dùng
+            </div>
+          </div>
+
+          {/* Tech badge & Back to top button */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', flexWrap: 'wrap' }}>
+            <span
+              style={{
+                fontFamily: C.mono,
+                fontSize: '0.7rem',
+                color: '#94a3b8',
+                background: 'rgba(255, 255, 255, 0.04)',
+                border: '1px solid rgba(255, 255, 255, 0.08)',
+                padding: '0.3rem 0.7rem',
+                borderRadius: '8px',
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '0.35rem',
+              }}
+            >
+              <span>⚡</span>
+              <span>React 19 · Vite · TypeScript</span>
+            </span>
+
+            <button
+              onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+              className="touch-target"
+              style={{
+                fontFamily: C.mono,
+                fontSize: '0.72rem',
+                color: '#38bdf8',
+                background: 'rgba(56, 189, 248, 0.08)',
+                border: '1px solid rgba(56, 189, 248, 0.25)',
+                padding: '0.3rem 0.75rem',
+                borderRadius: '8px',
+                cursor: 'pointer',
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '0.35rem',
+                transition: 'all 0.2s ease',
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.background = 'rgba(56, 189, 248, 0.18)'
+                e.currentTarget.style.borderColor = 'rgba(56, 189, 248, 0.5)'
+                e.currentTarget.style.transform = 'translate3d(0, -1.5px, 0)'
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.background = 'rgba(56, 189, 248, 0.08)'
+                e.currentTarget.style.borderColor = 'rgba(56, 189, 248, 0.25)'
+                e.currentTarget.style.transform = 'translate3d(0, 0, 0)'
+              }}
+            >
+              <span>Lên đầu trang</span>
+              <span>↑</span>
+            </button>
+          </div>
         </div>
       </div>
     </footer>
@@ -3031,7 +5324,9 @@ export default function App() {
 
   // Unified high-performance scroll & IntersectionObserver manager
   useEffect(() => {
-    // 1. Reveal observer (single observer for entire page)
+    const isMobile = window.innerWidth < 768
+
+    // 1. Reveal observer with adaptive device thresholds
     const revealEls = document.querySelectorAll('.reveal, .reveal-left, .reveal-right, .reveal-scale')
     const revealObs = new IntersectionObserver(
       (entries) => {
@@ -3042,12 +5337,15 @@ export default function App() {
           }
         })
       },
-      { rootMargin: '0px 0px -40px 0px', threshold: 0.12 }
+      {
+        rootMargin: isMobile ? '0px 0px -15px 0px' : '0px 0px -35px 0px',
+        threshold: isMobile ? 0.05 : 0.1,
+      }
     )
     revealEls.forEach((el) => revealObs.observe(el))
 
     // 2. Section spy observer for navbar
-    const sectionIds = ['about', 'projects', 'education', 'certificates', 'contact']
+    const sectionIds = ['about', 'projects', 'leetcode', 'education', 'certificates', 'contact']
     const sectionEls = sectionIds.map(id => document.getElementById(id)).filter(Boolean) as HTMLElement[]
     const sectionObs = new IntersectionObserver(
       (entries) => {
@@ -3057,11 +5355,11 @@ export default function App() {
           }
         })
       },
-      { rootMargin: '-20% 0px -60% 0px', threshold: 0 }
+      { rootMargin: '-18% 0px -55% 0px', threshold: 0 }
     )
     sectionEls.forEach(el => sectionObs.observe(el))
 
-    // 3. Scroll progress & back-to-top button
+    // 3. Ultra-smooth scroll progress & back-to-top button
     let ticking = false
     const onScroll = () => {
       if (!ticking) {
@@ -3069,7 +5367,13 @@ export default function App() {
           const totalHeight = document.documentElement.scrollHeight - window.innerHeight
           const progress = totalHeight > 0 ? (window.scrollY / totalHeight) * 100 : 0
           setScrollProgress(progress)
-          setShowScrollTop(window.scrollY > 320)
+          setShowScrollTop(window.scrollY > 280)
+
+          if (window.scrollY < 120) {
+            setActiveSection('about')
+          } else if (totalHeight > 0 && window.scrollY >= totalHeight - 60) {
+            setActiveSection('contact')
+          }
           ticking = false
         })
         ticking = true
@@ -3093,6 +5397,7 @@ export default function App() {
       <NavBar activeSection={activeSection} />
       <Hero />
       <Projects />
+      <LeetCode />
       <Education />
       <Certificates />
       <Contact />

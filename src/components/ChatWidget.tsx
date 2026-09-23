@@ -20,8 +20,8 @@ const POPUP_GREETINGS = [
     text: 'Tôi là **AI Assistant** của Khoa. Bạn có muốn tìm hiểu về học vấn UTH, kỹ năng hay dự án của Khoa không?',
   },
   {
-    badge: '🚀 Dự án mới',
-    text: 'Khoa vừa phát triển dự án **"Hành Trang Của Mẹ & Góc Nhỏ Của Ba"**. Hỏi tôi để biết thêm chi tiết nhé!',
+    badge: '🚀 Định hướng & Dự án',
+    text: 'Khoa đang tập trung nghiên cứu các dự án **AI, Machine Learning & C++ DSA Engine**. Hỏi tôi để tìm hiểu nhé!',
   },
   {
     badge: '⚡ Trợ lý 24/7',
