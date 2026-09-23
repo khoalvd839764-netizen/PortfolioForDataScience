@@ -67,59 +67,35 @@ export interface LeetCodeProblem {
   title: string
   difficulty: 'Easy' | 'Medium' | 'Hard'
   category?: string
+  submissionUrl?: string
   leetcodeUrl?: string
-  summary?: string
-  approach?: string
-  timeComplexity?: string
-  spaceComplexity?: string
   language?: string
-  code?: string
+  status?: string // 'Accepted' (mặc định)
+  runtime?: string
+  memory?: string
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
-// LINK TRANG CÁ NHÂN LEETCODE (Bạn có thể thay username của bạn vào đây)
+// LINK TRANG CÁ NHÂN LEETCODE CỦA BẠN
 // ─────────────────────────────────────────────────────────────────────────────
 const LEETCODE_PROFILE_URL = 'https://leetcode.com/u/khoalvd839764-netizen/'
 
 // ─────────────────────────────────────────────────────────────────────────────
-// KHU VỰC BÀI GIẢI LEETCODE & THUẬT TOÁN (DSA)
-// 👉 CÁCH 1 (SIÊU NHANH - KHÔNG CẦN VIẾT GÌ CẢ): Chỉ cần Tên bài, Độ khó & Link!
-//    Khi người xem bấm vào bài sẽ tự động mở thẳng bài đó trên LeetCode.
+// KHU VỰC DANH SÁCH BÀI ĐÃ NỘP TRÊN LEETCODE (LEETCODE SUBMISSION TRACKER)
+// 👉 Bạn làm xong bài nào trên LeetCode thì chỉ cần dán link vào đây để người khác check!
+//    Không cần viết code hay giải thích dài dòng gì cả.
 //    Ví dụ:
 //      {
 //        id: 1,
 //        title: 'Two Sum',
 //        difficulty: 'Easy',
-//        leetcodeUrl: 'https://leetcode.com/problems/two-sum/',
-//      }
-//
-// 👉 CÁCH 2 (ĐẦY ĐỦ): Viết thêm lời giải, phân tích độ phức tạp & code nếu muốn!
+//        submissionUrl: 'https://leetcode.com/problems/two-sum/', // hoặc link nộp bài
+//        language: 'C++',
+//        category: 'Array · Hash Table',
+//      },
 // ─────────────────────────────────────────────────────────────────────────────
 const LEETCODE_SOLUTIONS: LeetCodeProblem[] = [
-  /*
-  // Mẫu cách 1: Chỉ cần link, bấm vào là tự động mở trên LeetCode!
-  {
-    id: 1,
-    title: 'Two Sum',
-    difficulty: 'Easy',
-    leetcodeUrl: 'https://leetcode.com/problems/two-sum/',
-    category: 'Array · Hash Table',
-  },
-  {
-    id: 3,
-    title: 'Longest Substring Without Repeating Characters',
-    difficulty: 'Medium',
-    leetcodeUrl: 'https://leetcode.com/problems/longest-substring-without-repeating-characters/',
-    category: 'Sliding Window',
-  },
-  {
-    id: 42,
-    title: 'Trapping Rain Water',
-    difficulty: 'Hard',
-    leetcodeUrl: 'https://leetcode.com/problems/trapping-rain-water/',
-    category: 'Two Pointers',
-  },
-  */
+  // Thêm các bài bạn đã làm xong trên LeetCode vào đây:
 ]
 
 const EDUCATION = [
@@ -1638,126 +1614,43 @@ function Projects() {
   )
 }
 
-/* ─── Sample LeetCode Problems for Preview & Reference ──────────────────── */
+/* ─── Sample LeetCode Solved & Verified Submissions ──────────────────────── */
 const SAMPLE_LEETCODE_PROBLEMS: LeetCodeProblem[] = [
   {
     id: 1,
     title: 'Two Sum',
     difficulty: 'Easy',
     category: 'Array · Hash Table',
-    leetcodeUrl: 'https://leetcode.com/problems/two-sum/',
-    summary: 'Tìm hai phần tử trong mảng nums có tổng bằng giá trị target và trả về chỉ số (indices) của chúng.',
-    approach: 'Sử dụng cấu trúc bảng băm (unordered_map trong C++) để lưu trữ giá trị phần tử và chỉ số tương ứng. Với mỗi phần tử nums[i], tính phần bù complement = target - nums[i]. Nếu complement đã có trong bảng băm, lập tức trả về {seen[complement], i}. Ngược lại, thêm nums[i] vào bảng. Thuật toán duyệt qua mảng đúng 1 lần với độ phức tạp thời gian tối ưu O(n).',
-    timeComplexity: 'O(n)',
-    spaceComplexity: 'O(n)',
+    submissionUrl: 'https://leetcode.com/problems/two-sum/',
     language: 'C++',
-    code: `class Solution {
-public:
-    vector<int> twoSum(vector<int>& nums, int target) {
-        unordered_map<int, int> seen;
-        for (int i = 0; i < (int)nums.size(); ++i) {
-            int complement = target - nums[i];
-            if (seen.find(complement) != seen.end()) {
-                return {seen[complement], i};
-            }
-            seen[nums[i]] = i;
-        }
-        return {};
-    }
-};`,
+    status: 'Accepted',
   },
   {
     id: 20,
     title: 'Valid Parentheses',
     difficulty: 'Easy',
     category: 'String · Stack',
-    leetcodeUrl: 'https://leetcode.com/problems/valid-parentheses/',
-    summary: 'Kiểm tra chuỗi chứa các ký tự ngoặc (), {}, [] có đóng mở hợp lệ theo đúng thứ tự lồng nhau hay không.',
-    approach: 'Sử dụng cấu trúc dữ liệu Ngăn xếp (Stack). Khởi tạo bảng ánh xạ ngoặc đóng sang ngoặc mở tương ứng. Duyệt từng ký tự: nếu là ngoặc đóng, lấy phần tử đỉnh stack ra so sánh xem có khớp không; nếu là ngoặc mở, đẩy vào stack. Sau khi duyệt hết chuỗi, nếu stack rỗng thì chuỗi ngoặc là hợp lệ.',
-    timeComplexity: 'O(n)',
-    spaceComplexity: 'O(n)',
+    submissionUrl: 'https://leetcode.com/problems/valid-parentheses/',
     language: 'Python',
-    code: `class Solution:
-    def isValid(self, s: str) -> bool:
-        bracket_map = {')': '(', '}': '{', ']': '['}
-        stack = []
-        
-        for char in s:
-            if char in bracket_map:
-                top_element = stack.pop() if stack else '#'
-                if bracket_map[char] != top_element:
-                    return False
-            else:
-                stack.append(char)
-                
-        return not stack`,
+    status: 'Accepted',
   },
   {
     id: 3,
     title: 'Longest Substring Without Repeating Characters',
     difficulty: 'Medium',
-    category: 'String · Sliding Window · Hash Set',
-    leetcodeUrl: 'https://leetcode.com/problems/longest-substring-without-repeating-characters/',
-    summary: 'Tìm độ dài của chuỗi con dài nhất không chứa bất kỳ ký tự nào bị lặp lại trong chuỗi s.',
-    approach: 'Áp dụng kỹ thuật Cửa sổ trượt (Sliding Window) kết hợp mảng lưu vị trí xuất hiện gần nhất của ký tự. Duy trì 2 con trỏ left và right. Khi con trỏ right duyệt qua chuỗi, nếu ký tự s[right] đã xuất hiện và vị trí trước đó >= left, ta dịch chuyển con trỏ left sang vị trí lastPos[s[right]] + 1. Ở mỗi bước lặp, độ dài cực đại được cập nhật: maxLen = max(maxLen, right - left + 1).',
-    timeComplexity: 'O(n)',
-    spaceComplexity: 'O(min(n, m))',
+    category: 'Sliding Window · Hash Set',
+    submissionUrl: 'https://leetcode.com/problems/longest-substring-without-repeating-characters/',
     language: 'C++',
-    code: `class Solution {
-public:
-    int lengthOfLongestSubstring(string s) {
-        vector<int> lastPos(256, -1);
-        int maxLen = 0, left = 0;
-        
-        for (int right = 0; right < (int)s.length(); ++right) {
-            if (lastPos[s[right]] >= left) {
-                left = lastPos[s[right]] + 1;
-            }
-            lastPos[s[right]] = right;
-            maxLen = max(maxLen, right - left + 1);
-        }
-        return maxLen;
-    }
-};`,
+    status: 'Accepted',
   },
   {
     id: 42,
     title: 'Trapping Rain Water',
     difficulty: 'Hard',
-    category: 'Array · Two Pointers · Dynamic Programming',
-    leetcodeUrl: 'https://leetcode.com/problems/trapping-rain-water/',
-    summary: 'Cho mảng n số nguyên không âm biểu diễn bản đồ độ cao địa hình, tính tổng lượng nước mưa có thể giữ lại sau cơn mưa.',
-    approach: 'Kỹ thuật Hai con trỏ (Two Pointers) từ 2 đầu mảng (left = 0, right = n - 1). Duy trì hai mốc rào chắn left_max và right_max. Tại mỗi bước, lượng nước đọng luôn bị giới hạn bởi rào chắn thấp hơn giữa hai bên: nếu height[left] < height[right], ta cập nhật left_max và cộng thêm lượng nước (left_max - height[left]), sau đó tăng left++; ngược lại cập nhật right_max, cộng nước và giảm right--. Tiết kiệm bộ nhớ tối đa với không gian phụ O(1).',
-    timeComplexity: 'O(n)',
-    spaceComplexity: 'O(1)',
+    category: 'Array · Two Pointers',
+    submissionUrl: 'https://leetcode.com/problems/trapping-rain-water/',
     language: 'C++',
-    code: `class Solution {
-public:
-    int trap(vector<int>& height) {
-        int left = 0, right = (int)height.size() - 1;
-        int left_max = 0, right_max = 0;
-        int total_water = 0;
-
-        while (left < right) {
-            if (height[left] < height[right]) {
-                if (height[left] >= left_max) {
-                    left_max = height[left];
-                } else {
-                    total_water += left_max - height[left];
-                }
-                left++;
-            } else {
-                if (height[right] >= right_max) {
-                    right_max = height[right];
-                } else {
-                    total_water += right_max - height[right];
-                }
-                right--;
-            }
-        }
-        return total_water;
-    }
-};`,
+    status: 'Accepted',
   },
 ]
 
@@ -1774,546 +1667,28 @@ const getDifficultyColor = (diff: 'Easy' | 'Medium' | 'Hard') => {
   }
 }
 
-/* ─── Interactive LeetCode Detail Cyber Modal ────────────────────────────── */
-function LeetCodeDetailModal({
-  problem,
-  onClose,
-  onSelectProblem,
-  allProblems,
-}: {
-  problem: LeetCodeProblem | null
-  onClose: () => void
-  onSelectProblem: (p: LeetCodeProblem) => void
-  allProblems: LeetCodeProblem[]
-}) {
-  const [copied, setCopied] = useState(false)
-
-  useEffect(() => {
-    if (problem) {
-      document.body.style.overflow = 'hidden'
-    } else {
-      document.body.style.overflow = ''
-    }
-    return () => {
-      document.body.style.overflow = ''
-    }
-  }, [problem])
-
-  useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') onClose()
-    }
-    window.addEventListener('keydown', handleKeyDown)
-    return () => window.removeEventListener('keydown', handleKeyDown)
-  }, [onClose])
-
-  if (!problem) return null
-
+/* ─── Compact LeetCode Solved & Verified Problem Row ─────────────────────── */
+function LeetCodeProblemListItem({ problem }: { problem: LeetCodeProblem }) {
   const diffColor = getDifficultyColor(problem.difficulty)
-  const currentIndex = allProblems.findIndex((p) => p.id === problem.id)
-  const hasPrev = currentIndex > 0
-  const hasNext = currentIndex >= 0 && currentIndex < allProblems.length - 1
+  const targetUrl = problem.submissionUrl || problem.leetcodeUrl || LEETCODE_PROFILE_URL
 
-  const handleCopy = () => {
-    navigator.clipboard.writeText(problem.code)
-    setCopied(true)
-    setTimeout(() => setCopied(false), 2200)
+  const handleOpen = () => {
+    window.open(targetUrl, '_blank', 'noopener,noreferrer')
   }
 
   return (
     <div
-      style={{
-        position: 'fixed',
-        inset: 0,
-        zIndex: 9999,
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        padding: 'clamp(0.75rem, 3vw, 1.5rem)',
-        background: 'rgba(3, 7, 18, 0.88)',
-        backdropFilter: 'blur(20px) saturate(180%)',
-        WebkitBackdropFilter: 'blur(20px) saturate(180%)',
-        animation: 'fadeInBackdrop 0.25s ease-out',
-      }}
-      onClick={onClose}
-    >
-      <div
-        style={{
-          position: 'relative',
-          width: '100%',
-          maxWidth: 920,
-          maxHeight: '92vh',
-          overflowY: 'auto',
-          background: 'linear-gradient(180deg, rgba(15, 23, 42, 0.98) 0%, rgba(10, 15, 30, 0.99) 100%)',
-          border: `1px solid ${diffColor}55`,
-          borderRadius: 24,
-          boxShadow: `0 25px 60px rgba(0,0,0,0.8), 0 0 45px ${diffColor}25`,
-          padding: 'clamp(1.2rem, 3.5vw, 2.25rem)',
-          animation: 'chatAppear 0.3s cubic-bezier(0.16, 1, 0.3, 1)',
-        }}
-        onClick={(e) => e.stopPropagation()}
-      >
-        {/* Top Header Bar */}
-        <div
-          style={{
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-            borderBottom: '1px solid rgba(255, 255, 255, 0.08)',
-            paddingBottom: '1rem',
-            marginBottom: '1.25rem',
-            flexWrap: 'wrap',
-            gap: '0.75rem',
-          }}
-        >
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.65rem' }}>
-            <span
-              className="beacon-pulse"
-              style={{
-                width: 9,
-                height: 9,
-                borderRadius: '50%',
-                background: diffColor,
-                display: 'inline-block',
-                boxShadow: `0 0 10px ${diffColor}`,
-              }}
-            />
-            <div>
-              <div
-                style={{
-                  fontFamily: C.mono,
-                  fontSize: '0.7rem',
-                  letterSpacing: '0.12em',
-                  color: diffColor,
-                  fontWeight: 700,
-                  textTransform: 'uppercase',
-                }}
-              >
-                // LEETCODE SOLUTION DETAILS
-              </div>
-              <h2
-                style={{
-                  fontFamily: C.display,
-                  fontSize: 'clamp(1.2rem, 3vw, 1.55rem)',
-                  fontWeight: 800,
-                  color: '#ffffff',
-                  letterSpacing: '-0.02em',
-                  margin: '0.15rem 0 0',
-                }}
-              >
-                #{problem.id}. {problem.title}
-              </h2>
-            </div>
-          </div>
-
-          {/* Action Links & Close */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-            {problem.leetcodeUrl && (
-              <a
-                href={problem.leetcodeUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="touch-target"
-                style={{
-                  display: 'inline-flex',
-                  alignItems: 'center',
-                  gap: '0.35rem',
-                  background: 'rgba(251, 146, 60, 0.12)',
-                  border: '1px solid rgba(251, 146, 60, 0.35)',
-                  color: '#fb923c',
-                  borderRadius: 10,
-                  padding: '0.45rem 0.85rem',
-                  fontSize: '0.78rem',
-                  fontFamily: C.mono,
-                  fontWeight: 600,
-                  textDecoration: 'none',
-                  transition: 'all 0.2s',
-                }}
-              >
-                <span>Mở trên LeetCode</span>
-                <span>↗</span>
-              </a>
-            )}
-
-            <button
-              onClick={onClose}
-              aria-label="Đóng chi tiết"
-              style={{
-                width: 36,
-                height: 36,
-                borderRadius: 10,
-                background: 'rgba(255, 255, 255, 0.06)',
-                border: `1px solid ${C.border}`,
-                color: '#94a3b8',
-                fontSize: '1.1rem',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                cursor: 'pointer',
-                transition: 'all 0.2s',
-              }}
-            >
-              ✕
-            </button>
-          </div>
-        </div>
-
-        {/* Badges Strip */}
-        <div
-          style={{
-            display: 'flex',
-            flexWrap: 'wrap',
-            gap: '0.5rem',
-            alignItems: 'center',
-            marginBottom: '1.25rem',
-          }}
-        >
-          {/* Difficulty badge */}
-          <span
-            style={{
-              fontFamily: C.mono,
-              fontSize: '0.74rem',
-              fontWeight: 700,
-              padding: '0.25rem 0.75rem',
-              borderRadius: 999,
-              color: diffColor,
-              background: `${diffColor}18`,
-              border: `1px solid ${diffColor}45`,
-              boxShadow: `0 0 12px ${diffColor}22`,
-            }}
-          >
-            ● {problem.difficulty}
-          </span>
-
-          {/* Category */}
-          <span
-            style={{
-              fontFamily: C.mono,
-              fontSize: '0.74rem',
-              color: '#cbd5e1',
-              background: 'rgba(255, 255, 255, 0.05)',
-              border: `1px solid ${C.border}`,
-              padding: '0.25rem 0.75rem',
-              borderRadius: 999,
-            }}
-          >
-            🗂️ {problem.category}
-          </span>
-
-          {/* Language */}
-          <span
-            style={{
-              fontFamily: C.mono,
-              fontSize: '0.74rem',
-              color: '#38bdf8',
-              background: 'rgba(56, 189, 248, 0.1)',
-              border: '1px solid rgba(56, 189, 248, 0.3)',
-              padding: '0.25rem 0.75rem',
-              borderRadius: 999,
-            }}
-          >
-            ⚡ {problem.language}
-          </span>
-
-          {/* Time Complexity */}
-          {problem.timeComplexity && (
-            <span
-              style={{
-                fontFamily: C.mono,
-                fontSize: '0.74rem',
-                color: '#4ade80',
-                background: 'rgba(74, 222, 128, 0.08)',
-                border: '1px solid rgba(74, 222, 128, 0.25)',
-                padding: '0.25rem 0.75rem',
-                borderRadius: 999,
-              }}
-            >
-              ⏱️ Time: {problem.timeComplexity}
-            </span>
-          )}
-
-          {/* Space Complexity */}
-          {problem.spaceComplexity && (
-            <span
-              style={{
-                fontFamily: C.mono,
-                fontSize: '0.74rem',
-                color: '#c084fc',
-                background: 'rgba(192, 132, 252, 0.08)',
-                border: '1px solid rgba(192, 132, 252, 0.25)',
-                padding: '0.25rem 0.75rem',
-                borderRadius: 999,
-              }}
-            >
-              💾 Space: {problem.spaceComplexity}
-            </span>
-          )}
-        </div>
-
-        {/* Summary Description Box */}
-        {problem.summary && (
-          <div
-            style={{
-              background: 'rgba(255, 255, 255, 0.025)',
-              border: '1px solid rgba(255, 255, 255, 0.06)',
-              borderRadius: 14,
-              padding: '0.9rem 1.25rem',
-              marginBottom: '1rem',
-            }}
-          >
-            <div
-              style={{
-                fontFamily: C.mono,
-                fontSize: '0.7rem',
-                fontWeight: 700,
-                color: '#94a3b8',
-                letterSpacing: '0.08em',
-                marginBottom: '0.35rem',
-                textTransform: 'uppercase',
-              }}
-            >
-              📌 Đề bài tóm tắt:
-            </div>
-            <p
-              style={{
-                fontFamily: C.body,
-                color: '#e2e8f0',
-                fontSize: '0.9rem',
-                lineHeight: 1.65,
-                margin: 0,
-              }}
-            >
-              {problem.summary}
-            </p>
-          </div>
-        )}
-
-        {/* Approach / Solution Thought Process */}
-        <div
-          style={{
-            background: 'linear-gradient(165deg, rgba(251, 146, 60, 0.05) 0%, rgba(15, 23, 42, 0.7) 100%)',
-            border: '1px solid rgba(251, 146, 60, 0.25)',
-            borderRadius: 14,
-            padding: '1.1rem 1.35rem',
-            marginBottom: '1.25rem',
-          }}
-        >
-          <div
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: '0.5rem',
-              fontFamily: C.mono,
-              fontSize: '0.74rem',
-              fontWeight: 700,
-              color: '#fbbf24',
-              letterSpacing: '0.06em',
-              marginBottom: '0.5rem',
-            }}
-          >
-            <span>💡</span>
-            <span>Ý TƯỞNG & PHƯƠNG PHÁP GIẢI QUYẾT:</span>
-          </div>
-          <p
-            style={{
-              fontFamily: C.body,
-              color: '#d1d5db',
-              fontSize: '0.9rem',
-              lineHeight: 1.7,
-              margin: 0,
-            }}
-          >
-            {problem.approach}
-          </p>
-        </div>
-
-        {/* Source Code Container */}
-        <div
-          style={{
-            borderRadius: 14,
-            border: '1px solid rgba(99, 102, 241, 0.35)',
-            background: 'rgba(5, 8, 15, 0.95)',
-            overflow: 'hidden',
-            marginBottom: '1.4rem',
-          }}
-        >
-          {/* Code Window Header */}
-          <div
-            style={{
-              display: 'flex',
-              justifyContent: 'space-between',
-              alignItems: 'center',
-              padding: '0.65rem 1rem',
-              background: 'rgba(255, 255, 255, 0.04)',
-              borderBottom: '1px solid rgba(255, 255, 255, 0.08)',
-            }}
-          >
-            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-              <span style={{ width: 9, height: 9, borderRadius: '50%', background: '#ef4444' }} />
-              <span style={{ width: 9, height: 9, borderRadius: '50%', background: '#f59e0b' }} />
-              <span style={{ width: 9, height: 9, borderRadius: '50%', background: '#10b981' }} />
-              <span
-                style={{
-                  fontFamily: C.mono,
-                  fontSize: '0.74rem',
-                  color: '#94a3b8',
-                  marginLeft: '0.45rem',
-                }}
-              >
-                solution.{problem.language === 'Python' ? 'py' : 'cpp'}
-              </span>
-            </div>
-
-            <button
-              onClick={handleCopy}
-              className="touch-target"
-              style={{
-                fontFamily: C.mono,
-                fontSize: '0.74rem',
-                fontWeight: 600,
-                background: copied ? 'rgba(34, 197, 94, 0.22)' : 'rgba(255, 255, 255, 0.06)',
-                border: `1px solid ${copied ? 'rgba(34, 197, 94, 0.55)' : 'rgba(255, 255, 255, 0.12)'}`,
-                color: copied ? '#4ade80' : '#cbd5e1',
-                padding: '0.3rem 0.75rem',
-                borderRadius: 8,
-                cursor: 'pointer',
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: '0.35rem',
-                transition: 'all 0.2s',
-              }}
-            >
-              <span>{copied ? '✓ Đã sao chép' : '📋 Sao chép code'}</span>
-            </button>
-          </div>
-
-          {/* Code Body */}
-          <pre
-            style={{
-              margin: 0,
-              padding: '1.25rem',
-              overflowX: 'auto',
-              fontFamily: C.mono,
-              fontSize: '0.84rem',
-              lineHeight: 1.65,
-              color: '#e2e8f0',
-              maxHeight: '380px',
-            }}
-          >
-            <code>{problem.code}</code>
-          </pre>
-        </div>
-
-        {/* Modal Bottom Navigation */}
-        <div
-          style={{
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-            borderTop: '1px solid rgba(255, 255, 255, 0.08)',
-            paddingTop: '1rem',
-            flexWrap: 'wrap',
-            gap: '0.75rem',
-          }}
-        >
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-            <button
-              disabled={!hasPrev}
-              onClick={() => hasPrev && onSelectProblem(allProblems[currentIndex - 1])}
-              style={{
-                fontFamily: C.mono,
-                fontSize: '0.78rem',
-                padding: '0.4rem 0.85rem',
-                borderRadius: 8,
-                background: hasPrev ? 'rgba(255, 255, 255, 0.05)' : 'transparent',
-                border: `1px solid ${hasPrev ? 'rgba(255, 255, 255, 0.15)' : 'rgba(255, 255, 255, 0.05)'}`,
-                color: hasPrev ? '#cbd5e1' : '#475569',
-                cursor: hasPrev ? 'pointer' : 'not-allowed',
-                transition: 'all 0.2s',
-              }}
-            >
-              ‹ Bài trước
-            </button>
-
-            <span style={{ fontFamily: C.mono, fontSize: '0.74rem', color: '#64748b' }}>
-              {currentIndex + 1} / {allProblems.length}
-            </span>
-
-            <button
-              disabled={!hasNext}
-              onClick={() => hasNext && onSelectProblem(allProblems[currentIndex + 1])}
-              style={{
-                fontFamily: C.mono,
-                fontSize: '0.78rem',
-                padding: '0.4rem 0.85rem',
-                borderRadius: 8,
-                background: hasNext ? 'rgba(255, 255, 255, 0.05)' : 'transparent',
-                border: `1px solid ${hasNext ? 'rgba(255, 255, 255, 0.15)' : 'rgba(255, 255, 255, 0.05)'}`,
-                color: hasNext ? '#cbd5e1' : '#475569',
-                cursor: hasNext ? 'pointer' : 'not-allowed',
-                transition: 'all 0.2s',
-              }}
-            >
-              Bài tiếp theo ›
-            </button>
-          </div>
-
-          <button
-            onClick={onClose}
-            className="touch-target"
-            style={{
-              fontFamily: C.body,
-              fontSize: '0.85rem',
-              fontWeight: 600,
-              padding: '0.45rem 1.25rem',
-              borderRadius: 10,
-              background: 'rgba(255, 255, 255, 0.06)',
-              border: `1px solid ${C.border}`,
-              color: '#cbd5e1',
-              cursor: 'pointer',
-              transition: 'all 0.2s',
-            }}
-          >
-            Đóng cửa sổ
-          </button>
-        </div>
-      </div>
-    </div>
-  )
-}
-
-/* ─── Compact LeetCode Problem List Row ──────────────────────────────────── */
-function LeetCodeProblemListItem({
-  problem,
-  onClick,
-}: {
-  problem: LeetCodeProblem
-  onClick: () => void
-}) {
-  const diffColor = getDifficultyColor(problem.difficulty)
-  const hasDetailedSolution = Boolean(problem.code || problem.approach)
-
-  const handleRowClick = () => {
-    if (hasDetailedSolution) {
-      onClick()
-    } else if (problem.leetcodeUrl) {
-      window.open(problem.leetcodeUrl, '_blank', 'noopener,noreferrer')
-    }
-  }
-
-  return (
-    <div
-      onClick={handleRowClick}
+      onClick={handleOpen}
       className="glass-card"
       style={{
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'space-between',
-        padding: '0.9rem clamp(0.9rem, 2.5vw, 1.35rem)',
+        padding: '0.85rem clamp(0.85rem, 2.5vw, 1.35rem)',
         borderRadius: 14,
         borderLeft: `4px solid ${diffColor}`,
         cursor: 'pointer',
-        transition: 'all 0.25s cubic-bezier(0.16, 1, 0.3, 1)',
+        transition: 'all 0.22s cubic-bezier(0.16, 1, 0.3, 1)',
         gap: '0.9rem',
         flexWrap: 'wrap',
       }}
@@ -2328,14 +1703,14 @@ function LeetCodeProblemListItem({
         e.currentTarget.style.background = 'rgba(11, 17, 32, 0.72)'
       }}
     >
-      {/* Left: ID & Title & Topic */}
+      {/* Left: ID, Title & Topic */}
       <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', minWidth: 0, flex: '1 1 280px' }}>
         {problem.id !== undefined && (
           <span
             style={{
               fontFamily: C.mono,
               fontWeight: 800,
-              fontSize: '0.85rem',
+              fontSize: '0.82rem',
               color: '#38bdf8',
               background: 'rgba(56, 189, 248, 0.1)',
               border: '1px solid rgba(56, 189, 248, 0.25)',
@@ -2379,16 +1754,37 @@ function LeetCodeProblemListItem({
         </div>
       </div>
 
-      {/* Right: Badges & Action */}
+      {/* Right: Badges & Direct Check Button */}
       <div
         style={{
           display: 'flex',
           alignItems: 'center',
-          gap: '0.65rem',
+          gap: '0.55rem',
           flexWrap: 'wrap',
           justifyContent: 'flex-end',
         }}
       >
+        {/* Accepted Badge */}
+        <span
+          style={{
+            fontFamily: C.mono,
+            fontSize: '0.72rem',
+            fontWeight: 700,
+            color: '#4ade80',
+            background: 'rgba(34, 197, 94, 0.12)',
+            border: '1px solid rgba(34, 197, 94, 0.35)',
+            padding: '0.22rem 0.6rem',
+            borderRadius: 999,
+            display: 'inline-flex',
+            alignItems: 'center',
+            gap: '0.25rem',
+            whiteSpace: 'nowrap',
+          }}
+        >
+          <span>✓</span>
+          <span>{problem.status || 'Accepted'}</span>
+        </span>
+
         {/* Difficulty Pill */}
         <span
           style={{
@@ -2406,7 +1802,7 @@ function LeetCodeProblemListItem({
           ● {problem.difficulty}
         </span>
 
-        {/* Language Badge (if provided) */}
+        {/* Language Badge */}
         {problem.language && (
           <span
             style={{
@@ -2420,83 +1816,48 @@ function LeetCodeProblemListItem({
               whiteSpace: 'nowrap',
             }}
           >
-            {problem.language}
+            ⚡ {problem.language}
           </span>
         )}
 
-        {/* Complexity Summary (if provided) */}
-        {problem.timeComplexity && (
-          <span
-            style={{
-              fontFamily: C.mono,
-              fontSize: '0.7rem',
-              color: '#94a3b8',
-              background: 'rgba(255, 255, 255, 0.03)',
-              padding: '0.2rem 0.5rem',
-              borderRadius: 6,
-              whiteSpace: 'nowrap',
-            }}
-          >
-            ⏱️ {problem.timeComplexity}
-          </span>
-        )}
-
-        {/* CTA Button: View Detail or Open Directly on LeetCode */}
-        {hasDetailedSolution ? (
-          <div
-            style={{
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: '0.35rem',
-              fontFamily: C.mono,
-              fontSize: '0.76rem',
-              fontWeight: 600,
-              color: '#38bdf8',
-              background: 'rgba(56, 189, 248, 0.1)',
-              border: '1px solid rgba(56, 189, 248, 0.28)',
-              padding: '0.35rem 0.8rem',
-              borderRadius: 8,
-              marginLeft: '0.2rem',
-            }}
-          >
-            <span>Xem lời giải</span>
-            <span>›</span>
-          </div>
-        ) : problem.leetcodeUrl ? (
-          <a
-            href={problem.leetcodeUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            onClick={(e) => e.stopPropagation()}
-            style={{
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: '0.35rem',
-              fontFamily: C.mono,
-              fontSize: '0.76rem',
-              fontWeight: 600,
-              color: '#fb923c',
-              background: 'rgba(251, 146, 60, 0.12)',
-              border: '1px solid rgba(251, 146, 60, 0.35)',
-              padding: '0.35rem 0.8rem',
-              borderRadius: 8,
-              textDecoration: 'none',
-              marginLeft: '0.2rem',
-              transition: 'all 0.2s',
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.background = 'rgba(251, 146, 60, 0.22)'
-              e.currentTarget.style.borderColor = 'rgba(251, 146, 60, 0.6)'
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.background = 'rgba(251, 146, 60, 0.12)'
-              e.currentTarget.style.borderColor = 'rgba(251, 146, 60, 0.35)'
-            }}
-          >
-            <span>Mở trên LeetCode</span>
-            <span>↗</span>
-          </a>
-        ) : null}
+        {/* Direct Check Link Button */}
+        <a
+          href={targetUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          onClick={(e) => e.stopPropagation()}
+          className="touch-target"
+          style={{
+            display: 'inline-flex',
+            alignItems: 'center',
+            gap: '0.35rem',
+            fontFamily: C.mono,
+            fontSize: '0.76rem',
+            fontWeight: 700,
+            color: '#fb923c',
+            background: 'rgba(251, 146, 60, 0.14)',
+            border: '1px solid rgba(251, 146, 60, 0.45)',
+            padding: '0.35rem 0.85rem',
+            borderRadius: 8,
+            textDecoration: 'none',
+            marginLeft: '0.2rem',
+            transition: 'all 0.2s',
+            boxShadow: '0 0 10px rgba(251, 146, 60, 0.15)',
+          }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.background = 'rgba(251, 146, 60, 0.25)'
+            e.currentTarget.style.borderColor = 'rgba(251, 146, 60, 0.8)'
+            e.currentTarget.style.boxShadow = '0 0 16px rgba(251, 146, 60, 0.35)'
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.background = 'rgba(251, 146, 60, 0.14)'
+            e.currentTarget.style.borderColor = 'rgba(251, 146, 60, 0.45)'
+            e.currentTarget.style.boxShadow = '0 0 10px rgba(251, 146, 60, 0.15)'
+          }}
+        >
+          <span>Check bài nộp</span>
+          <span>↗</span>
+        </a>
       </div>
     </div>
   )
@@ -2506,7 +1867,6 @@ function LeetCodeProblemListItem({
 function LeetCode() {
   const [filter, setFilter] = useState<'All' | 'Easy' | 'Medium' | 'Hard'>('All')
   const [search, setSearch] = useState('')
-  const [activeProblem, setActiveProblem] = useState<LeetCodeProblem | null>(null)
 
   const hasCustomSolutions = LEETCODE_SOLUTIONS.length > 0
   const [dataSource, setDataSource] = useState<'custom' | 'sample'>(hasCustomSolutions ? 'custom' : 'sample')
@@ -2530,9 +1890,9 @@ function LeetCode() {
       const matchSearch =
         q === '' ||
         p.title.toLowerCase().includes(q) ||
-        p.category.toLowerCase().includes(q) ||
-        p.language.toLowerCase().includes(q) ||
-        String(p.id).includes(q.replace('#', ''))
+        (p.category && p.category.toLowerCase().includes(q)) ||
+        (p.language && p.language.toLowerCase().includes(q)) ||
+        (p.id !== undefined && String(p.id).includes(q.replace('#', '')))
       return matchDiff && matchSearch
     })
   }, [currentDataset, filter, search])
@@ -2572,9 +1932,9 @@ function LeetCode() {
 
       <div className="responsive-container" style={{ position: 'relative', zIndex: 1 }}>
         <SectionHeader
-          label="// LEETCODE & PROBLEM SOLVING"
+          label="// LEETCODE & DSA SUBMISSIONS"
           title="LeetCode & Thuật toán"
-          sub="Danh mục các bài toán thuật toán được phân loại theo độ khó (Easy · Medium · Hard). Nhấp vào từng bài để xem chi tiết cách giải, phân tích độ phức tạp và mã nguồn C++ / Python."
+          sub="Danh mục các bài toán LeetCode đã hoàn thành và nộp bài thành công (Accepted). Nhấp vào bài bất kỳ để kiểm tra bài nộp và kết quả chấm trực tiếp trên hệ thống LeetCode."
           accent="#fb923c"
         />
 
@@ -2599,13 +1959,13 @@ function LeetCode() {
             <div>
               <div style={{ fontFamily: C.body, fontSize: '0.86rem', color: '#f1f5f9', fontWeight: 600 }}>
                 {dataSource === 'sample'
-                  ? 'Đang xem danh mục mẫu tham khảo (Easy · Medium · Hard)'
-                  : `Đang xem danh mục của bạn (${LEETCODE_SOLUTIONS.length} bài giải)`}
+                  ? 'Đang xem danh sách mẫu tham khảo (Easy · Medium · Hard)'
+                  : `Đang xem danh sách bài nộp của bạn (${LEETCODE_SOLUTIONS.length} bài)`}
               </div>
               <div style={{ fontFamily: C.mono, fontSize: '0.72rem', color: '#94a3b8', marginTop: '0.15rem' }}>
                 {dataSource === 'sample'
-                  ? 'Bạn có thể tự cập nhật các bài giải của mình vào mảng LEETCODE_SOLUTIONS trong file App.tsx bất kỳ lúc nào.'
-                  : 'Mã nguồn được đồng bộ từ mảng dữ liệu cá nhân của bạn.'}
+                  ? 'Bạn làm xong bài nào trên LeetCode chỉ cần dán link vào mảng LEETCODE_SOLUTIONS trong file src/App.tsx.'
+                  : 'Mỗi bài nộp đều có thể nhấp vào để kiểm tra lời giải và trạng thái Accepted trực tiếp trên LeetCode.'}
               </div>
             </div>
           </div>
@@ -2677,7 +2037,7 @@ function LeetCode() {
                 e.currentTarget.style.boxShadow = '0 0 12px rgba(251, 146, 60, 0.2)'
               }}
             >
-              <span>Hồ sơ LeetCode</span>
+              <span>Hồ sơ LeetCode chính thức</span>
               <span>↗</span>
             </a>
           </div>
@@ -2910,15 +2270,15 @@ function LeetCode() {
               borderRadius: 20,
               padding: '3rem 1.5rem',
               textAlign: 'center',
-              border: '1px dashed rgba(99, 102, 241, 0.4)',
+              border: '1px dashed rgba(251, 146, 60, 0.4)',
             }}
           >
-            <div style={{ fontSize: '2.5rem', marginBottom: '0.85rem' }}>📂</div>
+            <div style={{ fontSize: '2.5rem', marginBottom: '0.85rem' }}>🎯</div>
             <h3 style={{ fontFamily: C.display, fontSize: '1.25rem', fontWeight: 700, color: '#fff', marginBottom: '0.5rem' }}>
-              Danh sách cá nhân của bạn hiện đang để trống
+              Danh sách bài nộp của bạn hiện đang để trống
             </h3>
-            <p style={{ fontFamily: C.body, color: '#94a3b8', fontSize: '0.9rem', maxWidth: 500, margin: '0 auto 1.5rem', lineHeight: 1.6 }}>
-              Khu vực đã được thiết kế sẵn sàng. Bạn chỉ cần thêm các bài toán vào mảng <code>LEETCODE_SOLUTIONS</code> trong file <code>src/App.tsx</code> để hiển thị!
+            <p style={{ fontFamily: C.body, color: '#94a3b8', fontSize: '0.9rem', maxWidth: 540, margin: '0 auto 1.5rem', lineHeight: 1.6 }}>
+              Làm xong bài nào trên LeetCode, bạn chỉ cần mở file <code>src/App.tsx</code> và dán link vào mảng <code>LEETCODE_SOLUTIONS</code> để người khác click vào kiểm tra bài nộp ngay!
             </p>
             <button
               onClick={() => setDataSource('sample')}
@@ -2935,7 +2295,7 @@ function LeetCode() {
                 boxShadow: '0 4px 16px rgba(251, 146, 60, 0.4)',
               }}
             >
-              Xem danh sách bài mẫu (4 bài giải) ➔
+              Xem danh sách bài mẫu demo ➔
             </button>
           </div>
         ) : filteredProblems.length === 0 ? (
@@ -3020,9 +2380,8 @@ function LeetCode() {
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '0.65rem' }}>
                   {easyGroup.map((problem) => (
                     <LeetCodeProblemListItem
-                      key={problem.id}
+                      key={problem.id !== undefined ? problem.id : problem.title}
                       problem={problem}
-                      onClick={() => setActiveProblem(problem)}
                     />
                   ))}
                 </div>
@@ -3074,9 +2433,8 @@ function LeetCode() {
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '0.65rem' }}>
                   {mediumGroup.map((problem) => (
                     <LeetCodeProblemListItem
-                      key={problem.id}
+                      key={problem.id !== undefined ? problem.id : problem.title}
                       problem={problem}
-                      onClick={() => setActiveProblem(problem)}
                     />
                   ))}
                 </div>
@@ -3128,9 +2486,8 @@ function LeetCode() {
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '0.65rem' }}>
                   {hardGroup.map((problem) => (
                     <LeetCodeProblemListItem
-                      key={problem.id}
+                      key={problem.id !== undefined ? problem.id : problem.title}
                       problem={problem}
-                      onClick={() => setActiveProblem(problem)}
                     />
                   ))}
                 </div>
@@ -3142,24 +2499,13 @@ function LeetCode() {
           <div className="reveal" style={{ display: 'flex', flexDirection: 'column', gap: '0.65rem' }}>
             {filteredProblems.map((problem) => (
               <LeetCodeProblemListItem
-                key={problem.id}
+                key={problem.id !== undefined ? problem.id : problem.title}
                 problem={problem}
-                onClick={() => setActiveProblem(problem)}
               />
             ))}
           </div>
         )}
       </div>
-
-      {/* ─── Interactive Cyber Detail Modal ─── */}
-      {activeProblem && (
-        <LeetCodeDetailModal
-          problem={activeProblem}
-          onClose={() => setActiveProblem(null)}
-          onSelectProblem={(p) => setActiveProblem(p)}
-          allProblems={filteredProblems}
-        />
-      )}
     </section>
   )
 }
