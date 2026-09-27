@@ -1940,231 +1940,272 @@ function LeetCode() {
       <div className="responsive-container" style={{ position: 'relative', zIndex: 1 }}>
         <SectionHeader
           label="// LEETCODE & PROBLEM SOLVING"
-          title="LeetCode & Thuật toán"
-          sub={
-            LEETCODE_COMING_SOON
-              ? 'Khu vực theo dõi và kiểm tra các bài giải thuật toán LeetCode đang được chuẩn bị và sẽ sớm ra mắt.'
-              : 'Danh mục các bài toán LeetCode đã hoàn thành và nộp bài thành công (Accepted). Nhấp vào bài bất kỳ để kiểm tra bài nộp và kết quả chấm trực tiếp trên hệ thống LeetCode.'
-          }
+          title="Hồ Sơ LeetCode Trực Tiếp"
+          sub="Hồ sơ và thống kê giải thuật toán LeetCode chính thức của Lê Võ Đăng Khoa (@khoalvd839764-netizen) được hiển thị và đồng bộ theo thời gian thực."
           accent="#fb923c"
         />
 
-        {LEETCODE_COMING_SOON ? (
-          /* ─── Coming Soon Display ─── */
+        {/* ─── Live LeetCode Profile Browser Window Showcase ─── */}
+        <div
+          className="reveal glass-card"
+          style={{
+            position: 'relative',
+            borderRadius: 24,
+            border: '1px solid rgba(251, 146, 60, 0.35)',
+            background: 'linear-gradient(180deg, rgba(15, 23, 42, 0.95) 0%, rgba(10, 15, 30, 0.98) 100%)',
+            boxShadow: '0 25px 60px rgba(0,0,0,0.65), 0 0 40px rgba(251, 146, 60, 0.15)',
+            overflow: 'hidden',
+            maxWidth: 820,
+            margin: '0 auto 2.5rem',
+          }}
+        >
+          {/* Cyber Browser Header Bar */}
           <div
-            className="reveal glass-card"
             style={{
-              position: 'relative',
-              borderRadius: 24,
-              padding: 'clamp(2.5rem, 5vw, 4rem) clamp(1.2rem, 4vw, 2.5rem)',
-              textAlign: 'center',
-              border: '1px solid rgba(251, 146, 60, 0.32)',
-              background: 'linear-gradient(180deg, rgba(251, 146, 60, 0.07) 0%, rgba(11, 17, 32, 0.88) 100%)',
-              boxShadow: '0 20px 50px rgba(0,0,0,0.5), 0 0 35px rgba(251, 146, 60, 0.12)',
-              overflow: 'hidden',
-              maxWidth: 860,
-              margin: '0 auto',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              padding: '0.8rem 1.25rem',
+              background: 'rgba(255, 255, 255, 0.035)',
+              borderBottom: '1px solid rgba(255, 255, 255, 0.08)',
+              flexWrap: 'wrap',
+              gap: '0.65rem',
             }}
           >
-            {/* Ambient Glow Orb */}
+            {/* Traffic Lights */}
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.45rem' }}>
+              <span style={{ width: 11, height: 11, borderRadius: '50%', background: '#ef4444', display: 'inline-block' }} />
+              <span style={{ width: 11, height: 11, borderRadius: '50%', background: '#f59e0b', display: 'inline-block' }} />
+              <span style={{ width: 11, height: 11, borderRadius: '50%', background: '#10b981', display: 'inline-block' }} />
+            </div>
+
+            {/* Simulated Secure Address Bar */}
             <div
               style={{
-                position: 'absolute',
-                top: '-25%',
-                left: '50%',
-                transform: 'translateX(-50%)',
-                width: 340,
-                height: 220,
-                background: 'radial-gradient(circle, rgba(251, 146, 60, 0.22) 0%, transparent 70%)',
-                pointerEvents: 'none',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '0.45rem',
+                background: 'rgba(0, 0, 0, 0.45)',
+                border: '1px solid rgba(255, 255, 255, 0.1)',
+                padding: '0.3rem 0.85rem',
+                borderRadius: 8,
+                fontSize: '0.76rem',
+                fontFamily: C.mono,
+                color: '#cbd5e1',
+                maxWidth: 'min(100%, 380px)',
+                overflow: 'hidden',
+                textOverflow: 'ellipsis',
+                whiteSpace: 'nowrap',
               }}
-            />
+            >
+              <span style={{ color: '#10b981' }}>🔒</span>
+              <span>https://leetcode.com/u/khoalvd839764-netizen/</span>
+            </div>
 
-            {/* Badge: COMING SOON */}
-            <div style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem', marginBottom: '1.25rem' }}>
+            {/* Live Indicator Badge */}
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.45rem' }}>
+              <span
+                className="beacon-pulse"
+                style={{
+                  width: 8,
+                  height: 8,
+                  borderRadius: '50%',
+                  background: '#10b981',
+                  boxShadow: '0 0 10px #10b981',
+                }}
+              />
               <span
                 style={{
                   fontFamily: C.mono,
-                  fontSize: '0.75rem',
+                  fontSize: '0.7rem',
                   fontWeight: 700,
-                  letterSpacing: '0.12em',
+                  color: '#4ade80',
+                  letterSpacing: '0.08em',
                   textTransform: 'uppercase',
-                  color: '#fb923c',
-                  background: 'rgba(251, 146, 60, 0.15)',
-                  border: '1px solid rgba(251, 146, 60, 0.45)',
-                  padding: '0.35rem 0.95rem',
-                  borderRadius: 999,
-                  boxShadow: '0 0 16px rgba(251, 146, 60, 0.25)',
-                  display: 'inline-flex',
-                  alignItems: 'center',
-                  gap: '0.45rem',
                 }}
               >
-                <span
-                  className="beacon-pulse"
-                  style={{
-                    width: 7,
-                    height: 7,
-                    borderRadius: '50%',
-                    background: '#fb923c',
-                    boxShadow: '0 0 8px #fb923c',
-                  }}
-                />
-                COMING SOON · ĐANG CẬP NHẬT
+                LIVE PROFILE SYNC
               </span>
             </div>
+          </div>
 
-            {/* Icon Graphic */}
+          {/* Browser Body with Live LeetCard SVG */}
+          <div
+            style={{
+              padding: 'clamp(1.2rem, 3.5vw, 2rem)',
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              background: 'radial-gradient(ellipse at 50% 0%, rgba(251, 146, 60, 0.08) 0%, transparent 70%)',
+            }}
+          >
+            {/* Live SVG Card */}
             <div
               style={{
-                width: 76,
-                height: 76,
-                margin: '0 auto 1.25rem',
-                borderRadius: 22,
-                background: 'linear-gradient(135deg, rgba(251, 146, 60, 0.22) 0%, rgba(234, 88, 12, 0.1) 100%)',
-                border: '1px solid rgba(251, 146, 60, 0.45)',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                fontSize: '2.3rem',
-                boxShadow: '0 0 25px rgba(251, 146, 60, 0.28)',
-              }}
-            >
-              ⚡
-            </div>
-
-            {/* Main Title */}
-            <h3
-              style={{
-                fontFamily: C.display,
-                fontSize: 'clamp(1.4rem, 3.2vw, 1.95rem)',
-                fontWeight: 800,
-                color: '#ffffff',
-                letterSpacing: '-0.02em',
-                marginBottom: '0.85rem',
-                lineHeight: 1.3,
-              }}
-            >
-              Hệ Thống LeetCode Submission Tracker Sắp Ra Mắt
-            </h3>
-
-            {/* Subtitle Description */}
-            <p
-              style={{
-                fontFamily: C.body,
-                color: '#94a3b8',
-                fontSize: 'clamp(0.9rem, 1.8vw, 1rem)',
-                lineHeight: 1.7,
-                maxWidth: 620,
-                margin: '0 auto 2rem',
-              }}
-            >
-              Danh sách bài toán, tiến độ giải thuật (DSA) và liên kết nộp bài xác thực trên LeetCode đang được chuẩn bị để cập nhật. Trong thời gian này, bạn có thể ghé thăm trực tiếp hồ sơ LeetCode chính thức của tôi.
-            </p>
-
-            {/* Teaser 3 Highlights */}
-            <div
-              style={{
-                display: 'grid',
-                gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 200px), 1fr))',
-                gap: '1rem',
-                marginBottom: '2.25rem',
-              }}
-            >
-              <div
-                style={{
-                  background: 'rgba(255, 255, 255, 0.03)',
-                  border: '1px solid rgba(255, 255, 255, 0.07)',
-                  borderRadius: 14,
-                  padding: '1.1rem 1rem',
-                }}
-              >
-                <div style={{ fontFamily: C.mono, fontSize: '0.7rem', color: '#10b981', fontWeight: 600, letterSpacing: '0.06em' }}>
-                  🟢 NGÔN NGỮ CHỦ ĐẠO
-                </div>
-                <div style={{ fontFamily: C.display, fontSize: '1.05rem', fontWeight: 700, color: '#f1f5f9', marginTop: '0.35rem' }}>
-                  C++ & Python
-                </div>
-                <div style={{ fontFamily: C.body, fontSize: '0.78rem', color: '#64748b', marginTop: '0.15rem' }}>
-                  Tối ưu bộ nhớ & thời gian
-                </div>
-              </div>
-
-              <div
-                style={{
-                  background: 'rgba(255, 255, 255, 0.03)',
-                  border: '1px solid rgba(255, 255, 255, 0.07)',
-                  borderRadius: 14,
-                  padding: '1.1rem 1rem',
-                }}
-              >
-                <div style={{ fontFamily: C.mono, fontSize: '0.7rem', color: '#f59e0b', fontWeight: 600, letterSpacing: '0.06em' }}>
-                  🟡 PHÂN LOẠI ĐỘ KHÓ
-                </div>
-                <div style={{ fontFamily: C.display, fontSize: '1.05rem', fontWeight: 700, color: '#f1f5f9', marginTop: '0.35rem' }}>
-                  Easy · Medium · Hard
-                </div>
-                <div style={{ fontFamily: C.body, fontSize: '0.78rem', color: '#64748b', marginTop: '0.15rem' }}>
-                  Đầy đủ cấp độ thuật toán
-                </div>
-              </div>
-
-              <div
-                style={{
-                  background: 'rgba(255, 255, 255, 0.03)',
-                  border: '1px solid rgba(255, 255, 255, 0.07)',
-                  borderRadius: 14,
-                  padding: '1.1rem 1rem',
-                }}
-              >
-                <div style={{ fontFamily: C.mono, fontSize: '0.7rem', color: '#38bdf8', fontWeight: 600, letterSpacing: '0.06em' }}>
-                  🔵 XÁC THỰC BÀI NỘP
-                </div>
-                <div style={{ fontFamily: C.display, fontSize: '1.05rem', fontWeight: 700, color: '#f1f5f9', marginTop: '0.35rem' }}>
-                  Direct Link Tracker
-                </div>
-                <div style={{ fontFamily: C.body, fontSize: '0.78rem', color: '#64748b', marginTop: '0.15rem' }}>
-                  Kiểm tra trực tiếp trên LeetCode
-                </div>
-              </div>
-            </div>
-
-            {/* Primary CTA Button: Visit LeetCode Profile */}
-            <a
-              href={LEETCODE_PROFILE_URL}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="touch-target"
-              style={{
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: '0.55rem',
-                fontFamily: C.body,
-                fontSize: '0.92rem',
-                fontWeight: 700,
-                color: '#ffffff',
-                background: 'linear-gradient(135deg, #fb923c 0%, #ea580c 100%)',
-                border: '1px solid rgba(255, 255, 255, 0.25)',
-                padding: '0.75rem 1.75rem',
-                borderRadius: 12,
-                textDecoration: 'none',
-                boxShadow: '0 4px 20px rgba(251, 146, 60, 0.4), 0 0 12px rgba(251, 146, 60, 0.25)',
-                transition: 'all 0.25s cubic-bezier(0.16, 1, 0.3, 1)',
+                width: '100%',
+                maxWidth: 560,
+                borderRadius: 16,
+                overflow: 'hidden',
+                border: '1px solid rgba(255, 255, 255, 0.1)',
+                boxShadow: '0 12px 35px rgba(0,0,0,0.5)',
+                background: '#101010',
+                transition: 'transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s cubic-bezier(0.16, 1, 0.3, 1)',
               }}
               onMouseEnter={(e) => {
-                e.currentTarget.style.transform = 'translate3d(0, -2px, 0)'
-                e.currentTarget.style.boxShadow = '0 6px 28px rgba(251, 146, 60, 0.6), 0 0 20px rgba(251, 146, 60, 0.4)'
+                e.currentTarget.style.transform = 'translate3d(0, -3px, 0)'
+                e.currentTarget.style.boxShadow = '0 18px 45px rgba(0,0,0,0.7), 0 0 25px rgba(251, 146, 60, 0.2)'
               }}
               onMouseLeave={(e) => {
                 e.currentTarget.style.transform = 'translate3d(0, 0, 0)'
-                e.currentTarget.style.boxShadow = '0 4px 20px rgba(251, 146, 60, 0.4), 0 0 12px rgba(251, 146, 60, 0.25)'
+                e.currentTarget.style.boxShadow = '0 12px 35px rgba(0,0,0,0.5)'
               }}
             >
-              <span>Ghé thăm Hồ sơ LeetCode chính thức</span>
-              <span>↗</span>
-            </a>
+              <img
+                src="https://leetcard.jacoblin.cool/khoalvd839764-netizen?theme=dark&font=Outfit&ext=activity"
+                alt="Hồ sơ LeetCode thời gian thực của Lê Võ Đăng Khoa - khoalvd839764-netizen"
+                loading="lazy"
+                style={{
+                  width: '100%',
+                  height: 'auto',
+                  display: 'block',
+                }}
+              />
+            </div>
+
+            {/* Quick Live Stats Summary Badges */}
+            <div
+              style={{
+                display: 'flex',
+                flexWrap: 'wrap',
+                gap: '0.65rem',
+                justifyContent: 'center',
+                marginTop: '1.5rem',
+                marginBottom: '1.25rem',
+              }}
+            >
+              <span
+                style={{
+                  fontFamily: C.mono,
+                  fontSize: '0.76rem',
+                  padding: '0.35rem 0.8rem',
+                  borderRadius: 999,
+                  background: 'rgba(251, 146, 60, 0.12)',
+                  border: '1px solid rgba(251, 146, 60, 0.35)',
+                  color: '#fb923c',
+                  fontWeight: 600,
+                }}
+              >
+                ⚡ 19 Solved Problems
+              </span>
+              <span
+                style={{
+                  fontFamily: C.mono,
+                  fontSize: '0.76rem',
+                  padding: '0.35rem 0.8rem',
+                  borderRadius: 999,
+                  background: 'rgba(16, 185, 129, 0.12)',
+                  border: '1px solid rgba(16, 185, 129, 0.35)',
+                  color: '#4ade80',
+                  fontWeight: 600,
+                }}
+              >
+                🟢 14 Easy
+              </span>
+              <span
+                style={{
+                  fontFamily: C.mono,
+                  fontSize: '0.76rem',
+                  padding: '0.35rem 0.8rem',
+                  borderRadius: 999,
+                  background: 'rgba(245, 158, 11, 0.12)',
+                  border: '1px solid rgba(245, 158, 11, 0.35)',
+                  color: '#fbbf24',
+                  fontWeight: 600,
+                }}
+              >
+                🟡 5 Medium
+              </span>
+              <span
+                style={{
+                  fontFamily: C.mono,
+                  fontSize: '0.76rem',
+                  padding: '0.35rem 0.8rem',
+                  borderRadius: 999,
+                  background: 'rgba(56, 189, 248, 0.12)',
+                  border: '1px solid rgba(56, 189, 248, 0.35)',
+                  color: '#38bdf8',
+                  fontWeight: 600,
+                }}
+              >
+                🏆 Rank #4,753,501
+              </span>
+            </div>
+
+            {/* Direct Open Button & Copy Button */}
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', flexWrap: 'wrap', justifyContent: 'center' }}>
+              <a
+                href={LEETCODE_PROFILE_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="touch-target"
+                style={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '0.55rem',
+                  fontFamily: C.body,
+                  fontSize: '0.88rem',
+                  fontWeight: 700,
+                  color: '#ffffff',
+                  background: 'linear-gradient(135deg, #fb923c 0%, #ea580c 100%)',
+                  border: '1px solid rgba(255, 255, 255, 0.25)',
+                  padding: '0.65rem 1.5rem',
+                  borderRadius: 12,
+                  textDecoration: 'none',
+                  boxShadow: '0 4px 20px rgba(251, 146, 60, 0.4), 0 0 12px rgba(251, 146, 60, 0.25)',
+                  transition: 'all 0.25s cubic-bezier(0.16, 1, 0.3, 1)',
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.transform = 'translate3d(0, -2px, 0)'
+                  e.currentTarget.style.boxShadow = '0 6px 28px rgba(251, 146, 60, 0.6), 0 0 20px rgba(251, 146, 60, 0.4)'
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.transform = 'translate3d(0, 0, 0)'
+                  e.currentTarget.style.boxShadow = '0 4px 20px rgba(251, 146, 60, 0.4), 0 0 12px rgba(251, 146, 60, 0.25)'
+                }}
+              >
+                <span>Mở đầy đủ trên LeetCode</span>
+                <span>↗</span>
+              </a>
+
+              <button
+                onClick={() => {
+                  navigator.clipboard.writeText(LEETCODE_PROFILE_URL)
+                  alert('Đã sao chép link hồ sơ LeetCode của bạn vào bộ nhớ tạm!')
+                }}
+                className="touch-target"
+                style={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '0.45rem',
+                  fontFamily: C.body,
+                  fontSize: '0.88rem',
+                  fontWeight: 600,
+                  color: '#cbd5e1',
+                  background: 'rgba(255, 255, 255, 0.06)',
+                  border: `1px solid ${C.border}`,
+                  padding: '0.65rem 1.25rem',
+                  borderRadius: 12,
+                  cursor: 'pointer',
+                  transition: 'all 0.2s',
+                }}
+              >
+                <span>📋 Sao chép link</span>
+              </button>
+            </div>
           </div>
-        ) : (
+        </div>
+
+        {LEETCODE_COMING_SOON ? null : (
           <>
             {/* ─── Status Banner & Dataset Switcher ─── */}
         <div
