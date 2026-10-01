@@ -21,8 +21,9 @@ Thông tin chính xác về Lê Võ Đăng Khoa:
   2. Python: Khoa học dữ liệu, Machine Learning, xử lý và trực quan hóa dữ liệu (NumPy, Pandas, Scikit-Learn, Matplotlib).
   3. MySQL: Thiết kế hệ quản trị cơ sở dữ liệu quan hệ (RDBMS), tối ưu hóa câu truy vấn SQL, phân tích dữ liệu kinh doanh.
 - Dự án tiêu biểu (Projects):
-  1. "Hành Trang Của Mẹ & Góc Nhỏ Của Ba" (App URL: https://khoalevodang-bavame.vercel.app/) — Nền tảng cẩm nang gia đình, chia sẻ mẹo hay cuộc sống & kinh nghiệm nuôi dạy con, xây dựng bằng React, TypeScript, Tailwind CSS, tối ưu PWA trên Vercel. Trạng thái: Tạm ngưng phát triển (Lý do: Không đạt kết quả mong muốn).
-  2. Các dự án AI/ML, C++ DSA Engine và Database Schema đang tiếp tục được nghiên cứu và phát triển trên GitHub.
+  1. "KStudent – Trợ Lý Học Tập & Quản Trị Deadline" (Website: https://kstudent.khoadang.site/) — Mini project cá nhân hỗ trợ sinh viên đại học quản lý deadline và lịch học: Tích hợp Google Gemini AI tạo To-Do tự động từ tin nhắn, tự động bóc tách và nhập lịch từ Portal sinh viên (UTH, VLU,...), tính GPA theo kỳ & CPA tích lũy săn học bổng, hệ thống 5 cấp độ thẻ VIP kim loại 3D phản quang. Nền tảng: Android Jetpack Compose (Kotlin) & Web Hub. Hoàn toàn miễn phí 100%. Trạng thái: Đang phát triển tích cực (In Development).
+  2. "Hành Trang Của Mẹ & Góc Nhỏ Của Ba" (App URL: https://khoalevodang-bavame.vercel.app/) — Nền tảng cẩm nang gia đình, chia sẻ mẹo hay cuộc sống & kinh nghiệm nuôi dạy con, xây dựng bằng React, TypeScript, Tailwind CSS, tối ưu PWA trên Vercel. Trạng thái: Tạm ngưng phát triển (Lý do: Không đạt kết quả mong muốn).
+  3. Các dự án AI/ML, C++ DSA Engine và Database Schema đang tiếp tục được nghiên cứu và phát triển trên GitHub.
 - Chứng chỉ (Certificates):
   1. "C++ Essentials 1" — Cấp bởi Cisco Networking Academy & C++ Institute (Open Education & Development Group) ngày 22/08/2026. Cert ID: 5af2e763-9146-4b4a-a909-b236739c7c4c (xác thực trực tuyến chính thức qua cổng Cisco NetAcad).
 - Địa điểm: TP. Hồ Chí Minh, Việt Nam.

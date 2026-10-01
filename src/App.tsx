@@ -41,6 +41,27 @@ const SKILLS = [
 
 const PROJECTS = [
   {
+    id: 'kstudent',
+    title: 'KStudent – Trợ Lý Học Tập & Quản Trị Deadline',
+    subtitle: 'Smart Student Assistant & Portal Integration Platform',
+    desc: 'Mini project cá nhân do Khoa lên ý tưởng và phát triển từ chính trải nghiệm thực tế tại UTH: Tự động nhắc nhở deadline, đồng bộ lịch học từ Portal sinh viên (hỗ trợ UTH & VLU, tiếp tục update), tính GPA/CPA săn học bổng, tích hợp Google Gemini AI và mô phỏng 5 cấp độ thẻ VIP kim loại 3D. Ứng dụng Android hoàn toàn miễn phí 100%.',
+    tags: ['Android Compose', 'Kotlin', 'Gemini AI', 'Portal Scraping', 'AlarmManager', 'Tailwind CSS', '3D Physics'],
+    link: 'https://kstudent.khoadang.site/',
+    downloadLink: 'https://kstudent.khoadang.site/#download',
+    featured: true,
+    status: 'Đang phát triển',
+    badge: 'ĐANG PHÁT TRIỂN (ACTIVE)',
+    icon: '🎓',
+    grad: ['#7c3aed', '#4f46e5', '#06b6d4'],
+    accent: '#a855f7',
+    stats: [
+      { label: 'Phiên bản', value: 'v2.0 Official' },
+      { label: 'Nền tảng', value: 'Android & Web' },
+      { label: 'Chi phí', value: 'Free 100% Trọn đời' },
+      { label: 'Trạng thái', value: 'Đang phát triển' },
+    ],
+  },
+  {
     id: 'bavame',
     title: 'Hành Trang Của Mẹ & Góc Nhỏ Của Ba',
     subtitle: 'Family Knowledge & Life Hub Platform',
@@ -1353,6 +1374,7 @@ function Hero() {
 
 /* ─── Projects Section ───────────────────────────────────────────────────── */
 function Projects() {
+  const [isKStudentHovered, setIsKStudentHovered] = useState(false)
   const [isPausedHovered, setIsPausedHovered] = useState(false)
 
   return (
@@ -1380,8 +1402,393 @@ function Projects() {
           accent="#f59e0b"
         />
 
-        {/* Khu vực dự án cá nhân: Thu nhỏ Hành Trang Của Mẹ ở 1 góc với hiệu ứng làm mờ thể hiện tạm ngưng */}
-        <div style={{ maxWidth: 960, margin: '0 auto 3rem' }}>
+        {/* Khu vực dự án cá nhân: Dự án trọng tâm KStudent (Đang phát triển) & Hành Trang Của Mẹ (Tạm ngưng) */}
+        <div style={{ maxWidth: 960, margin: '0 auto 3.5rem' }}>
+          {/* 1. DỰ ÁN TRỌNG TÂM: KStudent – Trợ Lý Học Tập & Quản Trị Deadline Cho Sinh Viên */}
+          <div
+            className="reveal delay-1 glass-card"
+            onMouseEnter={() => setIsKStudentHovered(true)}
+            onMouseLeave={() => setIsKStudentHovered(false)}
+            style={{
+              borderRadius: 24,
+              padding: 'clamp(1.6rem, 3.5vw, 2.4rem)',
+              position: 'relative',
+              overflow: 'hidden',
+              border: isKStudentHovered
+                ? '1px solid rgba(168, 85, 247, 0.7)'
+                : '1px solid rgba(147, 51, 234, 0.38)',
+              background: 'linear-gradient(155deg, rgba(124, 58, 237, 0.09) 0%, rgba(15, 23, 42, 0.94) 50%, rgba(6, 11, 25, 0.98) 100%)',
+              boxShadow: isKStudentHovered
+                ? '0 24px 60px rgba(0, 0, 0, 0.65), 0 0 40px rgba(124, 58, 237, 0.28)'
+                : '0 16px 45px rgba(0, 0, 0, 0.5), 0 0 25px rgba(124, 58, 237, 0.12)',
+              transform: isKStudentHovered ? 'translateY(-4px)' : 'none',
+              transition: 'all 0.35s cubic-bezier(0.16, 1, 0.3, 1)',
+              marginBottom: '2.5rem',
+            }}
+          >
+            {/* Ambient Corner Glow */}
+            <div
+              style={{
+                position: 'absolute',
+                top: -60,
+                right: -60,
+                width: 240,
+                height: 240,
+                borderRadius: '50%',
+                background: 'radial-gradient(circle, rgba(147, 51, 234, 0.28) 0%, transparent 70%)',
+                pointerEvents: 'none',
+              }}
+            />
+
+            {/* Header: Badge Trạng thái Đang phát triển & Version */}
+            <div
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                marginBottom: '1.25rem',
+                flexWrap: 'wrap',
+                gap: '0.65rem',
+              }}
+            >
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', flexWrap: 'wrap' }}>
+                <span
+                  style={{
+                    fontFamily: C.mono,
+                    fontSize: '0.74rem',
+                    fontWeight: 800,
+                    color: '#4ade80',
+                    background: 'rgba(34, 197, 94, 0.14)',
+                    border: '1px solid rgba(34, 197, 94, 0.45)',
+                    padding: '0.28rem 0.85rem',
+                    borderRadius: 999,
+                    letterSpacing: '0.06em',
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: '0.45rem',
+                    boxShadow: '0 0 12px rgba(34, 197, 94, 0.2)',
+                  }}
+                >
+                  <span
+                    className="beacon-pulse"
+                    style={{
+                      width: 8,
+                      height: 8,
+                      borderRadius: '50%',
+                      background: '#22c55e',
+                      boxShadow: '0 0 8px #22c55e',
+                    }}
+                  />
+                  <span>ĐANG PHÁT TRIỂN (IN DEVELOPMENT)</span>
+                </span>
+
+                <span
+                  style={{
+                    fontFamily: C.mono,
+                    fontSize: '0.72rem',
+                    fontWeight: 700,
+                    color: '#c084fc',
+                    background: 'rgba(192, 132, 252, 0.12)',
+                    border: '1px solid rgba(192, 132, 252, 0.35)',
+                    padding: '0.25rem 0.65rem',
+                    borderRadius: 999,
+                  }}
+                >
+                  v2.0 Official
+                </span>
+
+                <span
+                  style={{
+                    fontFamily: C.mono,
+                    fontSize: '0.72rem',
+                    fontWeight: 700,
+                    color: '#38bdf8',
+                    background: 'rgba(56, 189, 248, 0.12)',
+                    border: '1px solid rgba(56, 189, 248, 0.35)',
+                    padding: '0.25rem 0.65rem',
+                    borderRadius: 999,
+                  }}
+                >
+                  Android & Web Hub
+                </span>
+              </div>
+
+              <span
+                style={{
+                  fontFamily: C.mono,
+                  fontSize: '0.72rem',
+                  fontWeight: 700,
+                  color: '#fbbf24',
+                  background: 'rgba(245, 158, 11, 0.12)',
+                  border: '1px solid rgba(245, 158, 11, 0.3)',
+                  padding: '0.25rem 0.65rem',
+                  borderRadius: 999,
+                }}
+              >
+                🎁 Free 100% Trọn Đời
+              </span>
+            </div>
+
+            {/* Title & Icon */}
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.95rem', marginBottom: '0.85rem' }}>
+              <div
+                style={{
+                  width: 52,
+                  height: 52,
+                  borderRadius: 16,
+                  background: 'linear-gradient(135deg, #7c3aed 0%, #3b82f6 100%)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  fontSize: '1.65rem',
+                  flexShrink: 0,
+                  boxShadow: '0 8px 24px rgba(124, 58, 237, 0.35)',
+                }}
+              >
+                🎓
+              </div>
+              <div>
+                <h3
+                  style={{
+                    fontFamily: C.display,
+                    fontWeight: 800,
+                    fontSize: 'clamp(1.25rem, 3vw, 1.7rem)',
+                    color: '#ffffff',
+                    lineHeight: 1.25,
+                    letterSpacing: '-0.01em',
+                  }}
+                >
+                  KStudent – Trợ Lý Học Tập & Quản Trị Deadline
+                </h3>
+                <div style={{ fontFamily: C.mono, fontSize: '0.78rem', color: '#a78bfa', marginTop: '0.2rem' }}>
+                  Smart Student Assistant & Portal Integration Platform
+                </div>
+              </div>
+            </div>
+
+            {/* Description */}
+            <p
+              style={{
+                fontFamily: C.body,
+                color: '#cbd5e1',
+                fontSize: '0.9rem',
+                lineHeight: 1.7,
+                marginBottom: '1.35rem',
+              }}
+            >
+              Mini project cá nhân do chính <strong style={{ color: '#ffffff' }}>Lê Võ Đăng Khoa</strong> lên ý tưởng và phát triển từ trải nghiệm học tập thực tế tại UTH: Chấm dứt ám ảnh trôi deadline và lỡ lịch học, tự động đồng bộ thời khóa biểu từ Portal sinh viên (hỗ trợ UTH & VLU, tiếp tục update), tích hợp trợ lý Google Gemini AI bóc tách bài tập từ tin nhắn, tính GPA/CPA săn học bổng và hệ thống 5 cấp độ thẻ VIP 3D kim loại.
+            </p>
+
+            {/* 4 Feature Highlights Grid */}
+            <div
+              style={{
+                display: 'grid',
+                gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 260px), 1fr))',
+                gap: '0.75rem',
+                marginBottom: '1.5rem',
+              }}
+            >
+              <div
+                style={{
+                  background: 'rgba(0, 0, 0, 0.35)',
+                  border: '1px solid rgba(255, 255, 255, 0.07)',
+                  borderRadius: 12,
+                  padding: '0.75rem 0.95rem',
+                }}
+              >
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.25rem' }}>
+                  <span style={{ fontSize: '1rem' }}>🤖</span>
+                  <span style={{ fontFamily: C.display, fontSize: '0.84rem', fontWeight: 700, color: '#c084fc' }}>
+                    Google Gemini AI To-Do
+                  </span>
+                </div>
+                <p style={{ fontFamily: C.body, fontSize: '0.76rem', color: '#94a3b8', margin: 0, lineHeight: 1.5 }}>
+                  Gõ hoặc dán tin nhắn tự nhiên, AI tự bóc tách tên bài, môn học, hạn chót và tạo To-Do kèm thông báo nhắc nhở.
+                </p>
+              </div>
+
+              <div
+                style={{
+                  background: 'rgba(0, 0, 0, 0.35)',
+                  border: '1px solid rgba(255, 255, 255, 0.07)',
+                  borderRadius: 12,
+                  padding: '0.75rem 0.95rem',
+                }}
+              >
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.25rem' }}>
+                  <span style={{ fontSize: '1rem' }}>🏫</span>
+                  <span style={{ fontFamily: C.display, fontSize: '0.84rem', fontWeight: 700, color: '#38bdf8' }}>
+                    Nhập Lịch Portal UTH & VLU
+                  </span>
+                </div>
+                <p style={{ fontFamily: C.body, fontSize: '0.76rem', color: '#94a3b8', margin: 0, lineHeight: 1.5 }}>
+                  Tự động phân tách lịch học tuần chẵn/lẻ, thực hành/lý thuyết; lưu offline tra cứu khi Portal trường quá tải.
+                </p>
+              </div>
+
+              <div
+                style={{
+                  background: 'rgba(0, 0, 0, 0.35)',
+                  border: '1px solid rgba(255, 255, 255, 0.07)',
+                  borderRadius: 12,
+                  padding: '0.75rem 0.95rem',
+                }}
+              >
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.25rem' }}>
+                  <span style={{ fontSize: '1rem' }}>📊</span>
+                  <span style={{ fontFamily: C.display, fontSize: '0.84rem', fontWeight: 700, color: '#4ade80' }}>
+                    Tính Điểm GPA & CPA
+                  </span>
+                </div>
+                <p style={{ fontFamily: C.body, fontSize: '0.76rem', color: '#94a3b8', margin: 0, lineHeight: 1.5 }}>
+                  Quy đổi thang điểm 4.0 và 10 chuẩn quy chế tín chỉ đại học, gợi ý số điểm cần gánh để săn học bổng.
+                </p>
+              </div>
+
+              <div
+                style={{
+                  background: 'rgba(0, 0, 0, 0.35)',
+                  border: '1px solid rgba(255, 255, 255, 0.07)',
+                  borderRadius: 12,
+                  padding: '0.75rem 0.95rem',
+                }}
+              >
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.25rem' }}>
+                  <span style={{ fontSize: '1rem' }}>👑</span>
+                  <span style={{ fontFamily: C.display, fontSize: '0.84rem', fontWeight: 700, color: '#fbbf24' }}>
+                    5 Cấp Thẻ VIP Kim Loại 3D
+                  </span>
+                </div>
+                <p style={{ fontFamily: C.body, fontSize: '0.76rem', color: '#94a3b8', margin: 0, lineHeight: 1.5 }}>
+                  Hoàn thành deadline nhận EXP thăng hạng thẻ phản quang: Tân Binh ➔ Level UP ➔ Chăm Chỉ ➔ Học Bá ➔ Thủ Khoa.
+                </p>
+              </div>
+            </div>
+
+            {/* Tech Badges */}
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.45rem', marginBottom: '1.4rem' }}>
+              {[
+                'Android Jetpack Compose',
+                'Kotlin',
+                'Google Gemini AI',
+                'AlarmManager',
+                'Portal Parser',
+                'Tailwind CSS',
+                '3D Physics',
+              ].map((t) => (
+                <span
+                  key={t}
+                  style={{
+                    fontFamily: C.mono,
+                    fontSize: '0.7rem',
+                    color: '#e2e8f0',
+                    background: 'rgba(255, 255, 255, 0.05)',
+                    border: '1px solid rgba(255, 255, 255, 0.1)',
+                    padding: '0.22rem 0.65rem',
+                    borderRadius: 6,
+                  }}
+                >
+                  {t}
+                </span>
+              ))}
+            </div>
+
+            {/* Footer with Action CTAs */}
+            <div
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                paddingTop: '1rem',
+                borderTop: '1px solid rgba(255, 255, 255, 0.08)',
+                flexWrap: 'wrap',
+                gap: '0.85rem',
+              }}
+            >
+              <div style={{ fontFamily: C.mono, fontSize: '0.74rem', color: '#94a3b8', display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+                <span style={{ color: '#4ade80' }}>●</span>
+                <span>Tác giả: Lê Võ Đăng Khoa • ĐH GTVT TP.HCM (UTH)</span>
+              </div>
+
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.65rem', flexWrap: 'wrap' }}>
+                <a
+                  href="https://kstudent.khoadang.site/#download"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="touch-target"
+                  style={{
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: '0.45rem',
+                    fontFamily: C.body,
+                    fontSize: '0.84rem',
+                    fontWeight: 600,
+                    color: '#cbd5e1',
+                    background: 'rgba(255, 255, 255, 0.06)',
+                    border: '1px solid rgba(255, 255, 255, 0.12)',
+                    padding: '0.55rem 1.1rem',
+                    borderRadius: 10,
+                    textDecoration: 'none',
+                    transition: 'all 0.2s',
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.background = 'rgba(255, 255, 255, 0.12)'
+                    e.currentTarget.style.color = '#ffffff'
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.background = 'rgba(255, 255, 255, 0.06)'
+                    e.currentTarget.style.color = '#cbd5e1'
+                  }}
+                >
+                  <span>📲 Tải file APK</span>
+                </a>
+
+                <a
+                  href="https://kstudent.khoadang.site/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="touch-target"
+                  style={{
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: '0.5rem',
+                    fontFamily: C.body,
+                    fontSize: '0.86rem',
+                    fontWeight: 700,
+                    color: '#ffffff',
+                    background: 'linear-gradient(135deg, #7c3aed 0%, #4f46e5 50%, #2563eb 100%)',
+                    border: '1px solid rgba(255, 255, 255, 0.25)',
+                    padding: '0.55rem 1.35rem',
+                    borderRadius: 10,
+                    textDecoration: 'none',
+                    boxShadow: '0 4px 18px rgba(124, 58, 237, 0.45)',
+                    transition: 'all 0.25s cubic-bezier(0.16, 1, 0.3, 1)',
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.transform = 'translate3d(0, -2px, 0)'
+                    e.currentTarget.style.boxShadow = '0 6px 24px rgba(124, 58, 237, 0.65)'
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.transform = 'translate3d(0, 0, 0)'
+                    e.currentTarget.style.boxShadow = '0 4px 18px rgba(124, 58, 237, 0.45)'
+                  }}
+                >
+                  <span>Trải nghiệm website KStudent</span>
+                  <span>↗</span>
+                </a>
+              </div>
+            </div>
+          </div>
+
+          {/* Subheader: Dự án tiền nhiệm / Lưu trữ */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', margin: '2.5rem 0 1.25rem', paddingLeft: '0.25rem' }}>
+            <span style={{ fontFamily: C.mono, fontSize: '0.72rem', color: '#94a3b8', letterSpacing: '0.08em', textTransform: 'uppercase', fontWeight: 600 }}>
+              DỰ ÁN TIỀN NHIỆM (LƯU TRỮ & THAM KHẢO)
+            </span>
+            <div style={{ flex: 1, height: 1, background: 'rgba(255, 255, 255, 0.08)' }} />
+          </div>
+
+          {/* 2. DỰ ÁN TẠM DỪNG: Hành Trang Của Mẹ & Góc Nhỏ Của Ba */}
           <div
             className="reveal delay-1 glass-card"
             onMouseEnter={() => setIsPausedHovered(true)}

@@ -9,19 +9,19 @@ interface Message {
 
 const QUICK_QUESTIONS = [
   { icon: '🎓', text: 'Khoa học trường nào & ngành gì?' },
+  { icon: '🚀', text: 'Dự án KStudent (Trợ lý học tập UTH & VLU)?' },
   { icon: '⚡', text: 'Kỹ năng công nghệ cốt lõi của Khoa?' },
-  { icon: '🏡', text: 'Dự án Hành Trang Của Mẹ & Góc Nhỏ Của Ba?' },
   { icon: '✉️', text: 'Làm sao để liên hệ nhanh với Khoa?' },
 ]
 
 const POPUP_GREETINGS = [
   {
     badge: '👋 Xin chào!',
-    text: 'Tôi là **AI Assistant** của Khoa. Bạn có muốn tìm hiểu về học vấn UTH, kỹ năng hay dự án của Khoa không?',
+    text: 'Tôi là **AI Assistant** của Khoa. Bạn có muốn tìm hiểu về dự án mới **KStudent**, học vấn UTH hay kỹ năng của Khoa không?',
   },
   {
-    badge: '🚀 Định hướng & Dự án',
-    text: 'Khoa đang tập trung nghiên cứu các dự án **AI, Machine Learning & C++ DSA Engine**. Hỏi tôi để tìm hiểu nhé!',
+    badge: '🚀 Dự án KStudent v2.0',
+    text: 'Khoa vừa ra mắt dự án **KStudent** – Trợ lý học tập & quản trị deadline cho sinh viên tích hợp Gemini AI. Khám phá nhé!',
   },
   {
     badge: '⚡ Trợ lý 24/7',
